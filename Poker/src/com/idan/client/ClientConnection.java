@@ -30,11 +30,17 @@ public class ClientConnection extends Thread {
 
 	private ImageIcon[] opponentCards = new ImageIcon[2];
 
+	/**
+	 * Constructs a ClientConnection object
+	 * @param socket the socket to connect through
+	 * @param player the player whom this connection to be established.
+	 */
 	public ClientConnection(Socket socket, Player player) {
 		this.socket = socket;
 		this.player = player;
 	}
 
+	
 	public void setTableGUI(TableGUI tableGUI) {
 		this.tableGUI = tableGUI;
 	}
@@ -57,7 +63,7 @@ public class ClientConnection extends Thread {
 		}
 	}
 
-	// Sends any playre's states, actions, etc.
+	// Sends any player's states, actions, etc.
 	public void sendToServer(Player player) {
 		try {
 			objectOutput.writeObject(player);
@@ -91,6 +97,9 @@ public class ClientConnection extends Thread {
 		player = tableInfo.getPlayer();
 	}
 
+	/*
+	 * Prints the player's holecards to the console
+	 */
 	private void printHolecards() {
 		System.out.println("You were dealt " + player.getHoleCard1().getRank() + player.getHoleCard1().getSuit()
 				+ player.getHoleCard2().getRank() + player.getHoleCard2().getSuit());

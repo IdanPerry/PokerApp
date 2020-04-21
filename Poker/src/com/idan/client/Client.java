@@ -17,6 +17,10 @@ public class Client {
 	
 	private int clientId;
 
+	/**
+	 * Constructs a Client object.
+	 * Initializes player's name and a client connection to the server.
+	 */
 	public Client() {
 		// TODO: get the real name/screen name from database
 		String name = JOptionPane.showInputDialog("Enter your name");
