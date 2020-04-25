@@ -3,7 +3,6 @@ package com.idan.game;
 import java.io.Serializable;
 
 public class Player implements Serializable {
-
 	private static final long serialVersionUID = 271175255872953148L;
 	
 	private String name;

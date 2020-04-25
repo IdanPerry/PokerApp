@@ -1,22 +1,35 @@
 package com.idan.game;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
-public class CardsDeck extends Card {
-	
+/**
+ * This class represents a deck of cards.
+ * 
+ * @author Idan Perry
+ * @version 13.05.2013
+ */
+
+public class CardsDeck implements Serializable{
 	private static final long serialVersionUID = -759739111081498528L;
+	public static final int MAX_CARDS = 52;
 	
 	private ArrayList<Card> cardsDeck;
 
+	/**
+	 * Constructs a CardsDeck object. Initializes a deck of 52 cards.
+	 */
 	public CardsDeck() {
-		cardsDeck = new ArrayList<Card>();
-		for (int i = 0; i < RANKS.length; i++){
-			for (int j = 0; j < SUITS.length; j++){
-				Card card = new Card(RANKS[i], SUITS[j], i+2, j+1);
+		cardsDeck = new ArrayList<Card>(MAX_CARDS);
+		
+		for (Card.Rank rank : Card.Rank.values()) {
+			for (Card.Suit suit : Card.Suit.values()) {
+				Card card = new Card(rank, suit);
 				cardsDeck.add(card);
 			}
 		}
@@ -24,10 +37,25 @@ public class CardsDeck extends Card {
 		drawCardsImages();
 	}
 	
+	/**
+	 * Returns a deck of cards.
+	 * 
+	 * @return a deck of cards
+	 */
 	public ArrayList<Card> getCardsDeck() {
 		return cardsDeck;
 	}
 	
+	/**
+	 * Shuffles the cards of this deck.
+	 */
+	public void shuffle() {
+		Collections.shuffle(cardsDeck);
+	}
+	
+	/**
+	 * Sets the card images for all cards in this deck.
+	 */
 	public void drawCardsImages() {
 		try {
 			cardsDeck.get(0).setCardImage(new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/deuce_s.png"))));
@@ -82,6 +110,7 @@ public class CardsDeck extends Card {
 			cardsDeck.get(49).setCardImage(new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/a_c.png"))));
 			cardsDeck.get(50).setCardImage(new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/a_h.png"))));
 			cardsDeck.get(51).setCardImage(new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/a_d.png"))));
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

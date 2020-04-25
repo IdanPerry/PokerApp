@@ -19,10 +19,10 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class TableGUI implements ActionListener, ChangeListener {
-	public static final int[][] BOX_POSITION = { { 275, 365 }, { 275, 52 } };
-	public static final int[][] HOLE_CARDS_POSITION = { { 295, 330 }, { 345, 330 }, { 295, 18 }, { 345, 18 } };
-	public static final int CARD_WIDTH = 50;
-	public static final int CARD_HEIGHT = 70;	
+	private static final int[][] BOX_POSITION = { { 275, 365 }, { 275, 52 } };
+	private static final int[][] HOLE_CARDS_POSITION = { { 295, 330 }, { 345, 330 }, { 295, 18 }, { 345, 18 } };
+	private static final int CARD_WIDTH = 50;
+	private static final int CARD_HEIGHT = 70;	
 
 	private TableImage tableImage;
 	private ClientConnection clientConnection;
@@ -36,7 +36,7 @@ public class TableGUI implements ActionListener, ChangeListener {
 	private JLabel[] flopLabel = new JLabel[3];
 	private JLabel turnLabel;
 	private JLabel riverLabel;
-	public TextArea messagesBox;
+	private TextArea messagesBox;
 	private JTextField betField;
 	private JSlider betSlider;
 	private JButton foldBtn;
@@ -73,7 +73,7 @@ public class TableGUI implements ActionListener, ChangeListener {
 			playerBoxLabel[i].setForeground(Color.WHITE);
 		}
 
-		// init labels
+		/* init labels */
 		// player box
 		playerBoxLabel[0].setBounds(BOX_POSITION[0][0], BOX_POSITION[0][1], 140, 35);
 		playerBoxLabel[1].setBounds(BOX_POSITION[1][0], BOX_POSITION[1][1], 140, 35);
@@ -207,6 +207,10 @@ public class TableGUI implements ActionListener, ChangeListener {
 
 	public JLabel getRiverLabel() {
 		return riverLabel;
+	}
+	
+	public TextArea getMessagesBox() {
+		return messagesBox;
 	}
 	
 	public void setFlopLabels(ImageIcon flop1, ImageIcon flop2, ImageIcon flop3) {
@@ -431,10 +435,10 @@ public class TableGUI implements ActionListener, ChangeListener {
 		// leave table
 		if(e.getSource() == leaveTableBtn) {
 			clientConnection.sendToServer("leave", 0);
-			clientConnection.running = false;
+			clientConnection.setRunning(false);
 
 			try {
-				clientConnection.objectOutput.close();
+				clientConnection.getObjectOutput().close();
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}

@@ -26,27 +26,27 @@ public class OmahaDealer extends Dealer {
 		for (int i = 0; i < table.getPlayers().size(); i++) {
 			System.out.print(
 					table.getPlayers().get(i).getName() + " has: " + table.getPlayers().get(i).getHoleCard1().getRank()
-							+ table.getPlayers().get(i).getHoleCard1().getSuit());
-			System.out.print(table.getPlayers().get(i).getHoleCard2().getRank()
-					+ table.getPlayers().get(i).getHoleCard2().getSuit());
-			System.out.print(table.getPlayers().get(i).getHoleCard3().getRank()
-							+ table.getPlayers().get(i).getHoleCard3().getSuit());
-			System.out.print(table.getPlayers().get(i).getHoleCard4().getRank()
-					+ table.getPlayers().get(i).getHoleCard4().getSuit() + "\n");
+							+ table.getPlayers().get(i).getHoleCard1().getSuit().toString());
+			System.out.print(table.getPlayers().get(i).getHoleCard2().getRank().toString()
+					+ table.getPlayers().get(i).getHoleCard2().getSuit().toString());
+			System.out.print(table.getPlayers().get(i).getHoleCard3().getRank().toString()
+							+ table.getPlayers().get(i).getHoleCard3().getSuit().toString());
+			System.out.print(table.getPlayers().get(i).getHoleCard4().getRank().toString()
+					+ table.getPlayers().get(i).getHoleCard4().getSuit().toString() + "\n");
 		}
 	}
 	
 	public void printHands() {
 		for (int i = 0; i < table.getPlayers().size(); i++) {
 			System.out.print(
-					table.getPlayers().get(i).getName() + " has: " + table.getPlayers().get(i).getHoleCard1().getRank()
-							+ table.getPlayers().get(i).getHoleCard1().getSuit());
-			System.out.print(table.getPlayers().get(i).getHoleCard2().getRank()
-					+ table.getPlayers().get(i).getHoleCard2().getSuit());
-			System.out.print(table.getPlayers().get(i).getHoleCard3().getRank()
-					+ table.getPlayers().get(i).getHoleCard3().getSuit());
-			System.out.print(table.getPlayers().get(i).getHoleCard4().getRank()
-					+ table.getPlayers().get(i).getHoleCard4().getSuit() + "\n");
+					table.getPlayers().get(i).getName() + " has: " + table.getPlayers().get(i).getHoleCard1().getRank().toString()
+							+ table.getPlayers().get(i).getHoleCard1().getSuit().toString());
+			System.out.print(table.getPlayers().get(i).getHoleCard2().getRank().toString()
+					+ table.getPlayers().get(i).getHoleCard2().getSuit().toString());
+			System.out.print(table.getPlayers().get(i).getHoleCard3().getRank().toString()
+					+ table.getPlayers().get(i).getHoleCard3().getSuit().toString());
+			System.out.print(table.getPlayers().get(i).getHoleCard4().getRank().toString()
+					+ table.getPlayers().get(i).getHoleCard4().getSuit().toString() + "\n");
 		}
 
 		System.out.println("\nBoard: " + getFlop()[0].getRank() + getFlop()[0].getSuit() + getFlop()[1].getRank() + getFlop()[1].getSuit()

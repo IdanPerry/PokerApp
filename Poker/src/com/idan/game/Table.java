@@ -2,15 +2,14 @@ package com.idan.game;
 
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
-
 import com.idan.server.TableInformation;
 import com.idan.texasholdem.Evaluator;
 import com.idan.texasholdem.TexasHoldemDealer;
 
-public class Table extends Thread {
+public abstract class Table extends Thread {
+	public static final int SMALL_BLIND = 50;
+	public static final int BIG_BLIND = 100;
 
-	private static final int MAX_PLAYERS = 9;
 	protected static final int MIN_PLAYRES = 2;
 	private static final int[] SEATS = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
@@ -43,9 +42,6 @@ public class Table extends Thread {
 	protected boolean flop;
 	protected boolean turn;
 	protected boolean river;
-
-	public static final int SMALL_BLIND = 50;
-	public static final int BIG_BLIND = 100;
 
 	public Table() {
 		tablePlayers = new ArrayList<Player>();
@@ -127,31 +123,6 @@ public class Table extends Thread {
 
 	public boolean isRiver() {
 		return river;
-	}
-
-	public void seatPlayer(Player player) {
-		if (tablePlayers.size() < MAX_PLAYERS) {
-			player.setSeat(tablePlayers.size() + 1);
-			tablePlayers.add(player);
-
-		} else {
-			System.err.println("Table is full");
-		}
-
-	}
-
-	public void seatPlayers(int players) {
-		if (players < MAX_PLAYERS) {
-			setNumOfPlayers(players);
-			String inputPlayersName;
-
-			for (int i = 0; i < getNumOfPlayers(); i++) {
-				inputPlayersName = JOptionPane.showInputDialog("Enter player's name");
-				Player player = new Player(inputPlayersName);
-
-				tablePlayers.add(player);
-			}
-		}
 	}
 
 	private void postBlinds() {
@@ -387,7 +358,7 @@ public class Table extends Thread {
 
 			} else if (player.isCall()) {
 
-				// Working after raise //
+				// Working after raise
 				
 				player.setChips(player.getChips() - bet + BIG_BLIND);
 				pot += bet - BIG_BLIND;
@@ -617,7 +588,7 @@ public class Table extends Thread {
 	}
 
 	private void startHand() {
-		dealer.shuffle();
+		dealer.getDeck().shuffle();
 		resetBlinds();
 
 		if (tablePlayers.size() == MIN_PLAYRES) {
@@ -652,8 +623,7 @@ public class Table extends Thread {
 		setPlayersTurns();
 		postBlinds();
 
-		/********* PRE-FLOP ACTION **********/
-
+		/* PRE-FLOP ACTION */
 		running = true;
 
 		while (running) {
@@ -696,16 +666,20 @@ public class Table extends Thread {
 			}
 		}
 
-		/**** FLOP ACTION ****/
+		// flop action
 		postFlopAction();
 
-		/**** TURN ACTION ****/
+		// turn action
 		postFlopAction();
 
-		/**** RIVER ACTION ****/
+		// river action
 		postFlopAction();
 
 	}
+	
+	public abstract void seatPlayer(Player player);
+
+	public abstract void seatPlayers(int players);
 
 	@Override
 	public void run() {

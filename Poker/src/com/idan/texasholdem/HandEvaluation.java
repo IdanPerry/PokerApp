@@ -44,7 +44,7 @@ public class HandEvaluation {
 		for (int i = 0; i < sevenCards.length; i++) {
 			for (int j = 0; j < sevenCards[i].length; j++) {
 				for (int k = j+1; k < sevenCards[i].length; k++) {
-					if (sevenCards[i][j].getRankValue() > sevenCards[i][k].getRankValue()) {
+					if (sevenCards[i][j].getRank().getValue() > sevenCards[i][k].getRank().getValue()) {
 						temp = sevenCards[i][j];
 						sevenCards[i][j] = sevenCards[i][k];
 						sevenCards[i][k] = temp;
@@ -61,7 +61,7 @@ public class HandEvaluation {
 		for (int i = 0; i < sevenCards.length; i++) {
 			for (int j = 0; j < sevenCards[i].length; j++) {
 				for (int k = j+1; k < sevenCards[i].length; k++) {
-					if (sevenCards[i][j].getSuitValue() > sevenCards[i][k].getSuitValue()) {
+					if (sevenCards[i][j].getSuit().getValue() > sevenCards[i][k].getSuit().getValue()) {
 						temp = sevenCards[i][j];
 						sevenCards[i][j] = sevenCards[i][k];
 						sevenCards[i][k] = temp;
@@ -78,7 +78,7 @@ public class HandEvaluation {
 			hand = new Card[5];
 			
 				for (int j = 6; j > 3; j--) {
-					if (sevenCards[i][j].getSuitValue() == sevenCards[i][j-4].getSuitValue()) {
+					if (sevenCards[i][j].getSuit().getValue() == sevenCards[i][j-4].getSuit().getValue()) {
 
 						hand[0] = sevenCards[i][j];
 						hand[1] = sevenCards[i][j-1];
@@ -89,7 +89,7 @@ public class HandEvaluation {
 						// Sorting the suited cards array by ascending values
 						for (int k = 0; k < hand.length; k++) {
 							for (int m = k + 1; m < hand.length; m++) {
-								if (hand[k].getRankValue() > hand[m].getRankValue()) {
+								if (hand[k].getRank().getValue() > hand[m].getRank().getValue()) {
 									Card temp = hand[k];
 									hand[k] = hand[m];
 									hand[m] = temp;
@@ -97,9 +97,9 @@ public class HandEvaluation {
 							}
 						}
 						
-						if (hand[0].getRankValue() == hand[1].getRankValue() -1 && hand[1].getRankValue() == 
-								hand[2].getRankValue() -1 && hand[2].getRankValue() == hand[3].getRankValue() -1 && 
-								hand[3].getRankValue() == hand[4].getRankValue() -1){
+						if (hand[0].getRank().getValue() == hand[1].getRank().getValue() -1 && hand[1].getRank().getValue() == 
+								hand[2].getRank().getValue() -1 && hand[2].getRank().getValue() == hand[3].getRank().getValue() -1 && 
+								hand[3].getRank().getValue() == hand[4].getRank().getValue() -1){
 							
 							table.getPlayers().get(i).setStrFlush(true);
 							table.getPlayers().get(i).setHandValue(8);
@@ -286,7 +286,7 @@ public class HandEvaluation {
 					&& !table.getPlayers().get(i).isQuads() && !table.getPlayers().get(i).isStrFlush()) {
 
 				for (int j = 6; j > 3; j--) {
-					if (sevenCards[i][j].getSuitValue() == sevenCards[i][j-4].getSuitValue()) {
+					if (sevenCards[i][j].getSuit().getValue() == sevenCards[i][j-4].getSuit().getValue()) {
 						table.getPlayers().get(i).setFlush(true);
 						table.getPlayers().get(i).setHandValue(5);
 
@@ -299,7 +299,7 @@ public class HandEvaluation {
 						// Sorting the suited cards array by ascending values
 						for (int k = 0; k < hand.length; k++) {
 							for (int m = k + 1; m < hand.length; m++) {
-								if (hand[k].getRankValue() > hand[m].getRankValue()) {
+								if (hand[k].getRank().getValue() > hand[m].getRank().getValue()) {
 									Card temp = hand[k];
 									hand[k] = hand[m];
 									hand[m] = temp;
@@ -328,10 +328,10 @@ public class HandEvaluation {
 					!table.getPlayers().get(i).isQuads() && !table.getPlayers().get(i).isStrFlush()) {
 
 				for (int j = 6; j > 3; j--) {
-					if (sevenCards[i][j].getRankValue() == sevenCards[i][j-1].getRankValue() + 1 &&
-							sevenCards[i][j-1].getRankValue() == sevenCards[i][j-2].getRankValue() + 1 &&
-							sevenCards[i][j-2].getRankValue() == sevenCards[i][j-3].getRankValue() + 1 &&
-							sevenCards[i][j-3].getRankValue() == sevenCards[i][j-4].getRankValue() + 1) {
+					if (sevenCards[i][j].getRank().getValue() == sevenCards[i][j-1].getRank().getValue() + 1 &&
+							sevenCards[i][j-1].getRank().getValue() == sevenCards[i][j-2].getRank().getValue() + 1 &&
+							sevenCards[i][j-2].getRank().getValue() == sevenCards[i][j-3].getRank().getValue() + 1 &&
+							sevenCards[i][j-3].getRank().getValue() == sevenCards[i][j-4].getRank().getValue() + 1) {
 						
 						table.getPlayers().get(i).setStraight(true);
 						table.getPlayers().get(i).setHandValue(4);

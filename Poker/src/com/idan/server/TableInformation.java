@@ -7,7 +7,6 @@ import com.idan.game.Card;
 import com.idan.game.Player;
 
 public class TableInformation implements Serializable {
-
 	private static final long serialVersionUID = 3308340352929276498L;
 	
 	private Player player;
@@ -22,8 +21,7 @@ public class TableInformation implements Serializable {
 	private int raise;
 	private boolean raiseFlag;
 
-	public TableInformation() {
-		
+	public TableInformation() {		
 	}
 
 	public Player getPlayer() {

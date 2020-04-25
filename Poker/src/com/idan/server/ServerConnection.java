@@ -5,8 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import com.idan.game.Player;
-import com.idan.game.Table;
+import com.idan.game.*;
 
 public class ServerConnection extends Thread {
 
@@ -17,12 +16,12 @@ public class ServerConnection extends Thread {
 
 	private boolean running = true;
 	private Player player;
-	private Table table;
+	private HeadsUpTable table;
 	private TableInformation tableInfo;
 	private String actionInput = "";
 	private int betSize;
 
-	public ServerConnection(Socket socket, Server server, Table table) {
+	public ServerConnection(Socket socket, Server server, HeadsUpTable table) {
 		super("Server_Connection_Thread");
 		this.socket = socket;
 		this.server = server;

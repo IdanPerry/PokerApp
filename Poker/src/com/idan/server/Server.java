@@ -5,7 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import com.idan.game.Table;
+import com.idan.game.*;
 
 public class Server {
 	private ServerSocket serverSocket;
@@ -21,7 +21,7 @@ public class Server {
 		try {
 			serverSocket = new ServerSocket(PORT);
 			System.out.println("Server is connected");
-			Table table = new Table(1);
+			HeadsUpTable table = new HeadsUpTable(1);
 			table.start();
 
 			while (running) {

@@ -3,7 +3,6 @@ package com.idan.game;
 import javax.swing.JOptionPane;
 
 public class HeadsUpTable extends Table {
-
 	private static final int MAX_PLAYERS = 2;
 	private static final int[] SEATS = new int[2];
 	
