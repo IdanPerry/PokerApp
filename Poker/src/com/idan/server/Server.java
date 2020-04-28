@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import com.idan.game.*;
 
 public class Server {
+	private static final int PORT = 1342;
+	
 	private ServerSocket serverSocket;
 	private ArrayList<ServerConnection> connections;
-
-	private static final int PORT = 1342;
 
 	public Server() {
 		boolean running = true;

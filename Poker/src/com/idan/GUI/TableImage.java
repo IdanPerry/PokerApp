@@ -1,4 +1,4 @@
-package com.idan.client;
+package com.idan.GUI;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -20,13 +20,13 @@ public class TableImage extends JPanel implements MouseListener {
 	private static final long serialVersionUID = 1L;
 
 	private BufferedImage table;
-	private TableGUI tableGUI;
+	private TableWindow tableGUI;
 	private JLayeredPane layeredPane;
 
 	private int clicked;
 	private int chips;
 
-	public TableImage(TableGUI tableGUI) {
+	public TableImage(TableWindow tableGUI) {
 		this.tableGUI = tableGUI;
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		layeredPane = new JLayeredPane();

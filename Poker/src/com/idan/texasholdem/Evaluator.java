@@ -17,13 +17,13 @@ public class Evaluator extends HandEvaluation {
 
 	private void loop(int card) {
 		for (int i = 0; i < bestHands.size(); i++) {
-			if (bestHands.get(i).getHand()[card].getRank().getValue() > max) {
-				max = bestHands.get(i).getHand()[card].getRank().getValue();
+			if (bestHands.get(i).getFiveCardsHand()[card].getRank().getValue() > max) {
+				max = bestHands.get(i).getFiveCardsHand()[card].getRank().getValue();
 			}
 		}
 		
 		for (int j = 0; j < bestHands.size(); j++) {
-			if (bestHands.get(j).getHand()[card].getRank().getValue() < max) {
+			if (bestHands.get(j).getFiveCardsHand()[card].getRank().getValue() < max) {
 				bestHands.remove(j);
 			}
 		}
@@ -38,17 +38,17 @@ public class Evaluator extends HandEvaluation {
 		}
 		
 		System.out.println(bestHands.get(0).getName() + " wins with " + Player.HAND_RANK[bestHands.get(0).getHandValue()]
-				+ " " + bestHands.get(0).getHand()[0].getRank() + bestHands.get(0).getHand()[0].getSuit() + 
-				bestHands.get(0).getHand()[1].getRank() + bestHands.get(0).getHand()[1].getSuit() + 
-				bestHands.get(0).getHand()[2].getRank() + bestHands.get(0).getHand()[2].getSuit() + 
-				bestHands.get(0).getHand()[3].getRank() + bestHands.get(0).getHand()[3].getSuit() + 
-				bestHands.get(0).getHand()[4].getRank() + bestHands.get(0).getHand()[4].getSuit() + "\n");
+				+ " " + bestHands.get(0).getFiveCardsHand()[0].getRank() + bestHands.get(0).getFiveCardsHand()[0].getSuit() + 
+				bestHands.get(0).getFiveCardsHand()[1].getRank() + bestHands.get(0).getFiveCardsHand()[1].getSuit() + 
+				bestHands.get(0).getFiveCardsHand()[2].getRank() + bestHands.get(0).getFiveCardsHand()[2].getSuit() + 
+				bestHands.get(0).getFiveCardsHand()[3].getRank() + bestHands.get(0).getFiveCardsHand()[3].getSuit() + 
+				bestHands.get(0).getFiveCardsHand()[4].getRank() + bestHands.get(0).getFiveCardsHand()[4].getSuit() + "\n");
 		
 		bestHands.get(0).setScore(1);
 	}
 	
 	private void compHighCard() {
-		max = bestHands.get(0).getHand()[0].getRank().getValue();
+		max = bestHands.get(0).getFiveCardsHand()[0].getRank().getValue();
 
 		// Checking the possibility of more than 2 players having
 		// the same high card,
@@ -57,32 +57,32 @@ public class Evaluator extends HandEvaluation {
 		
 		if (bestHands.size() >= 2) {
 			// Checking the 2nd high card
-			max = bestHands.get(0).getHand()[1].getRank().getValue();
+			max = bestHands.get(0).getFiveCardsHand()[1].getRank().getValue();
 			loop(1);
 			
 			if (bestHands.size() >= 2) {
 				// Checking the 3rd high card
-				max = bestHands.get(0).getHand()[2].getRank().getValue();
+				max = bestHands.get(0).getFiveCardsHand()[2].getRank().getValue();
 				loop(2);
 				
 				if (bestHands.size() >= 2) {
 					// Checking the 4th high card
-					max = bestHands.get(0).getHand()[3].getRank().getValue();
+					max = bestHands.get(0).getFiveCardsHand()[3].getRank().getValue();
 					loop(3);
 					
 					if (bestHands.size() >= 2) {
 						// Checking the 5th high card
-						max = bestHands.get(0).getHand()[4].getRank().getValue();
+						max = bestHands.get(0).getFiveCardsHand()[4].getRank().getValue();
 						loop(4);
 						
 						if (bestHands.size() >= 2) {
 							// split pot
 							System.out.println("Players win with " + Player.HAND_RANK[bestHands.get(0).getHandValue()]
-									+ bestHands.get(0).getHand()[0].getRank() + bestHands.get(0).getHand()[0].getSuit() + 
-									bestHands.get(0).getHand()[1].getRank() + bestHands.get(0).getHand()[1].getSuit() + 
-									bestHands.get(0).getHand()[2].getRank() + bestHands.get(0).getHand()[2].getSuit() + 
-									bestHands.get(0).getHand()[3].getRank() + bestHands.get(0).getHand()[3].getSuit() + 
-									bestHands.get(0).getHand()[4].getRank() + bestHands.get(0).getHand()[4].getSuit());
+									+ bestHands.get(0).getFiveCardsHand()[0].getRank() + bestHands.get(0).getFiveCardsHand()[0].getSuit() + 
+									bestHands.get(0).getFiveCardsHand()[1].getRank() + bestHands.get(0).getFiveCardsHand()[1].getSuit() + 
+									bestHands.get(0).getFiveCardsHand()[2].getRank() + bestHands.get(0).getFiveCardsHand()[2].getSuit() + 
+									bestHands.get(0).getFiveCardsHand()[3].getRank() + bestHands.get(0).getFiveCardsHand()[3].getSuit() + 
+									bestHands.get(0).getFiveCardsHand()[4].getRank() + bestHands.get(0).getFiveCardsHand()[4].getSuit());
 							
 						} else if (bestHands.size() == 1) {
 							// There's a winner with 5th kicker
@@ -112,7 +112,7 @@ public class Evaluator extends HandEvaluation {
 	}
 	
 	private void compPair() {
-		max = bestHands.get(0).getHand()[0].getRank().getValue();
+		max = bestHands.get(0).getFiveCardsHand()[0].getRank().getValue();
 
 		// Checking the possibility of more than 2 players having
 		// the same pair,
@@ -121,27 +121,27 @@ public class Evaluator extends HandEvaluation {
 		
 		if (bestHands.size() >= 2) {
 			// Checking 1st kicker
-			max = bestHands.get(0).getHand()[2].getRank().getValue();	
+			max = bestHands.get(0).getFiveCardsHand()[2].getRank().getValue();	
 			loop(2);
 			
 			if (bestHands.size() >= 2) {
 				// Checking the 2nd kicker
-				max = bestHands.get(0).getHand()[3].getRank().getValue();
+				max = bestHands.get(0).getFiveCardsHand()[3].getRank().getValue();
 				loop(3);
 				
 				if (bestHands.size() >= 2) {
 					// Checking the 3rd kicker
-					max = bestHands.get(0).getHand()[4].getRank().getValue();
+					max = bestHands.get(0).getFiveCardsHand()[4].getRank().getValue();
 					loop(4);
 					
 					if (bestHands.size() >= 2) {
 						// split pot
 						System.out.println("Players win with " + Player.HAND_RANK[bestHands.get(0).getHandValue()]
-								+ bestHands.get(0).getHand()[0].getRank() + bestHands.get(0).getHand()[0].getSuit() + 
-								bestHands.get(0).getHand()[1].getRank() + bestHands.get(0).getHand()[1].getSuit() + 
-								bestHands.get(0).getHand()[2].getRank() + bestHands.get(0).getHand()[2].getSuit() + 
-								bestHands.get(0).getHand()[3].getRank() + bestHands.get(0).getHand()[3].getSuit() + 
-								bestHands.get(0).getHand()[4].getRank() + bestHands.get(0).getHand()[4].getSuit());
+								+ bestHands.get(0).getFiveCardsHand()[0].getRank() + bestHands.get(0).getFiveCardsHand()[0].getSuit() + 
+								bestHands.get(0).getFiveCardsHand()[1].getRank() + bestHands.get(0).getFiveCardsHand()[1].getSuit() + 
+								bestHands.get(0).getFiveCardsHand()[2].getRank() + bestHands.get(0).getFiveCardsHand()[2].getSuit() + 
+								bestHands.get(0).getFiveCardsHand()[3].getRank() + bestHands.get(0).getFiveCardsHand()[3].getSuit() + 
+								bestHands.get(0).getFiveCardsHand()[4].getRank() + bestHands.get(0).getFiveCardsHand()[4].getSuit());
 						
 					} else if (bestHands.size() == 1) {
 						// There's a winner with 3rd kicker
@@ -166,7 +166,7 @@ public class Evaluator extends HandEvaluation {
 	}
 
 	private void compTwoPairs() {
-		max = bestHands.get(0).getHand()[0].getRank().getValue();
+		max = bestHands.get(0).getFiveCardsHand()[0].getRank().getValue();
 
 		// Checking the possibility of more than 2 players having
 		// the same 2 pairs,
@@ -175,22 +175,22 @@ public class Evaluator extends HandEvaluation {
 		
 		if (bestHands.size() >= 2) {
 			// Checking 2nd pair
-			max = bestHands.get(0).getHand()[2].getRank().getValue();	
+			max = bestHands.get(0).getFiveCardsHand()[2].getRank().getValue();	
 			loop(2);
 			
 			if (bestHands.size() >= 2) {
 				// Checking the kicker
-				max = bestHands.get(0).getHand()[4].getRank().getValue();
+				max = bestHands.get(0).getFiveCardsHand()[4].getRank().getValue();
 				loop(4);
 					
 					if (bestHands.size() >= 2) {
 						// split pot
 						System.out.println("Players win with " + Player.HAND_RANK[bestHands.get(0).getHandValue()]
-								+ bestHands.get(0).getHand()[0].getRank() + bestHands.get(0).getHand()[0].getSuit() + 
-								bestHands.get(0).getHand()[1].getRank() + bestHands.get(0).getHand()[1].getSuit() + 
-								bestHands.get(0).getHand()[2].getRank() + bestHands.get(0).getHand()[2].getSuit() + 
-								bestHands.get(0).getHand()[3].getRank() + bestHands.get(0).getHand()[3].getSuit() + 
-								bestHands.get(0).getHand()[4].getRank() + bestHands.get(0).getHand()[4].getSuit());
+								+ bestHands.get(0).getFiveCardsHand()[0].getRank() + bestHands.get(0).getFiveCardsHand()[0].getSuit() + 
+								bestHands.get(0).getFiveCardsHand()[1].getRank() + bestHands.get(0).getFiveCardsHand()[1].getSuit() + 
+								bestHands.get(0).getFiveCardsHand()[2].getRank() + bestHands.get(0).getFiveCardsHand()[2].getSuit() + 
+								bestHands.get(0).getFiveCardsHand()[3].getRank() + bestHands.get(0).getFiveCardsHand()[3].getSuit() + 
+								bestHands.get(0).getFiveCardsHand()[4].getRank() + bestHands.get(0).getFiveCardsHand()[4].getSuit());
 						
 					} else if (bestHands.size() == 1) {
 						// There's a winner with kicker
@@ -210,7 +210,7 @@ public class Evaluator extends HandEvaluation {
 	}
 	
 	private void compTrips() {
-		max = bestHands.get(0).getHand()[0].getRank().getValue();
+		max = bestHands.get(0).getFiveCardsHand()[0].getRank().getValue();
 
 		// Checking the possibility of more than 2 players having
 		// the same trips,
@@ -219,22 +219,22 @@ public class Evaluator extends HandEvaluation {
 		
 		if (bestHands.size() >= 2) {
 			// Checking 1st kicker
-			max = bestHands.get(0).getHand()[3].getRank().getValue();	
+			max = bestHands.get(0).getFiveCardsHand()[3].getRank().getValue();	
 			loop(3);
 			
 			if (bestHands.size() >= 2) {
 				// Checking the 2nd kicker
-				max = bestHands.get(0).getHand()[4].getRank().getValue();
+				max = bestHands.get(0).getFiveCardsHand()[4].getRank().getValue();
 				loop(4);
 					
 					if (bestHands.size() >= 2) {
 						// split pot
 						System.out.println("Players win with " + Player.HAND_RANK[bestHands.get(0).getHandValue()]
-								+ bestHands.get(0).getHand()[0].getRank() + bestHands.get(0).getHand()[0].getSuit() + 
-								bestHands.get(0).getHand()[1].getRank() + bestHands.get(0).getHand()[1].getSuit() + 
-								bestHands.get(0).getHand()[2].getRank() + bestHands.get(0).getHand()[2].getSuit() + 
-								bestHands.get(0).getHand()[3].getRank() + bestHands.get(0).getHand()[3].getSuit() + 
-								bestHands.get(0).getHand()[4].getRank() + bestHands.get(0).getHand()[4].getSuit());
+								+ bestHands.get(0).getFiveCardsHand()[0].getRank() + bestHands.get(0).getFiveCardsHand()[0].getSuit() + 
+								bestHands.get(0).getFiveCardsHand()[1].getRank() + bestHands.get(0).getFiveCardsHand()[1].getSuit() + 
+								bestHands.get(0).getFiveCardsHand()[2].getRank() + bestHands.get(0).getFiveCardsHand()[2].getSuit() + 
+								bestHands.get(0).getFiveCardsHand()[3].getRank() + bestHands.get(0).getFiveCardsHand()[3].getSuit() + 
+								bestHands.get(0).getFiveCardsHand()[4].getRank() + bestHands.get(0).getFiveCardsHand()[4].getSuit());
 						
 					} else if (bestHands.size() == 1) {
 						// There's a winner with 2nd kicker
@@ -254,7 +254,7 @@ public class Evaluator extends HandEvaluation {
 	}
 	
 	private void compStraight() {
-		max = bestHands.get(0).getHand()[0].getRank().getValue();
+		max = bestHands.get(0).getFiveCardsHand()[0].getRank().getValue();
 
 		// Checking the possibility of more than 2 players having
 		// the same straight,
@@ -263,17 +263,17 @@ public class Evaluator extends HandEvaluation {
 
 		if (bestHands.size() >= 2) {
 			// Checking the highest card
-			max = bestHands.get(0).getHand()[0].getRank().getValue();
+			max = bestHands.get(0).getFiveCardsHand()[0].getRank().getValue();
 			loop(0);
 
 			if (bestHands.size() >= 2) {
 				// split pot
 				System.out.println("Players win with " + Player.HAND_RANK[bestHands.get(0).getHandValue()]
-						+ bestHands.get(0).getHand()[0].getRank() + bestHands.get(0).getHand()[0].getSuit()
-						+ bestHands.get(0).getHand()[1].getRank() + bestHands.get(0).getHand()[1].getSuit()
-						+ bestHands.get(0).getHand()[2].getRank() + bestHands.get(0).getHand()[2].getSuit()
-						+ bestHands.get(0).getHand()[3].getRank() + bestHands.get(0).getHand()[3].getSuit()
-						+ bestHands.get(0).getHand()[4].getRank() + bestHands.get(0).getHand()[4].getSuit());
+						+ bestHands.get(0).getFiveCardsHand()[0].getRank() + bestHands.get(0).getFiveCardsHand()[0].getSuit()
+						+ bestHands.get(0).getFiveCardsHand()[1].getRank() + bestHands.get(0).getFiveCardsHand()[1].getSuit()
+						+ bestHands.get(0).getFiveCardsHand()[2].getRank() + bestHands.get(0).getFiveCardsHand()[2].getSuit()
+						+ bestHands.get(0).getFiveCardsHand()[3].getRank() + bestHands.get(0).getFiveCardsHand()[3].getSuit()
+						+ bestHands.get(0).getFiveCardsHand()[4].getRank() + bestHands.get(0).getFiveCardsHand()[4].getSuit());
 			}
 
 		} else if (bestHands.size() == 1) {
@@ -283,7 +283,7 @@ public class Evaluator extends HandEvaluation {
 	}
 	
 	private void compFlush() {
-		max = bestHands.get(0).getHand()[4].getRank().getValue();
+		max = bestHands.get(0).getFiveCardsHand()[4].getRank().getValue();
 
 		// Checking the possibility of more than 2 players having
 		// the same flush,
@@ -292,17 +292,17 @@ public class Evaluator extends HandEvaluation {
 
 		if (bestHands.size() >= 2) {
 			// Checking the highest card
-			max = bestHands.get(0).getHand()[4].getRank().getValue();
+			max = bestHands.get(0).getFiveCardsHand()[4].getRank().getValue();
 			loop(4);
 
 			if (bestHands.size() >= 2) {
 				// split pot
 				System.out.println("Players win with " + Player.HAND_RANK[bestHands.get(0).getHandValue()]
-						+ bestHands.get(0).getHand()[0].getRank() + bestHands.get(0).getHand()[0].getSuit()
-						+ bestHands.get(0).getHand()[1].getRank() + bestHands.get(0).getHand()[1].getSuit()
-						+ bestHands.get(0).getHand()[2].getRank() + bestHands.get(0).getHand()[2].getSuit()
-						+ bestHands.get(0).getHand()[3].getRank() + bestHands.get(0).getHand()[3].getSuit()
-						+ bestHands.get(0).getHand()[4].getRank() + bestHands.get(0).getHand()[4].getSuit());
+						+ bestHands.get(0).getFiveCardsHand()[0].getRank() + bestHands.get(0).getFiveCardsHand()[0].getSuit()
+						+ bestHands.get(0).getFiveCardsHand()[1].getRank() + bestHands.get(0).getFiveCardsHand()[1].getSuit()
+						+ bestHands.get(0).getFiveCardsHand()[2].getRank() + bestHands.get(0).getFiveCardsHand()[2].getSuit()
+						+ bestHands.get(0).getFiveCardsHand()[3].getRank() + bestHands.get(0).getFiveCardsHand()[3].getSuit()
+						+ bestHands.get(0).getFiveCardsHand()[4].getRank() + bestHands.get(0).getFiveCardsHand()[4].getSuit());
 			}
 
 		} else if (bestHands.size() == 1) {
@@ -312,7 +312,7 @@ public class Evaluator extends HandEvaluation {
 	}
 	
 	private void compFull() {
-		max = bestHands.get(0).getHand()[0].getRank().getValue();
+		max = bestHands.get(0).getFiveCardsHand()[0].getRank().getValue();
 
 		// Checking the possibility of more than 2 players having
 		// the same full-house,
@@ -321,17 +321,17 @@ public class Evaluator extends HandEvaluation {
 
 		if (bestHands.size() >= 2) {
 			// Checking the pair
-			max = bestHands.get(0).getHand()[3].getRank().getValue();
+			max = bestHands.get(0).getFiveCardsHand()[3].getRank().getValue();
 			loop(3);
 
 			if (bestHands.size() >= 2) {
 				// split pot
 				System.out.println("Players win with " + Player.HAND_RANK[bestHands.get(0).getHandValue()]
-						+ bestHands.get(0).getHand()[0].getRank() + bestHands.get(0).getHand()[0].getSuit()
-						+ bestHands.get(0).getHand()[1].getRank() + bestHands.get(0).getHand()[1].getSuit()
-						+ bestHands.get(0).getHand()[2].getRank() + bestHands.get(0).getHand()[2].getSuit()
-						+ bestHands.get(0).getHand()[3].getRank() + bestHands.get(0).getHand()[3].getSuit()
-						+ bestHands.get(0).getHand()[4].getRank() + bestHands.get(0).getHand()[4].getSuit());
+						+ bestHands.get(0).getFiveCardsHand()[0].getRank() + bestHands.get(0).getFiveCardsHand()[0].getSuit()
+						+ bestHands.get(0).getFiveCardsHand()[1].getRank() + bestHands.get(0).getFiveCardsHand()[1].getSuit()
+						+ bestHands.get(0).getFiveCardsHand()[2].getRank() + bestHands.get(0).getFiveCardsHand()[2].getSuit()
+						+ bestHands.get(0).getFiveCardsHand()[3].getRank() + bestHands.get(0).getFiveCardsHand()[3].getSuit()
+						+ bestHands.get(0).getFiveCardsHand()[4].getRank() + bestHands.get(0).getFiveCardsHand()[4].getSuit());
 
 			} else if (bestHands.size() == 1) {
 				// There's a winner with pair
@@ -345,7 +345,7 @@ public class Evaluator extends HandEvaluation {
 	}
 	
 	private void compQuads() {
-		max = bestHands.get(0).getHand()[0].getRank().getValue();
+		max = bestHands.get(0).getFiveCardsHand()[0].getRank().getValue();
 
 		// Checking the possibility of more than 2 players having
 		// quads,
@@ -354,17 +354,17 @@ public class Evaluator extends HandEvaluation {
 
 		if (bestHands.size() >= 2) {
 			// Checking the kicker
-			max = bestHands.get(0).getHand()[4].getRank().getValue();
+			max = bestHands.get(0).getFiveCardsHand()[4].getRank().getValue();
 			loop(4);
 
 			if (bestHands.size() >= 2) {
 				// split pot
 				System.out.println("Players win with " + Player.HAND_RANK[bestHands.get(0).getHandValue()]
-						+ bestHands.get(0).getHand()[0].getRank() + bestHands.get(0).getHand()[0].getSuit()
-						+ bestHands.get(0).getHand()[1].getRank() + bestHands.get(0).getHand()[1].getSuit()
-						+ bestHands.get(0).getHand()[2].getRank() + bestHands.get(0).getHand()[2].getSuit()
-						+ bestHands.get(0).getHand()[3].getRank() + bestHands.get(0).getHand()[3].getSuit()
-						+ bestHands.get(0).getHand()[4].getRank() + bestHands.get(0).getHand()[4].getSuit());
+						+ bestHands.get(0).getFiveCardsHand()[0].getRank() + bestHands.get(0).getFiveCardsHand()[0].getSuit()
+						+ bestHands.get(0).getFiveCardsHand()[1].getRank() + bestHands.get(0).getFiveCardsHand()[1].getSuit()
+						+ bestHands.get(0).getFiveCardsHand()[2].getRank() + bestHands.get(0).getFiveCardsHand()[2].getSuit()
+						+ bestHands.get(0).getFiveCardsHand()[3].getRank() + bestHands.get(0).getFiveCardsHand()[3].getSuit()
+						+ bestHands.get(0).getFiveCardsHand()[4].getRank() + bestHands.get(0).getFiveCardsHand()[4].getSuit());
 
 			} else if (bestHands.size() == 1) {
 				// There's a winner with kicker
@@ -379,7 +379,7 @@ public class Evaluator extends HandEvaluation {
 	}
 	
 	private void compStrFlush() {
-		max = bestHands.get(0).getHand()[0].getRank().getValue();
+		max = bestHands.get(0).getFiveCardsHand()[0].getRank().getValue();
 
 		// Checking the possibility of more than 2 players having
 		// straight-flush,
@@ -388,17 +388,17 @@ public class Evaluator extends HandEvaluation {
 
 		if (bestHands.size() >= 2) {
 			// Checking the highest card
-			max = bestHands.get(0).getHand()[0].getRank().getValue();
+			max = bestHands.get(0).getFiveCardsHand()[0].getRank().getValue();
 			loop(0);
 
 			if (bestHands.size() >= 2) {
 				// split pot
 				System.out.println("Players win with " + Player.HAND_RANK[bestHands.get(0).getHandValue()]
-						+ bestHands.get(0).getHand()[0].getRank() + bestHands.get(0).getHand()[0].getSuit()
-						+ bestHands.get(0).getHand()[1].getRank() + bestHands.get(0).getHand()[1].getSuit()
-						+ bestHands.get(0).getHand()[2].getRank() + bestHands.get(0).getHand()[2].getSuit()
-						+ bestHands.get(0).getHand()[3].getRank() + bestHands.get(0).getHand()[3].getSuit()
-						+ bestHands.get(0).getHand()[4].getRank() + bestHands.get(0).getHand()[4].getSuit());
+						+ bestHands.get(0).getFiveCardsHand()[0].getRank() + bestHands.get(0).getFiveCardsHand()[0].getSuit()
+						+ bestHands.get(0).getFiveCardsHand()[1].getRank() + bestHands.get(0).getFiveCardsHand()[1].getSuit()
+						+ bestHands.get(0).getFiveCardsHand()[2].getRank() + bestHands.get(0).getFiveCardsHand()[2].getSuit()
+						+ bestHands.get(0).getFiveCardsHand()[3].getRank() + bestHands.get(0).getFiveCardsHand()[3].getSuit()
+						+ bestHands.get(0).getFiveCardsHand()[4].getRank() + bestHands.get(0).getFiveCardsHand()[4].getSuit());
 			}
 
 		} else if (bestHands.size() == 1) {

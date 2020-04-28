@@ -19,7 +19,7 @@ public class CardsDeck implements Serializable{
 	private static final long serialVersionUID = -759739111081498528L;
 	public static final int MAX_CARDS = 52;
 	
-	private ArrayList<Card> cardsDeck;
+	private final ArrayList<Card> cardsDeck;
 
 	/**
 	 * Constructs a CardsDeck object. Initializes a deck of 52 cards.

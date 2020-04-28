@@ -109,7 +109,7 @@ public class ServerConnection extends Thread {
 		// Game is in process, every player at the table is dealt hole cards
 		// only when at least 2 players are seating at the table - new hand will
 		// be dealt and run
-		while (table.getPlayers().size() < 2) {
+		while (table.getTablePlayers().size() < 2) {
 			try {
 				sleep(500);
 			} catch (InterruptedException e) {
@@ -118,7 +118,6 @@ public class ServerConnection extends Thread {
 		}
 
 		while (running) {
-
 			try {
 				sleep(500);
 			} catch (InterruptedException e) {
@@ -130,21 +129,20 @@ public class ServerConnection extends Thread {
 				sendInfoToAllClients("New Hand");
 				table.setHoleCardsWereDealt(false);
 
-			} else if (table.isFlop()) {
+			} else if (table.isFlopWasDealt()) {
 				tableInfo.setFlop(table.getDealer().getFlop());
 				sendInfoToAllClients("FLOP");
 
-			} else if (table.isTurn()) {
+			} else if (table.isTurnWasDealt()) {
 				tableInfo.setTurn(table.getDealer().getTurn());
 				sendInfoToAllClients("TURN");
 
-			} else if (table.isRiver()) {
+			} else if (table.isRiverWasDealt()) {
 				tableInfo.setRiver(table.getDealer().getRiver());
 				sendInfoToAllClients("RIVER");			
 			}
 
-			// Server is waiting for players actions,
-			// represented by strings here
+			// Server is waiting for players actions, represented by strings here
 			readActionInput();
 
 			if (actionInput.equals("fold")) {

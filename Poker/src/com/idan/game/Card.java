@@ -15,8 +15,11 @@ import javax.swing.ImageIcon;
 public class Card implements Serializable {
 	private static final long serialVersionUID = 8723973531140999334L;
 	
-	private Rank rank;
-	private Suit suit;
+	public static final int MIN_VALUE = 1;
+	public static final int MAX_VALUE = 15;
+	
+	private final Rank rank;
+	private final Suit suit;
 	private ImageIcon cardImage;
 	
 	public enum Rank {
@@ -38,6 +41,15 @@ public class Card implements Serializable {
 		 */
 		public int getValue() {
 			return value;
+		}
+		
+		/**
+		 * Changes ACE value to eaither 1 or 15 (1 for lowest straight).
+		 * 
+		 * @param value the value of ACE
+		 */
+		public void setAceValue(int value) {
+			ACE.value = value;
 		}
 		
 		/**

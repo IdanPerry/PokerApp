@@ -8,27 +8,32 @@ import java.net.Socket;
 
 import javax.swing.ImageIcon;
 
+import com.idan.GUI.Lobby;
+import com.idan.GUI.TableWindow;
 import com.idan.game.Player;
 import com.idan.server.TableInformation;
 
-public class ClientConnection extends Thread {
-	private Socket socket;
-	private ObjectInputStream objectInput;
-	private ObjectOutputStream objectOutput;
+/**
+ * This class represents a client (player) side connection.
+ * 
+ * @author Idan Perry
+ * @version 03.05.2013
+ */
 
-	private LobbyGUI lobbyGUI;
-	private TableGUI tableGUI;
+public class ClientConnection extends Thread {
+	private final ObjectInputStream objectInput;
+	private final ObjectOutputStream objectOutput;
+
+	private final ImageIcon[] opponentCards;
+	private Lobby lobbyGUI;
+	private TableWindow tableGUI;
 	private Player player;
 	private TableInformation tableInfo;
 
 	private String handState;
-	private int checkCounter = 0;
-	private boolean running = true;
-	private String actionInput = "";
-
-	private ClientConnection clientConnection = this;
-
-	private ImageIcon[] opponentCards = new ImageIcon[2];
+	private int checkCounter;
+	private boolean running;
+	private String actionInput;
 
 	/**
 	 * Constructs a ClientConnection object
@@ -36,15 +41,33 @@ public class ClientConnection extends Thread {
 	 * @param player the player whom this connection to be established.
 	 */
 	public ClientConnection(Socket socket, Player player) {
-		this.socket = socket;
 		this.player = player;
+		ObjectOutputStream tempObjectOutput;
+		ObjectInputStream tempObjectInput;	
+		
+		try {
+			tempObjectOutput = new ObjectOutputStream(socket.getOutputStream());
+			tempObjectInput = new ObjectInputStream(socket.getInputStream());
+			
+		} catch (IOException e) {
+			tempObjectInput = null;
+			tempObjectOutput = null;
+			e.printStackTrace();
+		}
+		
+		objectOutput = tempObjectOutput;
+		objectInput = tempObjectInput;
+		
+		opponentCards = new ImageIcon[2];
+		running = true;
+		actionInput = "";		
 	}
 
 	/**
 	 * Sets the game table window.
 	 * @param tableGUI the table window
 	 */
-	public void setTableGUI(TableGUI tableGUI) {
+	public void setTableGUI(TableWindow tableGUI) {
 		this.tableGUI = tableGUI;
 	}
 
@@ -80,21 +103,9 @@ public class ClientConnection extends Thread {
 		this.running = running;
 	}
 
-	/*
-	 * Opens input and output object streams for this connection.
-	 */
-	private void openObjectStream() {
-		try {
-			objectOutput = new ObjectOutputStream(socket.getOutputStream());
-			objectInput = new ObjectInputStream(socket.getInputStream());
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 	/**
 	 * Sends player's object to the server.
+	 * 
 	 * @param player the player object to send to the server
 	 */
 	public void sendToServer(Player player) {
@@ -108,7 +119,8 @@ public class ClientConnection extends Thread {
 	}
 
 	/**
-	 * Sends game actions and bet amount to the server
+	 * Sends game actions and bet amount to the server.
+	 * 
 	 * @param actionOutput the game actions represented as strings
 	 * @param betSize the bet amount
 	 */
@@ -148,18 +160,12 @@ public class ClientConnection extends Thread {
 
 	@Override
 	public void run() {
-		openObjectStream();
+		ClientConnection clientConnection = this;
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {
-					lobbyGUI = new LobbyGUI(clientConnection);
-					lobbyGUI.getLobbyFrame().setVisible(true);
-
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-
+				lobbyGUI = new Lobby(clientConnection);
+				lobbyGUI.getLobbyFrame().setVisible(true);
 			}
 		});
 

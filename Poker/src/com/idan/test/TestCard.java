@@ -1,42 +1,115 @@
 package com.idan.test;
 
-import java.io.Serializable;
-
-public class TestCard implements Serializable {
-
-	private static final long serialVersionUID = 8723973531140999334L;
+public class TestCard  {
+	public static final int MIN_VALUE = 1;
+	public static final int MAX_VALUE = 15;
 	
-	protected String rank;
-	protected String suit;
-	protected int rankValue;
-	protected int suitValue;
-	protected static final String[] RANKS = {"2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A"};
-	protected static final String[] SUITS = {"\u2660", "\u2663", "\u2665", "\u2666"}; //spade, club, heart, diamond
+	private final Rank rank;
+	private final Suit suit;
 	
-	public TestCard(String rank, String suit, int rankValue, int suitValue) {
+	public enum Rank {
+		TWO("2", 2), THREE("3", 3), FOUR("4", 4), FIVE("5", 5), SIX("6", 6), SEVEN("7", 7), EIGHT("8", 8), 
+		NINE("9", 9), TEN("10", 11), JACK("J", 12), QUEEN("Q", 13), KING("K", 14), ACE("A", 15);
+		
+		private String rank;
+		private int value;
+		
+		Rank(String rank, int value) {
+			this.rank = rank;
+			this.value = value;
+		}
+		
+		/**
+		 * Returns the card's value in accordance to the cards rank.
+		 * 
+		 * @return the value in accordance to the card's rank.
+		 */
+		public int getValue() {
+			return value;
+		}
+		
+		/**
+		 * Changes ACE value to eaither 1 or 15 (1 for lowest straight).
+		 * 
+		 * @param value the value of ACE
+		 */
+		public void setAceValue(int value) {
+			ACE.value = value;
+		}
+		
+		/**
+		 * Returns the card's rank as a string representation.
+		 * @return the card's rank as a string representation.
+		 */
+		@Override
+		public String toString() {
+			return rank;
+		}
+	}
+	
+	public enum Suit {
+		// the strings are unicode symbols in accordance to the suits
+		SPADES("\u2660", 1), CLUBS("\u2663", 2), HEARTS("\u2665", 3), DIAMONDS("\u2666", 4);	
+		private String symbol;
+		private int value;
+		
+		/**
+		 * Construcs a Suit object of enum type.
+		 * @param symbol a string representing the suit symbol.
+		 */
+		Suit(String symbol, int value) {
+			this.symbol = symbol;
+			this.value = value;
+		}
+		
+		/**
+		 * Returns the card's value in accordance to the cards suit.
+		 * 
+		 * @return the value in accordance to the card's suit.
+		 */
+		public int getValue() {
+			return value;
+		}
+		
+		/**
+		 * Returns the card's suit as a unicode symbol.
+		 * @return the card's suit as a unicode symbol.
+		 */
+		@Override
+		public String toString() {
+			return symbol;
+		}
+	}
+	
+	/**
+	 * Constructs a game card with the specified rank and suit.
+	 * 
+	 * @param rank the card rank
+	 * @param suit the card suit
+	 * @param rankValue the card value of the rank
+	 * @param suitValue the card value of the suit
+	 */
+	public TestCard(Rank rank, Suit suit) {
 		this.rank = rank;
 		this.suit = suit;
-		this.rankValue = rankValue;
-		this.suitValue = suitValue;
 	}
 	
-	public TestCard() {	
-	}
-	
-	public String getRank() {
+	/**
+	 * Returns the rank of this card.
+	 * 
+	 * @return the rank of this card
+	 */
+	public Rank getRank() {
 		return rank;
 	}
 
-	public String getSuit() {
+	/**
+	 * Returns the suit of this card.
+	 * 
+	 * @return the suit of this card
+	 */
+	public Suit getSuit() {
 		return suit;
-	}
-	
-	public int getRankValue() {
-		return rankValue;
-	}
-
-	public int getSuitValue() {
-		return suitValue;
 	}
 
 //	public void checkDeck(){

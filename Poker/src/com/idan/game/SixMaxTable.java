@@ -2,28 +2,33 @@ package com.idan.game;
 
 import javax.swing.JOptionPane;
 
-public class SixMaxTable extends Table {
-	
-	private static final int MAX_PLAYERS = 6;
-	private static final int[] SEATS = new int[6];
+/**
+ * This class represents a 6 players table.
+ * 
+ * @author Idan Perry
+ * @version 03.05.2013
+ *
+ */
 
+public class SixMaxTable extends Table {
+	private static final int MAX_PLAYERS = 6;
+
+	/**
+	 * Constructs a 6 players table.
+	 * 
+	 * @param tableId the id number of this table
+	 */
 	public SixMaxTable(int tableId) {
 		super(tableId);
 	}
 	
-	public SixMaxTable() {
-		super();
-	}
-	
 	@Override
 	public void seatPlayer(Player player) {
-		if (tablePlayers.size() < MAX_PLAYERS) {
-			tablePlayers.add(player);
+		if (getTablePlayers().size() < MAX_PLAYERS) {
+			getTablePlayers().add(player);
 			
-		} else {			
-			System.out.println("Table is full");
-		}
-		
+		} else		
+			System.out.println("Table is full");		
 	}
 	
 	@Override
@@ -36,7 +41,7 @@ public class SixMaxTable extends Table {
 				inputPlayersName = JOptionPane.showInputDialog("Enter player's name");
 				Player player = new Player(inputPlayersName);
 
-				tablePlayers.add(player);
+				getTablePlayers().add(player);
 			}
 		}
 	}

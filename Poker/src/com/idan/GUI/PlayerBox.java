@@ -1,4 +1,4 @@
-package com.idan.client;
+package com.idan.GUI;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -17,7 +17,6 @@ public class PlayerBox extends JPanel {
 		super.paintComponent(g);		
 		Graphics2D g2 = (Graphics2D) g;
 		
-
 		g2.setColor(Color.LIGHT_GRAY);
 		g2.fillRect(50, 50, 50, 50);
 	}

@@ -1,24 +1,40 @@
 package com.idan.test;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
-public class TestCardsDeck extends TestCard {
+public class TestCardsDeck {
+	public static final int MAX_CARDS = 52;
 	
-	private static final long serialVersionUID = -759739111081498528L;
-	
-	private ArrayList<TestCard> cardsDeck;
+	private final ArrayList<TestCard> cardsDeck;
 
+	/**
+	 * Constructs a CardsDeck object. Initializes a deck of 52 cards.
+	 */
 	public TestCardsDeck() {
-		cardsDeck = new ArrayList<TestCard>();
-		for (int i = 0; i < RANKS.length; i++){
-			for (int j = 0; j < SUITS.length; j++){
-				TestCard card = new TestCard(RANKS[i], SUITS[j], i+2, j+1);
+		cardsDeck = new ArrayList<TestCard>(MAX_CARDS);
+		
+		for (TestCard.Rank rank : TestCard.Rank.values()) {
+			for (TestCard.Suit suit : TestCard.Suit.values()) {
+				TestCard card = new TestCard(rank, suit);
 				cardsDeck.add(card);
 			}
 		}
 	}
 	
+	/**
+	 * Returns a deck of cards.
+	 * 
+	 * @return a deck of cards
+	 */
 	public ArrayList<TestCard> getCardsDeck() {
 		return cardsDeck;
+	}
+	
+	/**
+	 * Shuffles the cards of this deck.
+	 */
+	public void shuffle() {
+		Collections.shuffle(cardsDeck);
 	}
 }

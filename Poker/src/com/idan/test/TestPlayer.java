@@ -1,11 +1,9 @@
 package com.idan.test;
 
-import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Comparator;
 
-public class TestPlayer implements Serializable {
-
-	private static final long serialVersionUID = 271175255872953148L;
-	
+public class TestPlayer  {
 	private String name;
 	private int handValue;
 	private int chips;
@@ -15,7 +13,8 @@ public class TestPlayer implements Serializable {
 	private TestCard holeCard2;
 	private TestCard holeCard3;
 	private TestCard holeCard4;
-	private TestCard[] hand;
+	private ArrayList<TestCard> sevenCardsTempHand;  // holecards and all community cards combined
+	private TestCard[] fiveCardsHand;  // best posible hand made out of 5 cards
 
 	private boolean strFlush;
 	private boolean quads;
@@ -39,9 +38,6 @@ public class TestPlayer implements Serializable {
 	
 	public static final String[] HAND_RANK = {"High Card", "Pair", "Two Pairs", 
 			"Trips", "Straight", "Flush", "Full House", "Quads", "Straight Flush"};
-	
-	public TestPlayer() {
-	}
 	
 	public TestPlayer(String name) {
 		this.name = name;
@@ -85,12 +81,40 @@ public class TestPlayer implements Serializable {
 		return holeCard4;
 	}
 	
-	public void setHand(TestCard[] hand) {
-		this.hand = hand;
+	/**
+	 * Sets a hand to the player.
+	 * 
+	 * @param hand an array of cards representing the hand
+	 */
+	public void setFiveCardsHand(TestCard[] hand) {
+		this.fiveCardsHand = hand;
 	}
 	
-	public TestCard[] getHand() {
-		return hand;
+	/**
+	 * Returns the player's hand.
+	 * 
+	 * @return the player's hand
+	 */
+	public TestCard[] getFiveCardsHand() {
+		return fiveCardsHand;
+	}
+	
+	/**
+	 * Returns a temporary seven cards hand.
+	 * 
+	 * @return a temporary seven cards hand
+	 */
+	public ArrayList<TestCard> getSevenCardsTempHand() {
+		return sevenCardsTempHand;
+	}
+
+	/**
+	 * Sets a temporary seven cards hand to the player.
+	 * 
+	 * @param hand an array of cards representing the temporary hand
+	 */
+	public void setSevenCardsTempHand(ArrayList<TestCard> sevenCardsTempHand) {
+		this.sevenCardsTempHand = sevenCardsTempHand;
 	}
 	
 	public void setChips(int chips) {
@@ -263,5 +287,48 @@ public class TestPlayer implements Serializable {
 		call = false;
 		bet = false;
 		raise = false;
+	}
+	
+	public void sortHandByRank(ArrayList<TestCard> hand) {
+		hand.sort(new Comparator<TestCard>() {
+
+			@Override
+			public int compare(TestCard card1, TestCard card2) {
+				return Integer.compare(card1.getRank().getValue(), card2.getRank().getValue());
+			}
+		});
+//		Card temp;
+//		
+//		for (int i = 0; i < hand.length; i++) {
+//			for(int j = i+1; j < hand.length; j++) {
+//				if(hand[i].getRank().getValue() > hand[j].getRank().getValue()) {
+//					temp = hand[i];
+//					hand[i] = hand[j];
+//					hand[j] = temp;
+//				}
+//			}
+//		}
+	}
+	
+	public void sortHandBySuit(ArrayList<TestCard> hand) {
+		hand.sort(new Comparator<TestCard>() {
+
+			@Override
+			public int compare(TestCard card1, TestCard card2) {
+				return Integer.compare(card1.getSuit().getValue(), card2.getSuit().getValue());
+			}
+		});
+		
+//		Card temp;
+//		
+//		for (int i = 0; i < hand.length; i++) {
+//			for(int j = i+1; j < hand.length; j++) {
+//				if(hand[i].getSuit().getValue() > hand[j].getSuit().getValue()) {
+//					temp = hand[i];
+//					hand[i] = hand[j];
+//					hand[j] = temp;
+//				}
+//			}
+//		}
 	}
 }

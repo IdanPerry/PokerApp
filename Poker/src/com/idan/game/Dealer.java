@@ -7,16 +7,12 @@ package com.idan.game;
  * @version 13.05.2013
  */
 
-public class Dealer {
+public abstract class Dealer {
+	private final CardsDeck deck;
+	private final Table table;
 	private Card[] flop = new Card[3];
 	private Card turn;
 	private Card river;
-
-	protected CardsDeck deck;
-	protected Table table;
-	
-	public Dealer() {
-	}
 
 	/**
 	 * Constructs a dealer, which manages the game at a single table.
@@ -26,6 +22,15 @@ public class Dealer {
 	public Dealer(Table table) {
 		this.table = table;
 		deck = new CardsDeck();
+	}
+
+	/**
+	 * Returns the table this dealer manages.
+	 * 
+	 * @return the table this dealer manages
+	 */
+	public Table getTable() {
+		return table;
 	}
 
 	/**
@@ -70,9 +75,9 @@ public class Dealer {
 	 * @param cards the number of cards each player holds (2 in holdem, 4 in omaha)
 	 */
 	public void dealFlop(int cards) {
-		flop[0] = deck.getCardsDeck().get(1 + table.getPlayers().size() * cards);
-		flop[1] = deck.getCardsDeck().get(2 + table.getPlayers().size() * cards);
-		flop[2] = deck.getCardsDeck().get(3 + table.getPlayers().size() * cards);
+		flop[0] = deck.getCardsDeck().get(1 + table.getTablePlayers().size() * cards);
+		flop[1] = deck.getCardsDeck().get(2 + table.getTablePlayers().size() * cards);
+		flop[2] = deck.getCardsDeck().get(3 + table.getTablePlayers().size() * cards);
 	}
 
 	/**
@@ -81,7 +86,7 @@ public class Dealer {
 	 * @param cards the number of cards each player holds (2 in holdem, 4 in omaha)
 	 */
 	public void dealTurn(int cards) {
-		turn = deck.getCardsDeck().get(5 + table.getPlayers().size() * cards);
+		turn = deck.getCardsDeck().get(5 + table.getTablePlayers().size() * cards);
 	}
 
 	/**
@@ -90,7 +95,7 @@ public class Dealer {
 	 * @param cards the number of cards each player holds (2 in holdem, 4 in omaha)
 	 */
 	public void dealRiver(int cards) {
-		river = deck.getCardsDeck().get(7 + table.getPlayers().size() * cards);
+		river = deck.getCardsDeck().get(7 + table.getTablePlayers().size() * cards);
 	}
 	
 	/**
@@ -114,6 +119,13 @@ public class Dealer {
 	public void printRiver() {
 		System.out.println("\nRiver: " + river.getRank() + river.getSuit() + "\n");
 	}
+	
+	public abstract void dealHoleCards();
+	
+	public abstract void printHoleCards();
+	
+	public abstract void printHands();
+	
 
 	/** TEST ** checking hands statistics */
 	// public void drawHoleCards() {

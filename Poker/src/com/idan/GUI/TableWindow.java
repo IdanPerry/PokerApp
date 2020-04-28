@@ -1,4 +1,4 @@
-package com.idan.client;
+package com.idan.GUI;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -18,7 +18,9 @@ import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class TableGUI implements ActionListener, ChangeListener {
+import com.idan.client.ClientConnection;
+
+public class TableWindow implements ActionListener, ChangeListener {
 	private static final int[][] BOX_POSITION = { { 275, 365 }, { 275, 52 } };
 	private static final int[][] HOLE_CARDS_POSITION = { { 295, 330 }, { 345, 330 }, { 295, 18 }, { 345, 18 } };
 	private static final int CARD_WIDTH = 50;
@@ -46,7 +48,7 @@ public class TableGUI implements ActionListener, ChangeListener {
 	private JButton raiseBtn;
 	private JButton leaveTableBtn;
 
-	public TableGUI(ClientConnection c) {
+	public TableWindow(ClientConnection c) {
 		this.clientConnection = c;
 
 		initComponents();
@@ -54,7 +56,7 @@ public class TableGUI implements ActionListener, ChangeListener {
 
 	private void initComponents() {
 		tableFrame = new JFrame("No-limit Hold'em - Logged in as " + clientConnection.getPlayer().getName());
-		tableFrame.setBounds(100, 100, 705, 525);
+		tableFrame.setSize(705, 525);
 		tableFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		tableFrame.setResizable(false);
 

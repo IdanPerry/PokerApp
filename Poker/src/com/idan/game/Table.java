@@ -6,136 +6,198 @@ import com.idan.server.TableInformation;
 import com.idan.texasholdem.Evaluator;
 import com.idan.texasholdem.TexasHoldemDealer;
 
+/**
+ * This abstract class represented a poker table.
+ * 
+ * @author Idan Perry
+ * @version 13.05.2013
+ *
+ */
+
 public abstract class Table extends Thread {
 	public static final int SMALL_BLIND = 50;
 	public static final int BIG_BLIND = 100;
-
+	public static final int MAX_SEATS = 9;
 	protected static final int MIN_PLAYRES = 2;
-	private static final int[] SEATS = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+	
+	private final ArrayList<Player> tablePlayers;
+	private final ArrayList<Player> playersInHand;
+	private final ArrayList<String> playersNames;
+	private final TexasHoldemDealer dealer;
+	private final TableInformation tableInfo;
+	private Player player;
 
-	protected ArrayList<Player> tablePlayers;
-	protected ArrayList<Player> playersInHand;
-	protected ArrayList<String> playersNames;
+	private final int tableId;
+	private int numOfPlayers;
+	private int numOfPlayersInHand;
+	private int butPosition;
+	private int sbPosition;
+	private int bbPosition;
+	private int bet;
+	private int pot;
+	private boolean holeCardsWereDealt;
+	private boolean running;
+	private boolean preFlop;
+	private boolean flopWasDealt;
+	private boolean turnWasDealt;
+	private boolean riverWasDealt;
 
-	protected TexasHoldemDealer dealer;
-	protected TableInformation tableInfo;
-	protected Player player;
-
-	protected int tableId;
-	protected int numOfPlayers;
-	protected int numOfPlayersInHand;
-
-	protected int butPosition;
-	protected int sbPosition;
-	protected int bbPosition;
-
-	protected String action;
-	protected int bet;
-	protected int pot;
-	protected int foldCounter;
-	protected int checkCounter = 0;
-	protected int callCounter = 0;
-
-	protected boolean holeCardsWereDealt;
-	protected boolean running;
-	protected boolean preFlop;
-	protected boolean flop;
-	protected boolean turn;
-	protected boolean river;
-
-	public Table() {
-		tablePlayers = new ArrayList<Player>();
-		dealer = new TexasHoldemDealer(this);
-		tableInfo = new TableInformation();
-	}
-
+	/**
+	 * Constructs a poker table with a specified unique id.
+	 * 
+	 * @param tableId the table id
+	 */
 	public Table(int tableId) {
 		this.tableId = tableId;
 
 		tablePlayers = new ArrayList<Player>();
 		dealer = new TexasHoldemDealer(this);
 		tableInfo = new TableInformation();
+		playersInHand = new ArrayList<Player>();
+		playersNames = new ArrayList<String>();
 	}
-
-	public int[] getSeat() {
-		return SEATS;
-	}
-
-	public ArrayList<Player> getPlayers() {
+	
+	/**
+	 * Returns a list of the players at the table.
+	 * 
+	 * @return a list of the players at the table
+	 */
+	public ArrayList<Player> getTablePlayers() {
 		return tablePlayers;
 	}
 
+	/**
+	 * Returns a list of the players participating in the current hand.
+	 * 
+	 * @return a list of the players participating in the current hand
+	 */
 	public ArrayList<Player> getPlayersInHand() {
 		return playersInHand;
 	}
 
+	/**
+	 * Returns the table id.
+	 * 
+	 * @return the table id
+	 */
 	public int getTableId() {
 		return tableId;
 	}
 
-	protected void setTableId(int tableId) {
-		this.tableId = tableId;
-	}
-
+	/**
+	 * Returns the dealer at this table.
+	 * 
+	 * @return the dealer at this table
+	 */
 	public Dealer getDealer() {
 		return dealer;
 	}
 
+	/**
+	 * Returns this table game information.
+	 * 
+	 * @return this table game information
+	 */
 	public TableInformation getTableInfo() {
 		return tableInfo;
 	}
 
+	/**
+	 * Initializes the number of players at this table.
+	 * 
+	 * @param numOfPlayers the number of players at this table
+	 */
 	protected void setNumOfPlayers(int numOfPlayers) {
 		this.numOfPlayers = numOfPlayers;
 	}
 
+	/**
+	 * Returns the number of players at this table.
+	 * 
+	 * @return the number of players at this table
+	 */
 	public int getNumOfPlayers() {
 		return numOfPlayers;
 	}
 
+	/**
+	 * Returns the number of players participating in the current hand.
+	 * 
+	 * @return the number of players participating in the current hand
+	 */
 	public int getNumOfPlayersInHand() {
 		return numOfPlayersInHand;
 	}
 
-	public Player getPlayer() {
-		return player;
-	}
-
+	/**
+	 * Changes the state of holecards whether were dealt at this table or not.
+	 * 
+	 * @param holeCardsWereDealt the boolean flag to change.
+	 */
 	public void setHoleCardsWereDealt(boolean holeCardsWereDealt) {
 		this.holeCardsWereDealt = holeCardsWereDealt;
 	}
 
+	/**
+	 * Returns the bet amount.
+	 * 
+	 * @return the bet amount
+	 */
 	public int getBet() {
 		return bet;
 	}
 
+	/**
+	 * Returns true if holecards were dealt at this table, otherwise returns flase.
+	 * 
+	 * @return true if holecards were dealt at this table, otherwise returns flase
+	 */
 	public boolean isHoleCardsWereDealt() {
 		return holeCardsWereDealt;
 	}
 
-	public boolean isFlop() {
-		return flop;
+	/**
+	 * Returns true if flop were dealt at this table, otherwise returns flase.
+	 * 
+	 * @return true if flop were dealt at this table, otherwise returns flase
+	 */
+	public boolean isFlopWasDealt() {
+		return flopWasDealt;
 	}
 
-	public boolean isTurn() {
-		return turn;
+	/**
+	 * Returns true if turn were dealt at this table, otherwise returns flase.
+	 * 
+	 * @return true if turn were dealt at this table, otherwise returns flase
+	 */
+	public boolean isTurnWasDealt() {
+		return turnWasDealt;
 	}
 
-	public boolean isRiver() {
-		return river;
+	/**
+	 * Returns true if river were dealt at this table, otherwise returns flase.
+	 * 
+	 * @return true if river were dealt at this table, otherwise returns flase
+	 */
+	public boolean isRiverWasDealt() {
+		return riverWasDealt;
 	}
 
+	/*
+	 * Asks the players at the big blind and small blind positions
+	 * to make the big/small blind bets in accordance to this table bet amount.
+	 */
 	private void postBlinds() {
 		for (int i = 0; i < playersInHand.size(); i++) {
-			if (playersInHand.get(i).isBigBlind()) {
-
+			// big blind
+			if (playersInHand.get(i).isBigBlindPosition()) {
 				playersInHand.get(i).bet(BIG_BLIND);
 				System.out.println(playersInHand.get(i).getName() + " posts big blind " + BIG_BLIND);
 				System.out.println(playersInHand.get(i).getName() + " has " + playersInHand.get(i).getChips());
 			}
 
-			if (playersInHand.get(i).isSmallBlind()) {
-
+			// small blind
+			if (playersInHand.get(i).isSmallBlindPosition()) {
 				playersInHand.get(i).bet(SMALL_BLIND);
 				System.out.println(playersInHand.get(i).getName() + " posts small blind " + SMALL_BLIND);
 				System.out.println(playersInHand.get(i).getName() + " has " + playersInHand.get(i).getChips());
@@ -143,41 +205,51 @@ public abstract class Table extends Thread {
 		}
 	}
 
+	/*
+	 * Initializes the positions of the players at the "button", big blind
+	 * and small blind positions.
+	 */
 	private void initPositions() {
 		butPosition = tablePlayers.size() - 1;
 		sbPosition = 0;
 		bbPosition = 1;
 	}
 
-	// sets booleans to false after each hand
+	/*
+	 * Sets booleans to false after each hand.
+	 */
 	private void resetBlinds() {
 		for (int i = 0; i < tablePlayers.size(); i++) {
-			tablePlayers.get(i).setBigBlind(false);
-			tablePlayers.get(i).setSmallBlind(false);
-			tablePlayers.get(i).setDealer(false);
+			tablePlayers.get(i).setBigBlindPosition(false);
+			tablePlayers.get(i).setSmallBlindPosition(false);
+			tablePlayers.get(i).setDealerPosition(false);
 		}
 	}
 
-	// Dealer button, small and big blinds move clockwise every hand
+	/*
+	 *  "Button", small blind and big blind positions move clockwise every hand.
+	 */
 	private void nextPositions() {
 		butPosition++;
 		sbPosition++;
 		bbPosition++;
 
-		if (butPosition == tablePlayers.size()) {
+		// "button"
+		if (butPosition == tablePlayers.size())
 			butPosition = 0;
-		}
 
-		if (sbPosition == tablePlayers.size()) {
+		// small blind
+		if (sbPosition == tablePlayers.size())
 			sbPosition = 0;
-		}
 
-		if (bbPosition == tablePlayers.size()) {
+		// big blind
+		if (bbPosition == tablePlayers.size())
 			bbPosition = 0;
-		}
 	}
 
-	// set turns for beginning of each street
+	/*
+	 * Sets turns for beginning of each street in the current hand.
+	 */
 	private void setPlayersTurns() {
 		for (int i = 0; i < playersInHand.size(); i++) {
 			playersInHand.get(i).setYourTurn(false);
@@ -185,22 +257,25 @@ public abstract class Table extends Thread {
 		}
 
 		if (preFlop) {
-
+			// 2 to 3 players in the current hand
 			if (playersInHand.size() == MIN_PLAYRES || playersInHand.size() == 3) {
 				playersInHand.get(butPosition).setYourTurn(true);
 				player = playersInHand.get(butPosition);
 
+			// more than 3 players in the current hand
 			} else if (playersInHand.size() > 3) {
 				playersInHand.get(bbPosition + 1).setYourTurn(true);
 				player = playersInHand.get(bbPosition + 1);
 			}
 
-		} else if (flop || turn || river) {
-
+		// post flop
+		} else if (flopWasDealt || turnWasDealt || riverWasDealt) {
+			// 2 players in the current hand
 			if (playersInHand.size() == MIN_PLAYRES) {
 				playersInHand.get(bbPosition).setYourTurn(true);
 				player = playersInHand.get(bbPosition);
 
+			// more than 2 players in the current hand
 			} else if (playersInHand.size() > MIN_PLAYRES) {
 				playersInHand.get(sbPosition).setYourTurn(true);
 				player = playersInHand.get(sbPosition);
@@ -211,7 +286,9 @@ public abstract class Table extends Thread {
 		System.out.println(player.getName() + " Its your turn");
 	}
 
-	// set turns for inside street playing
+	/*
+	 * Sets turns for inside street playing.
+	 */
 	private void nextTurn() {
 		for (int i = 0; i < playersInHand.size(); i++) {
 			if (playersInHand.get(i).isYourTurn() && i < playersInHand.size() - 1) {
@@ -232,23 +309,76 @@ public abstract class Table extends Thread {
 
 		System.out.println(player.getName() + " Its your turn");
 	}
+	
+	/*
+	 * 
+	 */
+	private void flopAction() {
+		player.setChips(player.getChips() - bet);
+		pot += bet;
+		tableInfo.setPot(pot);
 
+		dealer.dealTurn(2);
+		dealer.printTurn();
+
+		turnWasDealt = true;
+		flopWasDealt = false;
+	}
+	
+	private void turnAction() {
+		player.setChips(player.getChips() - bet);
+		pot += bet;
+		tableInfo.setPot(pot);
+
+		dealer.dealRiver(2);
+		dealer.printRiver();
+		tableInfo.setRiver(dealer.getRiver());
+
+		riverWasDealt = true;
+		turnWasDealt = false;
+	}
+	
+	private void riverAction() {
+		player.setChips(player.getChips() - bet);
+		pot += bet;
+		tableInfo.setPot(pot);
+
+		Evaluator e = new Evaluator(dealer, this);
+		e.resetHandRanks();
+		e.sortAllHands();
+		e.evaluateAllHands();;
+		e.showDown();
+
+		riverWasDealt = false;
+
+		// move chips to the winner of this hand
+		for (int i = 0; i < playersInHand.size(); i++) {
+			if (playersInHand.get(i).isWin())
+				playersInHand.get(i).setChips(playersInHand.get(i).getChips() + pot);
+		}
+
+		playersInHand.clear();
+		nextPositions();
+		startHand();
+	}
+
+	/*
+	 * Running as long as one of the players made a raise.
+	 * each raise forces the other players in the hand to react.
+	 */
 	private void raiseLoop() {
 		while (running) {
 			if (player.isFold()) {
-
 				playersInHand.clear();
 				nextPositions();
-				river = false;
-				turn = false;
-				flop = false;
+				riverWasDealt = false;
+				turnWasDealt = false;
+				flopWasDealt = false;
 				startHand();
 				break;
 
 			} else if (player.isCall()) {
-
 				if (preFlop) {
-
 					player.setChips(player.getChips() - bet);
 					pot += bet;
 					tableInfo.setPot(pot);
@@ -256,70 +386,26 @@ public abstract class Table extends Thread {
 					dealer.dealFlop(2);
 					dealer.printFlop();
 
-					flop = true;
+					flopWasDealt = true;
 					preFlop = false;
 
 					setPlayersTurns();
 
-				} else if (flop) {
-
-					player.setChips(player.getChips() - bet);
-					pot += bet;
-					tableInfo.setPot(pot);
-
-					dealer.dealTurn(2);
-					dealer.printTurn();
-
-					turn = true;
-					flop = false;
-
+				} else if (flopWasDealt) {
+					flopAction();
 					setPlayersTurns();
 
-				} else if (turn) {
-
-					player.setChips(player.getChips() - bet);
-					pot += bet;
-					tableInfo.setPot(pot);
-
-					dealer.dealRiver(2);
-					dealer.printRiver();
-
-					river = true;
-					turn = false;
-
+				} else if (turnWasDealt) {
+					turnAction();
 					setPlayersTurns();
 
-				} else if (river) {
-
-					player.setChips(player.getChips() - bet);
-					pot += bet;
-					tableInfo.setPot(pot);
-
-					Evaluator e = new Evaluator(dealer, this);
-					e.resetHandRanks();
-					e.sortHand();
-					e.checkStrFlush();
-					e.showDown();
-
-					river = false;
-
-					for (int i = 0; i < playersInHand.size(); i++) {
-						if (playersInHand.get(i).isWins()) {
-							playersInHand.get(i).setChips(playersInHand.get(i).getChips() + pot);
-						}
-					}
-
-					playersInHand.clear();
-					nextPositions();
-					startHand();
-
-				}
+				} else if (riverWasDealt)
+					riverAction();
 
 				running = false;
 				break;
 
 			} else if (player.isRaise()) {
-
 				bet = player.getCurrentBet() - player.getLastBet();
 				pot += bet;
 				player.setLastBet(bet);
@@ -342,24 +428,24 @@ public abstract class Table extends Thread {
 		}
 	}
 
+	/*
+	 * Running from the start of the hand untill flop is dealt
+	 * or one of the players wins the hand preflop.
+	 */
 	private void preFlopGameLoop() {
 		while (running) {
 			if (player.isCheck()) {
-
 				dealer.dealFlop(2);
 				dealer.printFlop();
 				tableInfo.setFlop(dealer.getFlop());
 
-				flop = true;
+				flopWasDealt = true;
 				preFlop = false;
 
 				setPlayersTurns();
 				break;
 
-			} else if (player.isCall()) {
-
-				// Working after raise
-				
+			} else if (player.isCall()) {				
 				player.setChips(player.getChips() - bet + BIG_BLIND);
 				pot += bet - BIG_BLIND;
 				tableInfo.setPot(pot);
@@ -368,14 +454,13 @@ public abstract class Table extends Thread {
 				dealer.printFlop();
 				tableInfo.setFlop(dealer.getFlop());
 
-				flop = true;
+				flopWasDealt = true;
 				preFlop = false;
 
 				setPlayersTurns();
 				break;
 
 			} else if (player.isRaise()) {
-
 				bet = player.getCurrentBet() - BIG_BLIND;
 				pot += bet;
 				player.setLastBet(bet);
@@ -388,12 +473,11 @@ public abstract class Table extends Thread {
 				break;
 
 			} else if (player.isFold()) {
-
 				playersInHand.clear();
 				nextPositions();
-				river = false;
-				turn = false;
-				flop = false;
+				riverWasDealt = false;
+				turnWasDealt = false;
+				flopWasDealt = false;
 				startHand();
 				break;
 			}
@@ -406,117 +490,57 @@ public abstract class Table extends Thread {
 		}
 	}
 
+	/*
+	 * Running until one of the players wins the hand.
+	 * winning could be during flop, turn, river or at showdown.
+	 */
 	private void postFlopGameLoop() {
 		while (running) {
 			if (player.isCheck()) {
-
-				if (flop) {
+				if (flopWasDealt) {
 					dealer.dealTurn(2);
 					dealer.printTurn();
 					tableInfo.setTurn(dealer.getTurn());
 
-					turn = true;
-					flop = false;
+					turnWasDealt = true;
+					flopWasDealt = false;
 
 					setPlayersTurns();
 					break;
 
-				} else if (turn) {
-
+				} else if (turnWasDealt) {
 					dealer.dealRiver(2);
 					dealer.printRiver();
 					tableInfo.setRiver(dealer.getRiver());
 
-					river = true;
-					turn = false;
+					riverWasDealt = true;
+					turnWasDealt = false;
 
 					setPlayersTurns();
 					break;
 
-				} else if (river) {
-
-					Evaluator e = new Evaluator(dealer, this);
-					e.resetHandRanks();
-					e.sortHand();
-					e.checkStrFlush();
-					e.showDown();
-
-					river = false;
-
-					for (int i = 0; i < playersInHand.size(); i++) {
-						if (playersInHand.get(i).isWins()) {
-							playersInHand.get(i).setChips(playersInHand.get(i).getChips() + pot);
-						}
-					}
-
-					playersInHand.clear();
-					nextPositions();
-					startHand();
+				} else if (riverWasDealt) {
+					riverAction();
 					break;
 				}
 
 			} else if (player.isCall()) {
-
-				if (flop) {
-
-					player.setChips(player.getChips() - bet);
-					pot += bet;
-					tableInfo.setPot(pot);
-
-					dealer.dealTurn(2);
-					dealer.printTurn();
-					tableInfo.setTurn(dealer.getTurn());
-
-					turn = true;
-					flop = false;
-
+				if (flopWasDealt) {
+					flopAction();
 					setPlayersTurns();
 					break;
 
-				} else if (turn) {
-
-					player.setChips(player.getChips() - bet);
-					pot += bet;
-					tableInfo.setPot(pot);
-
-					dealer.dealRiver(2);
-					dealer.printRiver();
-					tableInfo.setRiver(dealer.getRiver());
-
-					river = true;
-					turn = false;
-
+				} else if (turnWasDealt) {
+					turnAction();
 					setPlayersTurns();
 					break;
 
-				} else if (river) {
-
-					player.setChips(player.getChips() - bet);
-					pot += bet;
-					tableInfo.setPot(pot);
-
-					Evaluator e = new Evaluator(dealer, this);
-					e.resetHandRanks();
-					e.sortHand();
-					e.checkStrFlush();
-					e.showDown();
-
-					river = false;
-
-					for (int i = 0; i < playersInHand.size(); i++) {
-						if (playersInHand.get(i).isWins()) {
-							playersInHand.get(i).setChips(playersInHand.get(i).getChips() + pot);
-						}
-					}
-
-					playersInHand.clear();
-					nextPositions();
-					startHand();
+				} else if (riverWasDealt) {
+					riverAction();
 					break;
 				}
 
 			} else if (player.isBet()) {
-
 				bet = player.getCurrentBet();
 				pot += bet;
 				tableInfo.setBet(bet);
@@ -526,8 +550,7 @@ public abstract class Table extends Thread {
 				raiseLoop();
 				break;
 
-			} else if (player.isRaise()) {
-				
+			} else if (player.isRaise()) {				
 				bet = player.getCurrentBet();
 				pot += bet;
 				tableInfo.setBet(bet);
@@ -539,12 +562,11 @@ public abstract class Table extends Thread {
 				break;
 				
 			} else if (player.isFold()) {
-
 				playersInHand.clear();
 				nextPositions();
-				river = false;
-				turn = false;
-				flop = false;
+				riverWasDealt = false;
+				turnWasDealt = false;
+				flopWasDealt = false;
 				startHand();
 				break;
 			}
@@ -562,13 +584,11 @@ public abstract class Table extends Thread {
 
 		while (running) {
 			if (player.isCheck()) {
-
 				nextTurn();
 				postFlopGameLoop();
 				break;
 
 			} else if (player.isBet()) {
-
 				bet = player.getCurrentBet();
 				pot += bet;
 				tableInfo.setBet(bet);
@@ -587,18 +607,20 @@ public abstract class Table extends Thread {
 		}
 	}
 
+	/*
+	 * Starts a new hand.
+	 */
 	private void startHand() {
 		dealer.getDeck().shuffle();
 		resetBlinds();
 
-		if (tablePlayers.size() == MIN_PLAYRES) {
+		if (tablePlayers.size() == MIN_PLAYRES)
 			butPosition = sbPosition;
-		}
-
+		
 		if (tablePlayers.size() >= MIN_PLAYRES) {
-			tablePlayers.get(butPosition).setDealer(true);
-			tablePlayers.get(sbPosition).setSmallBlind(true);
-			tablePlayers.get(bbPosition).setBigBlind(true);
+			tablePlayers.get(butPosition).setDealerPosition(true);
+			tablePlayers.get(sbPosition).setSmallBlindPosition(true);
+			tablePlayers.get(bbPosition).setBigBlindPosition(true);
 		}
 
 		dealer.dealHoleCards();
@@ -623,19 +645,17 @@ public abstract class Table extends Thread {
 		setPlayersTurns();
 		postBlinds();
 
-		/* PRE-FLOP ACTION */
+		// pre-flop action
 		running = true;
 
 		while (running) {
 			if (player.isFold()) {
-
 				playersInHand.clear();
 				nextPositions();
 				startHand();
 				break;
 
 			} else if (player.isCall()) {
-
 				player.setChips(player.getChips() - SMALL_BLIND);
 				pot += bet - player.getCurrentBet();
 				tableInfo.setPot(pot);
@@ -645,7 +665,6 @@ public abstract class Table extends Thread {
 				break;
 
 			} else if (player.isRaise()) {
-
 				player.setChips(player.getChips() - player.getCurrentBet() + SMALL_BLIND);
 				bet = player.getCurrentBet();
 				pot += bet - SMALL_BLIND;
@@ -668,10 +687,8 @@ public abstract class Table extends Thread {
 
 		// flop action
 		postFlopAction();
-
 		// turn action
 		postFlopAction();
-
 		// river action
 		postFlopAction();
 
@@ -683,7 +700,6 @@ public abstract class Table extends Thread {
 
 	@Override
 	public void run() {
-
 		while (tablePlayers.size() != MIN_PLAYRES) {
 			try {
 				sleep(500);
@@ -692,8 +708,6 @@ public abstract class Table extends Thread {
 			}
 		}
 
-		playersInHand = new ArrayList<Player>();
-		playersNames = new ArrayList<String>();
 		initPositions();
 		startHand();
 	}

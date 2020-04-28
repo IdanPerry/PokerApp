@@ -2,10 +2,7 @@ package com.idan.test;
 
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
-
 public class TestTable {
-
 	private static final int MAX_PLAYERS = 9;
 	protected static final int MIN_PLAYRES = 2;
 	protected ArrayList<TestPlayer> tablePlayers;
@@ -41,19 +38,18 @@ public class TestTable {
 		TestPlayer player1 = new TestPlayer("Idan");
 		seatPlayer(player1);
 		
-		TestPlayer player2 = new TestPlayer("Moshe");
+		TestPlayer player2 = new TestPlayer("Perry");
 		seatPlayer(player2);		
-		
-//		dealer.drawHand();
 
-		dealer.shuffle();
-		dealer.checkDealing();
-		
-		TestEvaluator e = new TestEvaluator(dealer, this);
-		e.resetHandRanks();
-		e.sortHand();
-		e.checkStrFlush();
-		e.showDown();
+		for(int i = 0; i < 3000; i++) {
+			dealer.getDeck().shuffle();
+			dealer.checkDealing();
+			
+			TestEvaluator e = new TestEvaluator(dealer, this);
+			e.resetHandRanks();
+			e.evaluateAllHands();
+			e.showDown();
+		}
 	}
 
 	public TestTable(int tableId) {
@@ -63,7 +59,7 @@ public class TestTable {
 		dealer = new TestTexasHoldemDealer(this);
 	}
 
-	public ArrayList<TestPlayer> getPlayers() {
+	public ArrayList<TestPlayer> getTablePlayers() {
 		return tablePlayers;
 	}
 
@@ -91,19 +87,5 @@ public class TestTable {
 			System.out.println("Table is full");
 		}
 
-	}
-
-	public void seatPlayers(int players) {
-		if (players < MAX_PLAYERS) {
-			setNumOfPlayers(players);
-			String inputPlayersName;
-
-			for (int i = 0; i < getNumOfPlayers(); i++) {
-				inputPlayersName = JOptionPane.showInputDialog("Enter player's name");
-				TestPlayer player = new TestPlayer(inputPlayersName);
-
-				tablePlayers.add(player);
-			}
-		}
 	}
 }

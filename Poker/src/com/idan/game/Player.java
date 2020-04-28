@@ -1,11 +1,27 @@
 package com.idan.game;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Comparator;
+
+/**
+ * This class represents a poker player.
+ * 
+ * @author Idan Perry
+ * @version 03.05.2013
+ */
 
 public class Player implements Serializable {
 	private static final long serialVersionUID = 271175255872953148L;
 	
-	private String name;
+	public enum HandRank {
+		HIGH_CARD, PAIR, TWO_PAIRS, TRIPS, STRAIGHT, FLUSH, FULL_HOUSE, QUADS, STRAIGHT_FLUSH
+	}
+	
+	public static final String[] HAND_RANK = {"High Card", "Pair", "Two Pairs", 
+			"Trips", "Straight", "Flush", "Full House", "Quads", "Straight Flush"};
+	
+	private final String name;
 	private int handValue;
 	private int chips;
 	private int score;
@@ -17,7 +33,8 @@ public class Player implements Serializable {
 	private Card holeCard2;
 	private Card holeCard3;
 	private Card holeCard4;
-	private Card[] hand;
+	private ArrayList<Card> sevenCardsTempHand;  // holecards and all community cards combined
+	private Card[] fiveCardsHand;  // best posible hand made out of 5 cards
 
 	private boolean strFlush;
 	private boolean quads;
@@ -34,38 +51,50 @@ public class Player implements Serializable {
 	private boolean bet;
 	private boolean raise;
 	
-	private boolean dealer;
-	private boolean bigBlind;
-	private boolean smallBlind;	
+	private boolean dealerPosition;
+	private boolean bigBlindPosition;
+	private boolean smallBlindPosition;	
 	private boolean yourTurn;
-	private boolean wins;
+	private boolean win;
 	private boolean allIn;
 	
-	public static final String[] HAND_RANK = {"High Card", "Pair", "Two Pairs", 
-			"Trips", "Straight", "Flush", "Full House", "Quads", "Straight Flush"};
-	
-	public Player() {
-	}
-	
+	/**
+	 * Constructs a poker player object.
+	 * 
+	 * @param name the name of the player
+	 */
 	public Player(String name) {
 		this.name = name;
 	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 	
+	/**
+	 * Returns the name of the player.
+	 * 
+	 * @return the name of the player
+	 */
 	public String getName() {
 		return name;
 	}
 
-	// Each player gets his hole cards
+	/**
+	 * Initializes the player's 2 holecards.
+	 * 
+	 * @param holeCard1 first holecard
+	 * @param holeCard2 second holecard
+	 */
 	public void setTexasHoleCards(Card holeCard1, Card holeCard2) {
 		this.holeCard1 = holeCard1;
 		this.holeCard2 = holeCard2;
 	}
 	
-	// Each player gets his hole cards
+	/**
+	 * Initializes the player's 4 holecards.
+	 * 
+	 * @param holeCard1 first holecard
+	 * @param holeCard2 second holecard
+	 * @param holeCard3 third holecard
+	 * @param holeCard4 forth holecard
+	 */
 	public void setOmahaHoleCards(Card holeCard1, Card holeCard2, Card holeCard3, Card holeCard4) {
 		this.holeCard1 = holeCard1;
 		this.holeCard2 = holeCard2;
@@ -73,68 +102,134 @@ public class Player implements Serializable {
 		this.holeCard4 = holeCard4;
 	}
 	
+	/**
+	 * Returns the first holecard.
+	 * 
+	 * @return the first holecard
+	 */
 	public Card getHoleCard1() {
 		return holeCard1;
 	}
 	
+	/**
+	 * Returns the second holecard.
+	 * 
+	 * @return the second holecard
+	 */
 	public Card getHoleCard2() {
 		return holeCard2;
 	}
 	
+	/**
+	 * Returns the third holecard.
+	 * 
+	 * @return the third holecard
+	 */
 	public Card getHoleCard3() {
 		return holeCard3;
 	}
 	
+	/**
+	 * Returns the forth holecard.
+	 * 
+	 * @return the forth holecard
+	 */
 	public Card getHoleCard4() {
 		return holeCard4;
 	}
 	
-	public void setHand(Card[] hand) {
-		this.hand = hand;
+	/**
+	 * Sets a hand to the player.
+	 * 
+	 * @param hand an array of cards representing the hand
+	 */
+	public void setFiveCardsHand(Card[] hand) {
+		this.fiveCardsHand = hand;
 	}
 	
-	public Card[] getHand() {
-		return hand;
+	/**
+	 * Returns the player's hand.
+	 * 
+	 * @return the player's hand
+	 */
+	public Card[] getFiveCardsHand() {
+		return fiveCardsHand;
 	}
 	
+	/**
+	 * Returns a temporary seven cards hand.
+	 * 
+	 * @return a temporary seven cards hand
+	 */
+	public ArrayList<Card> getSevenCardsTempHand() {
+		return sevenCardsTempHand;
+	}
+
+	/**
+	 * Sets a temporary seven cards hand to the player.
+	 * 
+	 * @param hand an array of cards representing the temporary hand
+	 */
+	public void setSevenCardsTempHand(ArrayList<Card> sevenCardsTempHand) {
+		this.sevenCardsTempHand = sevenCardsTempHand;
+	}
+
+	/**
+	 * Sets or changes the chip bank of the player.
+	 * 
+	 * @param chips the chips of the player
+	 */
 	public void setChips(int chips) {
 		this.chips = chips;
 	}
 	
+	/**
+	 * Returns the chips of the player.
+	 * 
+	 * @return the chips of the player
+	 */
 	public int getChips() {
 		return chips;
 	}
 	
+	/**
+	 * 
+	 * @param seat
+	 */
 	public void setSeat(int seat) {
 		this.seat = seat;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public int getSeat() {
 		return seat;
 	}
 
-	public boolean isDealer() {
-		return dealer;
+	public boolean isDealerPosition() {
+		return dealerPosition;
 	}
 
-	public void setDealer(boolean dealer) {
-		this.dealer = dealer;
+	public void setDealerPosition(boolean dealer) {
+		this.dealerPosition = dealer;
 	}
 
-	public boolean isBigBlind() {
-		return bigBlind;
+	public boolean isBigBlindPosition() {
+		return bigBlindPosition;
 	}
 
-	public void setBigBlind(boolean bigBlind) {
-		this.bigBlind = bigBlind;
+	public void setBigBlindPosition(boolean bigBlind) {
+		this.bigBlindPosition = bigBlind;
 	}
 
-	public boolean isSmallBlind() {
-		return smallBlind;
+	public boolean isSmallBlindPosition() {
+		return smallBlindPosition;
 	}
 
-	public void setSmallBlind(boolean smallBlind) {
-		this.smallBlind = smallBlind;
+	public void setSmallBlindPosition(boolean smallBlind) {
+		this.smallBlindPosition = smallBlind;
 	}
 	
 	public boolean isYourTurn() {
@@ -284,12 +379,12 @@ public class Player implements Serializable {
 		return lastBet;
 	}
 	
-	public void setWin(boolean wins) {
-		this.wins = wins;
+	public void setWin(boolean win) {
+		this.win = win;
 	}
 	
-	public boolean isWins() {
-		return wins;
+	public boolean isWin() {
+		return win;
 	}
 	
 	public void setAllIn(boolean allIn) {
@@ -307,7 +402,50 @@ public class Player implements Serializable {
 		bet = false;
 		raise = false;
 		currentBet = 0;
-		wins = false;
+		win = false;
 		allIn = false;
+	}
+	
+	public void sortHandByRank(ArrayList<Card> hand) {
+		hand.sort(new Comparator<Card>() {
+
+			@Override
+			public int compare(Card card1, Card card2) {
+				return Integer.compare(card1.getRank().getValue(), card2.getRank().getValue());
+			}
+		});
+//		Card temp;
+//		
+//		for (int i = 0; i < hand.length; i++) {
+//			for(int j = i+1; j < hand.length; j++) {
+//				if(hand[i].getRank().getValue() > hand[j].getRank().getValue()) {
+//					temp = hand[i];
+//					hand[i] = hand[j];
+//					hand[j] = temp;
+//				}
+//			}
+//		}
+	}
+	
+	public void sortHandBySuit(ArrayList<Card> hand) {
+		hand.sort(new Comparator<Card>() {
+
+			@Override
+			public int compare(Card card1, Card card2) {
+				return Integer.compare(card1.getSuit().getValue(), card2.getSuit().getValue());
+			}
+		});
+		
+//		Card temp;
+//		
+//		for (int i = 0; i < hand.length; i++) {
+//			for(int j = i+1; j < hand.length; j++) {
+//				if(hand[i].getSuit().getValue() > hand[j].getSuit().getValue()) {
+//					temp = hand[i];
+//					hand[i] = hand[j];
+//					hand[j] = temp;
+//				}
+//			}
+//		}
 	}
 }
