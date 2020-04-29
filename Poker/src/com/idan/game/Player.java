@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+import com.idan.texasholdem.HandEvaluation.HandRank;
+
 /**
  * This class represents a poker player.
  * 
@@ -14,15 +16,11 @@ import java.util.Comparator;
 public class Player implements Serializable {
 	private static final long serialVersionUID = 271175255872953148L;
 	
-	public enum HandRank {
-		HIGH_CARD, PAIR, TWO_PAIRS, TRIPS, STRAIGHT, FLUSH, FULL_HOUSE, QUADS, STRAIGHT_FLUSH
-	}
-	
-	public static final String[] HAND_RANK = {"High Card", "Pair", "Two Pairs", 
+	public static final String[] HAND_RANK_STR = {"High Card", "Pair", "Two Pairs", 
 			"Trips", "Straight", "Flush", "Full House", "Quads", "Straight Flush"};
 	
 	private final String name;
-	private int handValue;
+	private HandRank handRank;
 	private int chips;
 	private int score;
 	private int currentBet;
@@ -303,13 +301,21 @@ public class Player implements Serializable {
 	public boolean isPair() {
 		return pair;
 	}
+	
+	public HandRank getHandRank() {
+		return handRank;
+	}
 
-	public void setHandValue(int handValue) {
-		this.handValue = handValue;
+	public void setHandRank(HandRank handRank) {
+		this.handRank = handRank;
+	}
+
+	public void setHandValue(HandRank handRank) {
+		this.handRank = handRank;
 	}
 
 	public int getHandValue() {
-		return handValue;
+		return handRank.getValue();
 	}
 
 	public void setScore(int score) {
@@ -414,17 +420,6 @@ public class Player implements Serializable {
 				return Integer.compare(card1.getRank().getValue(), card2.getRank().getValue());
 			}
 		});
-//		Card temp;
-//		
-//		for (int i = 0; i < hand.length; i++) {
-//			for(int j = i+1; j < hand.length; j++) {
-//				if(hand[i].getRank().getValue() > hand[j].getRank().getValue()) {
-//					temp = hand[i];
-//					hand[i] = hand[j];
-//					hand[j] = temp;
-//				}
-//			}
-//		}
 	}
 	
 	public void sortHandBySuit(ArrayList<Card> hand) {
@@ -435,17 +430,5 @@ public class Player implements Serializable {
 				return Integer.compare(card1.getSuit().getValue(), card2.getSuit().getValue());
 			}
 		});
-		
-//		Card temp;
-//		
-//		for (int i = 0; i < hand.length; i++) {
-//			for(int j = i+1; j < hand.length; j++) {
-//				if(hand[i].getSuit().getValue() > hand[j].getSuit().getValue()) {
-//					temp = hand[i];
-//					hand[i] = hand[j];
-//					hand[j] = temp;
-//				}
-//			}
-//		}
 	}
 }

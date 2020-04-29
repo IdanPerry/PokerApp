@@ -1,6 +1,7 @@
 package com.idan.test;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  * This class represented a poker table.
@@ -30,7 +31,7 @@ public class TestTable {
 		TestPlayer player2 = new TestPlayer("Perry");
 		seatPlayer(player2);		
 
-		for(int i = 0; i < 3000; i++) {
+		for(int i = 0; i < 300; i++) {
 			dealer.getDeck().shuffle();
 			dealer.checkDealing();
 			
@@ -78,5 +79,21 @@ public class TestTable {
 			tablePlayers.add(player);
 		 else 
 			System.out.println("Table is full");
+	}
+	
+	/**
+	 * Sort the players at this table by their hand strength
+	 * in ascending order.
+	 * 
+	 * @param playerList the players to be sort
+	 */
+	public void sortPlayersByHandValue(ArrayList<TestPlayer> playerList) {
+		playerList.sort(new Comparator<TestPlayer>() {
+
+			@Override
+			public int compare(TestPlayer player1, TestPlayer player2) {
+				return Integer.compare(player1.getHandValue(), player2.getHandValue());
+			}
+		});
 	}
 }

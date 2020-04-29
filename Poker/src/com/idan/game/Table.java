@@ -1,6 +1,7 @@
 package com.idan.game;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import com.idan.server.TableInformation;
 import com.idan.texasholdem.HandComparison;
@@ -182,6 +183,22 @@ public abstract class Table extends Thread {
 	 */
 	public boolean isRiverWasDealt() {
 		return riverWasDealt;
+	}
+	
+	/**
+	 * Sort the players at this table by their hand strength
+	 * in ascending order.
+	 * 
+	 * @param playerList the players to be sort
+	 */
+	public void sortPlayersByHandValue(ArrayList<Player> playerList) {
+		playerList.sort(new Comparator<Player>() {
+
+			@Override
+			public int compare(Player player1, Player player2) {
+				return Integer.compare(player1.getHandValue(), player2.getHandValue());
+			}
+		});
 	}
 
 	/*

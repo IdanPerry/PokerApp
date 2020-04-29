@@ -7,51 +7,71 @@ import com.idan.test.TestDealer;
 import com.idan.test.TestPlayer;
 import com.idan.test.TestTable;
 
+/**
+ * This class represents a hand evaluation tool for each poker table.
+ * 
+ * @author Idan Perry
+ * @version 03.05.2013
+ */
+
 public class TestHandEvaluation {
 	private final TestDealer dealer;
 	private final TestTable table;
 	private TestCard[] hand;
 
 	private boolean strFlush; // for debug
+	
+	public enum HandRank {
+		HIGH_CARD(0, "High Catd"),
+		PAIR(1, "One Pair"),
+		TWO_PAIRS(2, "Two Pairs"),
+		TRIPS(3, "Trips"),
+		STRAIGHT(4, "Straight"),
+		FLUSH(5, "Flush"),
+		FULL_HOUSE(6, "Full House"),
+		QUADS(7, "Quads"),
+		STRAIGHT_FLUSH(8, "Straight Flush");
+		
+		private final int value;
+		private final String string;
+		
+		/**
+		 * Constructs HandRank enum object.
+		 * 
+		 * @param value the value of the hand
+		 * @param string the hand as a string
+		 */
+		HandRank(int value, String string) {
+			this.value = value;
+			this.string = string;
+		}
+		
+		/**
+		 * Returns the value of the hand.
+		 * 
+		 * @return the value of the hand
+		 */
+		public int getValue() {
+			return value;
+		}
+		
+		@Override
+		public String toString() {
+			return string;
+		}
+	}
 
+	/**
+	 * Constructs a hand eavaluation object.
+	 * 
+	 * @param dealer the dealer of the table which uses this evaluation tool
+	 * @param table the table which uses this evaluation tool
+	 */
 	public TestHandEvaluation(TestDealer dealer, TestTable table) {
 		this.dealer = dealer;
 		this.table = table;
 	}
-
-	// for debug
-	public void handAlarm() {
-		if (strFlush)
-			System.out.println(" * * * * * * * S T R A I G H T - F L U S H * * * * * * *");
-	}
-
-	// Combines each player's hole cards with the board (flop, turn and river)
-	// in array to make a 7 cards hand in ascending rank order
-	private void initAndSortAllHands() {
-		ArrayList<TestCard> sevenCards;
-		TestPlayer player;
-
-		// initalize the seven cards hand
-		for (int i = 0; i < table.getTablePlayers().size(); i++) {
-			sevenCards = new ArrayList<TestCard>(7);
-			player = table.getTablePlayers().get(i);
-
-			sevenCards.add(player.getHoleCard1());
-			sevenCards.add(player.getHoleCard2());
-			sevenCards.add(dealer.getFlop()[0]);
-			sevenCards.add(dealer.getFlop()[1]);
-			sevenCards.add(dealer.getFlop()[2]);
-			sevenCards.add(dealer.getTurn());
-			sevenCards.add(dealer.getRiver());
-
-			player.setSevenCardsTempHand(sevenCards);
-		}
-
-		// sort the hand
-		for (int i = 0; i < table.getTablePlayers().size(); i++)
-			table.getTablePlayers().get(i).sortHandByRank(table.getTablePlayers().get(i).getSevenCardsTempHand());
-	}
-
+	
 	/**
 	 * Start sequence of hand evaluation for all players at the table,
 	 * checking the highest ranking first down to the lowest.
@@ -101,6 +121,39 @@ public class TestHandEvaluation {
 		}
 	}
 
+	// for debug
+	public void handAlarm() {
+		if (strFlush)
+			System.out.println(" * * * * * * * S T R A I G H T - F L U S H * * * * * * *");
+	}
+
+	// Combines each player's hole cards with the board (flop, turn and river)
+	// in array to make a 7 cards hand in ascending rank order
+	private void initAndSortAllHands() {
+		ArrayList<TestCard> sevenCards;
+		TestPlayer player;
+
+		// initalize the seven cards hand
+		for (int i = 0; i < table.getTablePlayers().size(); i++) {
+			sevenCards = new ArrayList<TestCard>(7);
+			player = table.getTablePlayers().get(i);
+
+			sevenCards.add(player.getHoleCard1());
+			sevenCards.add(player.getHoleCard2());
+			sevenCards.add(dealer.getFlop()[0]);
+			sevenCards.add(dealer.getFlop()[1]);
+			sevenCards.add(dealer.getFlop()[2]);
+			sevenCards.add(dealer.getTurn());
+			sevenCards.add(dealer.getRiver());
+
+			player.setSevenCardsTempHand(sevenCards);
+		}
+
+		// sort the hand
+		for (int i = 0; i < table.getTablePlayers().size(); i++)
+			table.getTablePlayers().get(i).sortHandByRank(table.getTablePlayers().get(i).getSevenCardsTempHand());
+	}
+
 	/*
 	 * Check if teh hand is a straight-flush
 	 */
@@ -124,7 +177,7 @@ public class TestHandEvaluation {
 				}
 
 				player.setStrFlush(true);
-				player.setHandValue(8);
+				player.setHandRank(HandRank.STRAIGHT_FLUSH);
 				player.setFiveCardsHand(hand);
 
 				strFlush = true;
@@ -141,7 +194,7 @@ public class TestHandEvaluation {
 				&& hand[0].getRank().equals(TestCard.Rank.TWO)) {
 
 			player.setStrFlush(true);
-			player.setHandValue(8);
+			player.setHandRank(HandRank.STRAIGHT_FLUSH);
 			player.setFiveCardsHand(hand);
 
 			strFlush = true;
@@ -160,7 +213,7 @@ public class TestHandEvaluation {
 			if (player.getSevenCardsTempHand().get(j).getRank()
 					.equals(player.getSevenCardsTempHand().get(j + 3).getRank())) {
 				player.setQuads(true);
-				player.setHandValue(7);
+				player.setHandRank(HandRank.QUADS);
 				break;
 			}
 		}
@@ -197,7 +250,7 @@ public class TestHandEvaluation {
 			if (player.getSevenCardsTempHand().get(j).getRank()
 					.equals(player.getSevenCardsTempHand().get(j - 1).getRank())) {
 				player.setFullHouse(true);
-				player.setHandValue(6);
+				player.setHandRank(HandRank.FULL_HOUSE);
 
 				// add the pair to the 5 cards hand
 				hand[3] = player.getSevenCardsTempHand().get(j);
@@ -228,7 +281,7 @@ public class TestHandEvaluation {
 			if (player.getSevenCardsTempHand().get(j).getSuit().getValue() == player.getSevenCardsTempHand().get(j - 4)
 					.getSuit().getValue()) {
 				player.setFlush(true);
-				player.setHandValue(5);
+				player.setHandRank(HandRank.FLUSH);
 				break;
 			}
 		}
@@ -254,20 +307,22 @@ public class TestHandEvaluation {
 		int counter = 0; // counts the increments between 2 folowing cards
 		int j;
 
-		for (j = 6; j >= 1; j--) {
-			if (player.getSevenCardsTempHand().get(j).getRank()
-					.getValue() == player.getSevenCardsTempHand().get(j - 1).getRank().getValue() + 1)
+		for (j = 6; j >= 4; j--) {
+			counter = 0;
+			for (int i = j; i > 2; i--) {
+				if (player.getSevenCardsTempHand().get(i).getRank()
+						.getValue() == player.getSevenCardsTempHand().get(i - 1).getRank().getValue() + 1)
+					counter++;
+					
 
-				counter++;
-
-			// exclude lower values if there are any
-			if (counter == 4)
-				break;
+				if (counter == 4)
+					break;
+			}
 		}
 
 		if (counter == 4) {
 			player.setStraight(true);
-			player.setHandValue(4);
+			player.setHandRank(HandRank.STRAIGHT);
 
 			// init 5 cards hand
 			for (int i = 0; i < hand.length; i++)
@@ -285,7 +340,7 @@ public class TestHandEvaluation {
 				&& player.getSevenCardsTempHand().get(6).getRank().equals(TestCard.Rank.ACE)) {
 
 			player.setStraight(true);
-			player.setHandValue(4);
+			player.setHandRank(HandRank.STRAIGHT);
 
 			// init 5 cards hand
 			hand[0] = player.getSevenCardsTempHand().get(6);
@@ -308,7 +363,7 @@ public class TestHandEvaluation {
 					.equals(player.getSevenCardsTempHand().get(j - 2).getRank())) {
 
 				player.setTrips(true);
-				player.setHandValue(3);
+				player.setHandRank(HandRank.TRIPS);
 				hand[0] = player.getSevenCardsTempHand().get(j);
 				hand[1] = player.getSevenCardsTempHand().get(j - 1);
 				hand[2] = player.getSevenCardsTempHand().get(j - 2);
@@ -338,7 +393,7 @@ public class TestHandEvaluation {
 			if (player.getSevenCardsTempHand().get(j).getRank()
 					.equals(player.getSevenCardsTempHand().get(j - 1).getRank())) {
 				player.setTwoPairs(true);
-				player.setHandValue(2);
+				player.setHandRank(HandRank.TWO_PAIRS);
 
 				// add second pair to the 5 cards hand
 				hand[2] = player.getSevenCardsTempHand().get(j);
@@ -370,7 +425,7 @@ public class TestHandEvaluation {
 			if (player.getSevenCardsTempHand().get(j).getRank()
 					.equals(player.getSevenCardsTempHand().get(j - 1).getRank())) {
 				player.setPair(true);
-				player.setHandValue(1);
+				player.setHandRank(HandRank.PAIR);
 
 				// add the pair to the 5 cards hand
 				hand[0] = player.getSevenCardsTempHand().get(j);
@@ -386,7 +441,7 @@ public class TestHandEvaluation {
 	 * Check if the hand is a high-card hand.
 	 */
 	private void checkHighCard(TestPlayer player) {
-		player.setHandValue(0);
+		player.setHandRank(HandRank.HIGH_CARD);
 
 		for (int i = 0, j = 6; i < hand.length; i++, j--)
 			hand[i] = player.getSevenCardsTempHand().get(j);

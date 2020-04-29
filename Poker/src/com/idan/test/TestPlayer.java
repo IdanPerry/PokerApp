@@ -3,10 +3,21 @@ package com.idan.test;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+import com.idan.test.TestHandEvaluation.HandRank;
+
+/**
+ * This class represents a poker player.
+ * 
+ * @author Idan Perry
+ * @version 03.05.2013
+ */
+
 public class TestPlayer  {
+	public static final String[] HAND_RANK_STR = {"High Card", "Pair", "Two Pairs", 
+			"Trips", "Straight", "Flush", "Full House", "Quads", "Straight Flush"};
+	
 	private String name;
-	private int handValue;
-	private int chips;
+	private HandRank handRank;
 	private int score;
 	
 	private TestCard holeCard1;
@@ -25,39 +36,52 @@ public class TestPlayer  {
 	private boolean twoPairs;
 	private boolean pair;
 	
-	private boolean fold;
-	private boolean check;
-	private boolean call;
-	private boolean bet;
-	private boolean raise;
-	
-	private boolean dealer;
-	private boolean bigBlind;
-	private boolean smallBlind;	
-	private boolean yourTurn;
-	
-	public static final String[] HAND_RANK = {"High Card", "Pair", "Two Pairs", 
-			"Trips", "Straight", "Flush", "Full House", "Quads", "Straight Flush"};
-	
+	/**
+	 * Constructs a poker player object.
+	 * 
+	 * @param name the name of the player
+	 */
 	public TestPlayer(String name) {
 		this.name = name;
 	}
 
+	/**
+	 * Sets the player's name.
+	 * 
+	 * @param name the player's name
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 	
+	/**
+	 * Returns the name of the player.
+	 * 
+	 * @return the name of the player
+	 */
 	public String getName() {
 		return name;
 	}
 
-	// Each player gets his hole cards
+	/**
+	 * Initializes the player's 2 holecards.
+	 * 
+	 * @param holeCard1 first holecard
+	 * @param holeCard2 second holecard
+	 */
 	public void setTexasHoleCards(TestCard holeCard1, TestCard holeCard2) {
 		this.holeCard1 = holeCard1;
 		this.holeCard2 = holeCard2;
 	}
 	
-	// Each player gets his hole cards
+	/**
+	 * Initializes the player's 4 holecards.
+	 * 
+	 * @param holeCard1 first holecard
+	 * @param holeCard2 second holecard
+	 * @param holeCard3 third holecard
+	 * @param holeCard4 forth holecard
+	 */
 	public void setOmahaHoleCards(TestCard holeCard1, TestCard holeCard2, TestCard holeCard3, TestCard holeCard4) {
 		this.holeCard1 = holeCard1;
 		this.holeCard2 = holeCard2;
@@ -65,18 +89,38 @@ public class TestPlayer  {
 		this.holeCard4 = holeCard4;
 	}
 	
+	/**
+	 * Returns the first holecard.
+	 * 
+	 * @return the first holecard
+	 */
 	public TestCard getHoleCard1() {
 		return holeCard1;
 	}
 	
+	/**
+	 * Returns the second holecard.
+	 * 
+	 * @return the second holecard
+	 */
 	public TestCard getHoleCard2() {
 		return holeCard2;
 	}
 	
+	/**
+	 * Returns the third holecard.
+	 * 
+	 * @return the third holecard
+	 */
 	public TestCard getHoleCard3() {
 		return holeCard3;
 	}
 	
+	/**
+	 * Returns the forth holecard.
+	 * 
+	 * @return the forth holecard
+	 */
 	public TestCard getHoleCard4() {
 		return holeCard4;
 	}
@@ -115,46 +159,6 @@ public class TestPlayer  {
 	 */
 	public void setSevenCardsTempHand(ArrayList<TestCard> sevenCardsTempHand) {
 		this.sevenCardsTempHand = sevenCardsTempHand;
-	}
-	
-	public void setChips(int chips) {
-		this.chips = chips;
-	}
-	
-	public int getChips() {
-		return chips;
-	}
-
-	public boolean isDealer() {
-		return dealer;
-	}
-
-	public void setDealer(boolean dealer) {
-		this.dealer = dealer;
-	}
-
-	public boolean isBigBlind() {
-		return bigBlind;
-	}
-
-	public void setBigBlind(boolean bigBlind) {
-		this.bigBlind = bigBlind;
-	}
-
-	public boolean isSmallBlind() {
-		return smallBlind;
-	}
-
-	public void setSmallBlind(boolean smallBlind) {
-		this.smallBlind = smallBlind;
-	}
-	
-	public boolean isYourTurn() {
-		return yourTurn;
-	}
-	
-	public void setYourTurn(boolean yourTurn) {
-		this.yourTurn = yourTurn;
 	}
 
 	public void setStrFlush(boolean strFlush) {
@@ -220,13 +224,17 @@ public class TestPlayer  {
 	public boolean isPair() {
 		return pair;
 	}
+	
+	public HandRank getHandRank() {
+		return handRank;
+	}
 
-	public void setHandValue(int handValue) {
-		this.handValue = handValue;
+	public void setHandRank(HandRank handRank) {
+		this.handRank = handRank;
 	}
 
 	public int getHandValue() {
-		return handValue;
+		return handRank.getValue();
 	}
 
 	public void setScore(int score) {
@@ -237,58 +245,6 @@ public class TestPlayer  {
 		return score;
 	}
 	
-	public boolean isFold() {
-		return fold;
-	}
-	
-	public boolean isCall() {
-		return call;
-	}
-	
-	public boolean isCheck() {
-		return check;
-	}
-	
-	public boolean isBet() {
-		return bet;
-	}
-	
-	public boolean isRaise() {
-		return raise;
-	}
-
-	public void fold() {
-		fold = true;
-	}
-
-	public boolean check() {
-		check = true;
-		return check;
-	}
-	
-	public boolean call() {
-		call = true;
-		return call;
-	}
-	
-	public boolean bet() {
-		bet = true;
-		return bet;
-	}
-
-	public boolean raise() {
-		raise = true;
-		return raise;
-	}
-	
-	public void resetActions() {
-		fold = false;
-		check = false;
-		call = false;
-		bet = false;
-		raise = false;
-	}
-	
 	public void sortHandByRank(ArrayList<TestCard> hand) {
 		hand.sort(new Comparator<TestCard>() {
 
@@ -297,17 +253,6 @@ public class TestPlayer  {
 				return Integer.compare(card1.getRank().getValue(), card2.getRank().getValue());
 			}
 		});
-//		Card temp;
-//		
-//		for (int i = 0; i < hand.length; i++) {
-//			for(int j = i+1; j < hand.length; j++) {
-//				if(hand[i].getRank().getValue() > hand[j].getRank().getValue()) {
-//					temp = hand[i];
-//					hand[i] = hand[j];
-//					hand[j] = temp;
-//				}
-//			}
-//		}
 	}
 	
 	public void sortHandBySuit(ArrayList<TestCard> hand) {
@@ -318,17 +263,5 @@ public class TestPlayer  {
 				return Integer.compare(card1.getSuit().getValue(), card2.getSuit().getValue());
 			}
 		});
-		
-//		Card temp;
-//		
-//		for (int i = 0; i < hand.length; i++) {
-//			for(int j = i+1; j < hand.length; j++) {
-//				if(hand[i].getSuit().getValue() > hand[j].getSuit().getValue()) {
-//					temp = hand[i];
-//					hand[i] = hand[j];
-//					hand[j] = temp;
-//				}
-//			}
-//		}
 	}
 }

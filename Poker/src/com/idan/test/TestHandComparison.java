@@ -1,477 +1,240 @@
 package com.idan.test;
 
-import java.util.ArrayList;
+import com.idan.test.TestHandEvaluation.HandRank;
 
-public class TestHandComparison  {
+/**
+ * This class represents a comparison tool between the player's hands.
+ * 
+ * @author Idan Perry
+ * @version 03.15.2013
+ */
+
+public class TestHandComparison {
+	private static final int HAND_SIZE = 5;
 	private final TestTable table;
-	private ArrayList<TestPlayer> bestHands;
-	private int max;
-	
+	private HandRank handRank;
+
+	/**
+	 * Constructs a hand comparison object to use in the specified table.
+	 * 
+	 * @param table the table this hand comparison is to be used
+	 */
 	public TestHandComparison(TestTable table) {
 		this.table = table;
 	}
 
-	private void loop(int card) {
-		for (int i = 0; i < bestHands.size(); i++) {
-			if (bestHands.get(i).getFiveCardsHand()[card].getRank().getValue() > max) {
-				max = bestHands.get(i).getFiveCardsHand()[card].getRank().getValue();
-			}
-		}
-		
-		for (int j = 0; j < bestHands.size(); j++) {
-			if (bestHands.get(j).getFiveCardsHand()[card].getRank().getValue() < max) {
-				bestHands.remove(j);
-			}
-		}
-	}
-	
-	private void print() {
-		System.out.println(bestHands.get(0).getName() + " wins with " + TestPlayer.HAND_RANK[bestHands.get(0).getHandValue()]
-				+ " " + bestHands.get(0).getFiveCardsHand()[0].getRank() + bestHands.get(0).getFiveCardsHand()[0].getSuit() + 
-				bestHands.get(0).getFiveCardsHand()[1].getRank() + bestHands.get(0).getFiveCardsHand()[1].getSuit() + 
-				bestHands.get(0).getFiveCardsHand()[2].getRank() + bestHands.get(0).getFiveCardsHand()[2].getSuit() + 
-				bestHands.get(0).getFiveCardsHand()[3].getRank() + bestHands.get(0).getFiveCardsHand()[3].getSuit() + 
-				bestHands.get(0).getFiveCardsHand()[4].getRank() + bestHands.get(0).getFiveCardsHand()[4].getSuit() + "\n");
-		
-		bestHands.get(0).setScore(1);
-	}
-	
-	private void compHighCard() {
-		max = bestHands.get(0).getFiveCardsHand()[0].getRank().getValue();
-
-		// Checking the possibility of more than 2 players having
-		// the same high card,
-		// in which case - checking the next high card and so on
-		loop(0);
-		
-		if (bestHands.size() >= 2) {
-			// Checking the 2nd high card
-			max = bestHands.get(0).getFiveCardsHand()[1].getRank().getValue();
-			loop(1);
-			
-			if (bestHands.size() >= 2) {
-				// Checking the 3rd high card
-				max = bestHands.get(0).getFiveCardsHand()[2].getRank().getValue();
-				loop(2);
-				
-				if (bestHands.size() >= 2) {
-					// Checking the 4th high card
-					max = bestHands.get(0).getFiveCardsHand()[3].getRank().getValue();
-					loop(3);
-					
-					if (bestHands.size() >= 2) {
-						// Checking the 5th high card
-						max = bestHands.get(0).getFiveCardsHand()[4].getRank().getValue();
-						loop(4);
-						
-						if (bestHands.size() >= 2) {
-							// split pot
-							System.out.println("Players win with " + TestPlayer.HAND_RANK[bestHands.get(0).getHandValue()]
-									+ bestHands.get(0).getFiveCardsHand()[0].getRank() + bestHands.get(0).getFiveCardsHand()[0].getSuit() + 
-									bestHands.get(0).getFiveCardsHand()[1].getRank() + bestHands.get(0).getFiveCardsHand()[1].getSuit() + 
-									bestHands.get(0).getFiveCardsHand()[2].getRank() + bestHands.get(0).getFiveCardsHand()[2].getSuit() + 
-									bestHands.get(0).getFiveCardsHand()[3].getRank() + bestHands.get(0).getFiveCardsHand()[3].getSuit() + 
-									bestHands.get(0).getFiveCardsHand()[4].getRank() + bestHands.get(0).getFiveCardsHand()[4].getSuit());
-							
-						} else if (bestHands.size() == 1) {
-							// There's a winner with 5th kicker
-							print();
-						}
-						
-					} else if (bestHands.size() == 1) {
-						// There's a winner with 4th kicker
-						print();
-					}
-					
-				} else if (bestHands.size() == 1) {
-					// There's a winner with 3rd kicker
-					print();
-				}
-				
-			} else if (bestHands.size() == 1) {
-				// There's a winner with 2nd kicker
-				print();
-			}
-			
-		} else if (bestHands.size() == 1) {
-			// there's a winner with 1st kicker
-			print();
-			
-		}
-	}
-	
-	private void compPair() {
-		max = bestHands.get(0).getFiveCardsHand()[0].getRank().getValue();
-
-		// Checking the possibility of more than 2 players having
-		// the same pair,
-		// in which case - checking high card
-		loop(0);
-		
-		if (bestHands.size() >= 2) {
-			// Checking 1st kicker
-			max = bestHands.get(0).getFiveCardsHand()[2].getRank().getValue();	
-			loop(2);
-			
-			if (bestHands.size() >= 2) {
-				// Checking the 2nd kicker
-				max = bestHands.get(0).getFiveCardsHand()[3].getRank().getValue();
-				loop(3);
-				
-				if (bestHands.size() >= 2) {
-					// Checking the 3rd kicker
-					max = bestHands.get(0).getFiveCardsHand()[4].getRank().getValue();
-					loop(4);
-					
-					if (bestHands.size() >= 2) {
-						// split pot
-						System.out.println("Players win with " + TestPlayer.HAND_RANK[bestHands.get(0).getHandValue()]
-								+ bestHands.get(0).getFiveCardsHand()[0].getRank() + bestHands.get(0).getFiveCardsHand()[0].getSuit() + 
-								bestHands.get(0).getFiveCardsHand()[1].getRank() + bestHands.get(0).getFiveCardsHand()[1].getSuit() + 
-								bestHands.get(0).getFiveCardsHand()[2].getRank() + bestHands.get(0).getFiveCardsHand()[2].getSuit() + 
-								bestHands.get(0).getFiveCardsHand()[3].getRank() + bestHands.get(0).getFiveCardsHand()[3].getSuit() + 
-								bestHands.get(0).getFiveCardsHand()[4].getRank() + bestHands.get(0).getFiveCardsHand()[4].getSuit());
-						
-					} else if (bestHands.size() == 1) {
-						// There's a winner with 3rd kicker
-						print();
-					}
-					
-				} else if (bestHands.size() == 1) {
-					// There's a winner with 2nd kicker
-					print();
-				}
-				
-			} else if (bestHands.size() == 1) {
-				// There's a winner with 1st kicker
-				print();
-			}
-			
-		} else if (bestHands.size() == 1) {
-			// there's a winner with a pair
-			print();
-			
-		}
-	}
-
-	private void compTwoPairs() {
-		max = bestHands.get(0).getFiveCardsHand()[0].getRank().getValue();
-
-		// Checking the possibility of more than 2 players having
-		// the same 2 pairs,
-		// in which case - checking the 1st pair
-		loop(0);
-		
-		if (bestHands.size() >= 2) {
-			// Checking 2nd pair
-			max = bestHands.get(0).getFiveCardsHand()[2].getRank().getValue();	
-			loop(2);
-			
-			if (bestHands.size() >= 2) {
-				// Checking the kicker
-				max = bestHands.get(0).getFiveCardsHand()[4].getRank().getValue();
-				loop(4);
-					
-					if (bestHands.size() >= 2) {
-						// split pot
-						System.out.println("Players win with " + TestPlayer.HAND_RANK[bestHands.get(0).getHandValue()]
-								+ bestHands.get(0).getFiveCardsHand()[0].getRank() + bestHands.get(0).getFiveCardsHand()[0].getSuit() + 
-								bestHands.get(0).getFiveCardsHand()[1].getRank() + bestHands.get(0).getFiveCardsHand()[1].getSuit() + 
-								bestHands.get(0).getFiveCardsHand()[2].getRank() + bestHands.get(0).getFiveCardsHand()[2].getSuit() + 
-								bestHands.get(0).getFiveCardsHand()[3].getRank() + bestHands.get(0).getFiveCardsHand()[3].getSuit() + 
-								bestHands.get(0).getFiveCardsHand()[4].getRank() + bestHands.get(0).getFiveCardsHand()[4].getSuit());
-						
-					} else if (bestHands.size() == 1) {
-						// There's a winner with kicker
-						print();
-					}
-				
-			} else if (bestHands.size() == 1) {
-				// There's a winner with 2nd pair
-				print();
-			}
-			
-		} else if (bestHands.size() == 1) {
-			// there's a winner with 1st pair
-			print();
-			
-		}
-	}
-	
-	private void compTrips() {
-		max = bestHands.get(0).getFiveCardsHand()[0].getRank().getValue();
-
-		// Checking the possibility of more than 2 players having
-		// the same trips,
-		// in which case - checking the kickers
-		loop(0);
-		
-		if (bestHands.size() >= 2) {
-			// Checking 1st kicker
-			max = bestHands.get(0).getFiveCardsHand()[3].getRank().getValue();	
-			loop(3);
-			
-			if (bestHands.size() >= 2) {
-				// Checking the 2nd kicker
-				max = bestHands.get(0).getFiveCardsHand()[4].getRank().getValue();
-				loop(4);
-					
-					if (bestHands.size() >= 2) {
-						// split pot
-						System.out.println("Players win with " + TestPlayer.HAND_RANK[bestHands.get(0).getHandValue()]
-								+ bestHands.get(0).getFiveCardsHand()[0].getRank() + bestHands.get(0).getFiveCardsHand()[0].getSuit() + 
-								bestHands.get(0).getFiveCardsHand()[1].getRank() + bestHands.get(0).getFiveCardsHand()[1].getSuit() + 
-								bestHands.get(0).getFiveCardsHand()[2].getRank() + bestHands.get(0).getFiveCardsHand()[2].getSuit() + 
-								bestHands.get(0).getFiveCardsHand()[3].getRank() + bestHands.get(0).getFiveCardsHand()[3].getSuit() + 
-								bestHands.get(0).getFiveCardsHand()[4].getRank() + bestHands.get(0).getFiveCardsHand()[4].getSuit());
-						
-					} else if (bestHands.size() == 1) {
-						// There's a winner with 2nd kicker
-						print();
-					}
-				
-			} else if (bestHands.size() == 1) {
-				// There's a winner with 1st kicker
-				print();
-			}
-			
-		} else if (bestHands.size() == 1) {
-			// there's a winner with trips
-			print();
-			
-		}
-	}
-	
-	private void compStraight() {
-		max = bestHands.get(0).getFiveCardsHand()[0].getRank().getValue();
-
-		// Checking the possibility of more than 2 players having
-		// the same straight,
-		// in which case - checking the highest card
-		loop(0);
-
-		if (bestHands.size() >= 2) {
-			// Checking the highest card
-			max = bestHands.get(0).getFiveCardsHand()[0].getRank().getValue();
-			loop(0);
-
-			if (bestHands.size() >= 2) {
-				// split pot
-				System.out.println("Players win with " + TestPlayer.HAND_RANK[bestHands.get(0).getHandValue()]
-						+ bestHands.get(0).getFiveCardsHand()[0].getRank() + bestHands.get(0).getFiveCardsHand()[0].getSuit()
-						+ bestHands.get(0).getFiveCardsHand()[1].getRank() + bestHands.get(0).getFiveCardsHand()[1].getSuit()
-						+ bestHands.get(0).getFiveCardsHand()[2].getRank() + bestHands.get(0).getFiveCardsHand()[2].getSuit()
-						+ bestHands.get(0).getFiveCardsHand()[3].getRank() + bestHands.get(0).getFiveCardsHand()[3].getSuit()
-						+ bestHands.get(0).getFiveCardsHand()[4].getRank() + bestHands.get(0).getFiveCardsHand()[4].getSuit());
-			}
-
-		} else if (bestHands.size() == 1) {
-			// There's a winner with highest card straight
-			print();
-		}
-	}
-	
-	private void compFlush() {
-		max = bestHands.get(0).getFiveCardsHand()[4].getRank().getValue();
-
-		// Checking the possibility of more than 2 players having
-		// the same flush,
-		// in which case - checking the highest card
-		loop(4);
-
-		if (bestHands.size() >= 2) {
-			// Checking the highest card
-			max = bestHands.get(0).getFiveCardsHand()[4].getRank().getValue();
-			loop(4);
-
-			if (bestHands.size() >= 2) {
-				// split pot
-				System.out.println("Players win with " + TestPlayer.HAND_RANK[bestHands.get(0).getHandValue()]
-						+ bestHands.get(0).getFiveCardsHand()[0].getRank() + bestHands.get(0).getFiveCardsHand()[0].getSuit()
-						+ bestHands.get(0).getFiveCardsHand()[1].getRank() + bestHands.get(0).getFiveCardsHand()[1].getSuit()
-						+ bestHands.get(0).getFiveCardsHand()[2].getRank() + bestHands.get(0).getFiveCardsHand()[2].getSuit()
-						+ bestHands.get(0).getFiveCardsHand()[3].getRank() + bestHands.get(0).getFiveCardsHand()[3].getSuit()
-						+ bestHands.get(0).getFiveCardsHand()[4].getRank() + bestHands.get(0).getFiveCardsHand()[4].getSuit());
-			}
-
-		} else if (bestHands.size() == 1) {
-			// There's a winner with highest card flush
-			print();
-		}
-	}
-	
-	private void compFull() {
-		max = bestHands.get(0).getFiveCardsHand()[0].getRank().getValue();
-
-		// Checking the possibility of more than 2 players having
-		// the same full-house,
-		// in which case - checking the trips
-		loop(0);
-
-		if (bestHands.size() >= 2) {
-			// Checking the pair
-			max = bestHands.get(0).getFiveCardsHand()[3].getRank().getValue();
-			loop(3);
-
-			if (bestHands.size() >= 2) {
-				// split pot
-				System.out.println("Players win with " + TestPlayer.HAND_RANK[bestHands.get(0).getHandValue()]
-						+ bestHands.get(0).getFiveCardsHand()[0].getRank() + bestHands.get(0).getFiveCardsHand()[0].getSuit()
-						+ bestHands.get(0).getFiveCardsHand()[1].getRank() + bestHands.get(0).getFiveCardsHand()[1].getSuit()
-						+ bestHands.get(0).getFiveCardsHand()[2].getRank() + bestHands.get(0).getFiveCardsHand()[2].getSuit()
-						+ bestHands.get(0).getFiveCardsHand()[3].getRank() + bestHands.get(0).getFiveCardsHand()[3].getSuit()
-						+ bestHands.get(0).getFiveCardsHand()[4].getRank() + bestHands.get(0).getFiveCardsHand()[4].getSuit());
-
-			} else if (bestHands.size() == 1) {
-				// There's a winner with pair
-			}
-
-		} else if (bestHands.size() == 1) {
-			// there's a winner with trips
-			print();
-
-		}
-	}
-	
-	private void compQuads() {
-		max = bestHands.get(0).getFiveCardsHand()[0].getRank().getValue();
-
-		// Checking the possibility of more than 2 players having
-		// quads,
-		// in which case - checking the kicker
-		loop(0);
-
-		if (bestHands.size() >= 2) {
-			// Checking the kicker
-			max = bestHands.get(0).getFiveCardsHand()[4].getRank().getValue();
-			loop(4);
-
-			if (bestHands.size() >= 2) {
-				// split pot
-				System.out.println("Players win with " + TestPlayer.HAND_RANK[bestHands.get(0).getHandValue()]
-						+ bestHands.get(0).getFiveCardsHand()[0].getRank() + bestHands.get(0).getFiveCardsHand()[0].getSuit()
-						+ bestHands.get(0).getFiveCardsHand()[1].getRank() + bestHands.get(0).getFiveCardsHand()[1].getSuit()
-						+ bestHands.get(0).getFiveCardsHand()[2].getRank() + bestHands.get(0).getFiveCardsHand()[2].getSuit()
-						+ bestHands.get(0).getFiveCardsHand()[3].getRank() + bestHands.get(0).getFiveCardsHand()[3].getSuit()
-						+ bestHands.get(0).getFiveCardsHand()[4].getRank() + bestHands.get(0).getFiveCardsHand()[4].getSuit());
-
-			} else if (bestHands.size() == 1) {
-				// There's a winner with kicker
-				print();
-			}
-
-		} else if (bestHands.size() == 1) {
-			// there's a winner with quads
-			print();
-
-		}
-	}
-	
-	private void compStrFlush() {
-		max = bestHands.get(0).getFiveCardsHand()[0].getRank().getValue();
-
-		// Checking the possibility of more than 2 players having
-		// straight-flush,
-		// in which case - checking the highest card
-		loop(0);
-
-		if (bestHands.size() >= 2) {
-			// Checking the highest card
-			max = bestHands.get(0).getFiveCardsHand()[0].getRank().getValue();
-			loop(0);
-
-			if (bestHands.size() >= 2) {
-				// split pot
-				System.out.println("Players win with " + TestPlayer.HAND_RANK[bestHands.get(0).getHandValue()]
-						+ bestHands.get(0).getFiveCardsHand()[0].getRank() + bestHands.get(0).getFiveCardsHand()[0].getSuit()
-						+ bestHands.get(0).getFiveCardsHand()[1].getRank() + bestHands.get(0).getFiveCardsHand()[1].getSuit()
-						+ bestHands.get(0).getFiveCardsHand()[2].getRank() + bestHands.get(0).getFiveCardsHand()[2].getSuit()
-						+ bestHands.get(0).getFiveCardsHand()[3].getRank() + bestHands.get(0).getFiveCardsHand()[3].getSuit()
-						+ bestHands.get(0).getFiveCardsHand()[4].getRank() + bestHands.get(0).getFiveCardsHand()[4].getSuit());
-			}
-
-		} else if (bestHands.size() == 1) {
-			// There's a winner with highest card straight-flush
-			print();
-		}
-	}
-	
+	/**
+	 * Flips the cards and compare the hands.
+	 */
 	public void showDown() {
-		bestHands = new ArrayList<TestPlayer>();
-		max = table.getTablePlayers().get(0).getHandValue();
+		int size = table.getTablePlayers().size();
+		table.sortPlayersByHandValue(table.getTablePlayers());
+		handRank = table.getTablePlayers().get(size - 1).getHandRank();
 
-		// Iterating through playerList array to find the best ranked hands
-		for (int i = 0; i < table.getTablePlayers().size(); i++) {
-			if (table.getTablePlayers().get(i).getHandValue() > max) {
-				max = table.getTablePlayers().get(i).getHandValue();
-			}
+		// one player holds a hand stronger than others.
+		if (size >= 2 && table.getTablePlayers().get(size - 1).getHandValue() > table.getTablePlayers().get(size - 2)
+				.getHandValue()) {
+			table.getTablePlayers().get(size - 1).setScore(1);
+			printWinner(table.getTablePlayers().get(size - 1));
+			return;
 		}
 
-		// Iterating through playerList again to find what hand is currently the
-		// strongest
-		// and how many players are holding this hand
-		for (int i = 0; i < table.getTablePlayers().size(); i++) {
+		compareSameValueHands(table.getTablePlayers().get(size - 1), table.getTablePlayers().get(size - 2));
+	}
 
-			// If the players in the list have the same hand rank (a pair for
-			// example),
-			// than check the kickers
-			if (table.getTablePlayers().get(i).getHandValue() == max) {
-				bestHands.add(table.getTablePlayers().get(i));
-			}
+	/*
+	 * Compares hands which has the same strength (one pair vs. one pair etc.)
+	 */
+	private void compareSameValueHands(TestPlayer player1, TestPlayer player2) {
+		TestPlayer player = null;
+		
+		switch (handRank) {
+		case STRAIGHT_FLUSH:
+			player = compareStraightAndFlush(player1, player2);
+			break;
+
+		case QUADS:
+			player = compareQuads(player1, player2);
+			break;
+
+		case FULL_HOUSE:
+			player = compareFullHouse(player1, player2);
+			break;
+
+		case FLUSH:
+			player = compareStraightAndFlush(player1, player2);
+			break;
+
+		case STRAIGHT:
+			player = compareStraightAndFlush(player1, player2);
+			break;
+
+		case TRIPS:
+			player = compareTrips(player1, player2);
+			break;
+
+		case TWO_PAIRS:
+			player = compareTwoPairs(player1, player2);
+			break;
+
+		case PAIR:
+			player = comparePair(player1, player2);
+			break;
+
+		case HIGH_CARD:
+			player = compareHighCard(player1, player2);
+			break;
 		}
-
-		if (bestHands.size() >= 2) {
-			switch (bestHands.get(0).getHandValue()) {
-
-			// If the best hand is high card
-			case 0:
-				compHighCard();
-				break;
-				
-			// If the best hand is 1 pair	
-			case 1:
-				compPair();
-				break;
-				
-			// If the best hand is 2 pairs	
-			case 2:
-				compTwoPairs();
-				break;
-				
-			// If the best hand is trips
-			case 3:
-				compTrips();
-				break;
-				
-			// If the best hand is straight	
-			case 4:
-				compStraight();
-				break;
-				
-			// If the best hand is flush	
-			case 5:
-				compFlush();
-				break;
-				
-			// If the best hand is full-house	
-			case 6:
-				compFull();
-				break;
-				
-			// If the best hand is quads	
-			case 7:
-				compQuads();
-				break;
-				
-			// If the best hand is straight-flush	
-			case 8:
-				compStrFlush();
-				break;
-			}
+		
+		if(player != null) {
+			player.setScore(1);
+			printWinner(player);
+		}
+	}
+	
+	/*
+	 * Returns the player with the highest kicker card.
+	 * if all kickers are the same, the hands are equal and a null
+	 * will be returned.
+	 */
+	private TestPlayer compareKickers(TestPlayer player1, TestPlayer player2, int i) {
+		while(i < HAND_SIZE && player1.getFiveCardsHand()[i].getRank().equals(player2.getFiveCardsHand()[i].getRank()))
+			i++;
 			
-		} else if (bestHands.size() == 1) {
-			// ther's a winner
-			print();
+		if(i == HAND_SIZE)
+			return null;
+		
+		if(player1.getFiveCardsHand()[i].getRank().getValue() > player2.getFiveCardsHand()[i].getRank().getValue())
+			return player1;
+		 
+		return player2;
+	}
+
+	/*
+	 * Prints the plyare with the winning hand and the winning hand.
+	 */
+	private void printWinner(TestPlayer player) {
+		System.out.print(player.getName() + " wins with " + player.getHandRank() + ":	");
+
+		for (int i = 0; i < player.getFiveCardsHand().length; i++) {
+			System.out.print(player.getFiveCardsHand()[i].getRank());
+			System.out.print(player.getFiveCardsHand()[i].getSuit());
 		}
+
+		System.out.println("\n");
+	}
+
+	/*
+	 * Compares hands of 2 players, which ranked as High Card.
+	 * returns the player with the highest high card or null
+	 * if both hands are equal.
+	 */
+	private TestPlayer compareHighCard(TestPlayer player1, TestPlayer player2) {
+		int i = 0;
+
+		while (i < HAND_SIZE && player1.getFiveCardsHand()[i].getRank().equals(player2.getFiveCardsHand()[i].getRank()))
+			i++;
+
+		// both players have the same hand
+		if(i == HAND_SIZE )
+			return null;
+		
+		if (player1.getFiveCardsHand()[i].getRank().getValue() > player2.getFiveCardsHand()[i].getRank().getValue())
+			return player1;
+		
+		return player2;
+	}
+
+	/*
+	 * Compares hands of 2 players, which ranked as Pair.
+	 * returns the player with the highest pair or null
+	 * if both hands are equal.
+	 */
+	private TestPlayer comparePair(TestPlayer player1, TestPlayer player2) {
+		// compare the pair
+		if(player1.getFiveCardsHand()[0].getRank().getValue() > player2.getFiveCardsHand()[0].getRank().getValue())
+			return player1;
+		else if(player1.getFiveCardsHand()[0].getRank().getValue() < player2.getFiveCardsHand()[0].getRank().getValue())
+			return player2;
+		
+		return compareKickers(player1, player2, 2);	
+	}
+
+	/*
+	 * Compares hands of 2 players, which ranked as Two Pairs.
+	 * returns the player with the highest two pairs or null
+	 * if both hands are equal.
+	 */
+	private TestPlayer compareTwoPairs(TestPlayer player1, TestPlayer player2) {
+		// compair pairs, first the bigger value than the second
+		for(int i = 0; i <= 2; i+=2) {
+			if(player1.getFiveCardsHand()[i].getRank().getValue() > player2.getFiveCardsHand()[i].getRank().getValue())
+				return player1;
+			else if(player1.getFiveCardsHand()[i].getRank().getValue() < player2.getFiveCardsHand()[i].getRank().getValue())
+				return player2;
+		}
+		
+		// compair kicker
+		return compareCardFromEach(player1, player2, 4);
+	}
+
+	/*
+	 * Compares hands of 2 players, which ranked as Trips.
+	 * returns the player with the highest trips or null
+	 * if both hands are equal.
+	 */
+	private TestPlayer compareTrips(TestPlayer player1, TestPlayer player2) {
+		// compair trips
+		if(player1.getFiveCardsHand()[0].getRank().getValue() > player2.getFiveCardsHand()[0].getRank().getValue())
+			return player1;
+		else if(player1.getFiveCardsHand()[0].getRank().getValue() < player2.getFiveCardsHand()[0].getRank().getValue())
+			return player2;
+		
+		//compair kickers
+		return compareKickers(player1, player2, 3);
+	}
+
+	/*
+	 * Compares hands of 2 players, which ranked as Straight or Flush or Straight-Flush.
+	 * returns the player with the highest of the above respectively, or null if both
+	 * hands are equal.
+	 */
+	private TestPlayer compareStraightAndFlush(TestPlayer player1, TestPlayer player2) {
+		// compare by highest value in the hand
+		return compareCardFromEach(player1, player2, 0);
+	}
+
+	/*
+	 * Compares hands of 2 players, which ranked as Full-House.
+	 * returns the player with the highest full-house or null
+	 * if both hands are equal.
+	 */
+	private TestPlayer compareFullHouse(TestPlayer player1, TestPlayer player2) {
+		// compair trips
+		if(player1.getFiveCardsHand()[0].getRank().getValue() > player2.getFiveCardsHand()[0].getRank().getValue())
+			return player1;
+		else if(player1.getFiveCardsHand()[0].getRank().getValue() < player2.getFiveCardsHand()[0].getRank().getValue())
+			return player2;
+		
+		// compare the pair
+		return compareCardFromEach(player1, player2, 3);	
+	}
+
+	/*
+	 * Compares hands of 2 players, which ranked as Quads.
+	 * returns the player with the highest quads or null
+	 * if both hands are equal.
+	 */
+	private TestPlayer compareQuads(TestPlayer player1, TestPlayer player2) {
+		return compareCardFromEach(player1, player2, 0);
+	}
+	
+	private TestPlayer compareCardFromEach(TestPlayer player1, TestPlayer player2, int i) {
+		if(player1.getFiveCardsHand()[i].getRank().getValue() > player2.getFiveCardsHand()[i].getRank().getValue())
+			return player1;
+		else if(player1.getFiveCardsHand()[i].getRank().getValue() < player2.getFiveCardsHand()[i].getRank().getValue())
+			return player2;
+		
+		return null;
 	}
 }

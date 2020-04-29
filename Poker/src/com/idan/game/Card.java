@@ -26,8 +26,8 @@ public class Card implements Serializable {
 		TWO("2", 2), THREE("3", 3), FOUR("4", 4), FIVE("5", 5), SIX("6", 6), SEVEN("7", 7), EIGHT("8", 8), 
 		NINE("9", 9), TEN("10", 11), JACK("J", 12), QUEEN("Q", 13), KING("K", 14), ACE("A", 15);
 		
-		private String rank;
-		private int value;
+		private final String rank;
+		private final int value;
 		
 		Rank(String rank, int value) {
 			this.rank = rank;
@@ -44,15 +44,6 @@ public class Card implements Serializable {
 		}
 		
 		/**
-		 * Changes ACE value to eaither 1 or 15 (1 for lowest straight).
-		 * 
-		 * @param value the value of ACE
-		 */
-		public void setAceValue(int value) {
-			ACE.value = value;
-		}
-		
-		/**
 		 * Returns the card's rank as a string representation.
 		 * @return the card's rank as a string representation.
 		 */
@@ -64,9 +55,10 @@ public class Card implements Serializable {
 	
 	public enum Suit {
 		// the strings are unicode symbols in accordance to the suits
-		SPADES("\u2660", 1), CLUBS("\u2663", 2), HEARTS("\u2665", 3), DIAMONDS("\u2666", 4);	
-		private String symbol;
-		private int value;
+		SPADES("\u2660", 1), CLUBS("\u2663", 2), HEARTS("\u2665", 3), DIAMONDS("\u2666", 4);
+		
+		private final String symbol;
+		private final int value;
 		
 		/**
 		 * Construcs a Suit object of enum type.
