@@ -28,12 +28,12 @@ public class TestTexasHoldemDealer extends TestDealer {
 	 * Prints the holecards of all players at the table.
 	 */
 	public void printHoleCards() {
+		TestPlayer player;
 		for (int i = 0; i < getTable().getTablePlayers().size(); i++) {
-			System.out.print(getTable().getTablePlayers().get(i).getName() + " has: "
-					+ getTable().getTablePlayers().get(i).getHoleCard1().getRank()
-					+ getTable().getTablePlayers().get(i).getHoleCard1().getSuit());
-			System.out.print("" + getTable().getTablePlayers().get(i).getHoleCard2().getRank()
-					+ getTable().getTablePlayers().get(i).getHoleCard2().getSuit() + "\n");
+			player = getTable().getTablePlayers().get(i);
+
+			System.out.print(player.getName() + " has: " + player.getHoleCard1().getRank() + player.getHoleCard1().getSuit());
+			System.out.print(player.getHoleCard2().getRank() + "" + player.getHoleCard2().getSuit());
 		}
 	}
 

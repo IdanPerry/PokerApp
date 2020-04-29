@@ -1,10 +1,8 @@
 package com.idan.GUI;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -24,11 +22,13 @@ import com.idan.client.ClientConnection;
  *
  */
 
-public class Lobby extends JPanel implements ActionListener {
+public class Lobby extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
+	private static final int WIDTH = 500;
+	private static final int HEIGHT = 250;	
 	
 	private final ClientConnection clientConnection;
-	private final JFrame lobbyFrame;
+	private final JPanel mainPanel;
 	private final TableWindow tableGUI;
 	private JButton openTable;
 	
@@ -39,45 +39,29 @@ public class Lobby extends JPanel implements ActionListener {
 	 * 						   with this lobby.
 	 */
 	public Lobby(ClientConnection clientConnection) {
+		super("Logged in as " + clientConnection.getPlayer().getName());
 		this.clientConnection = clientConnection;		
-		lobbyFrame = new JFrame("Logged in as " + clientConnection.getPlayer().getName());
 		tableGUI = new TableWindow(clientConnection);
-		setBorder(BorderFactory.createTitledBorder("Choose table"));
+		mainPanel = new JPanel();
 		
-		customizeFrame();
+		setSize(WIDTH, HEIGHT);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setResizable(false);
+			
 		initComponnents();
-	}
-
-	public JFrame getLobbyFrame() {
-		return lobbyFrame;
+		add(mainPanel, BorderLayout.CENTER);
 	}
 	
-	/*
-	 * Customizes the frame properties.
-	 */
-	private void customizeFrame() {
-		lobbyFrame.setSize(500, 250);
-		lobbyFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		lobbyFrame.setResizable(false);
-		lobbyFrame.setLayout(new FlowLayout());
-		lobbyFrame.setContentPane(this);
-	}
-
 	/*
 	 * Initializes the components of this panel.
 	 */
 	private void initComponnents() {	
 		openTable = new JButton("Open Table");
 		openTable.addActionListener(this);
-		lobbyFrame.add(openTable);
-	}
-
-	@Override
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		Graphics2D g2 = (Graphics2D) g;
-		g2.setColor(Color.WHITE);
-		g2.fillRect(0, 0, this.getWidth(), this.getHeight());
+		
+		mainPanel.setBackground(Color.WHITE);	
+		mainPanel.setBorder(BorderFactory.createTitledBorder("Choose table"));
+		mainPanel.add(openTable);
 	}
 
 	@Override

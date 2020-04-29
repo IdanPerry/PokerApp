@@ -22,9 +22,7 @@ public class TexasHoldemDealer extends Dealer {
 		super(table);
 	}
 
-	/**
-	 * Dealer deals all players at the table 2 holecards.
-	 */
+	@Override
 	public void dealHoleCards() {
 		int size = getTable().getTablePlayers().size();
 		
@@ -34,9 +32,7 @@ public class TexasHoldemDealer extends Dealer {
 		}
 	}
 
-	/**
-	 * Prints the holecards of all players at the table.
-	 */
+	@Override
 	public void printHoleCards() {
 		for (int i = 0; i < getTable().getTablePlayers().size(); i++) {
 			System.out.print(getTable().getTablePlayers().get(i).getName() + " has: "
@@ -47,9 +43,7 @@ public class TexasHoldemDealer extends Dealer {
 		}
 	}
 
-	/**
-	 * Prints the hands of all players at the table.
-	 */
+	@Override
 	public void printHands() {
 		for (int i = 0; i < getTable().getTablePlayers().size(); i++) {
 			System.out.print(getTable().getTablePlayers().get(i).getName() + " has: "

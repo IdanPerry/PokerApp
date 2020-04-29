@@ -161,90 +161,200 @@ public class TestPlayer  {
 		this.sevenCardsTempHand = sevenCardsTempHand;
 	}
 
+	/**
+	 * Changes whether this player has Straight-flush.  
+	 * 
+	 * @param strFlush true if this player has Straight-flush. false otherwise
+	 */
 	public void setStrFlush(boolean strFlush) {
 		this.strFlush = strFlush;
 	}
 
+	/**
+	 * Returns true if this player has Straight-flush, false otherwise.
+	 * 
+	 * @return true if this player has Straight-flush, false otherwise
+	 */
 	public boolean isStrFlush() {
 		return strFlush;
 	}
 
+	/**
+	 * Changes whether this player has Quads.  
+	 * 
+	 * @param strFlush true if this player has Quads. false otherwise
+	 */
 	public void setQuads(boolean quads) {
 		this.quads = quads;
 	}
 
+	/**
+	 * Returns true if this player has Quads, false otherwise.
+	 * 
+	 * @return true if this player has Quads, false otherwise
+	 */
 	public boolean isQuads() {
 		return quads;
 	}
 
+	/**
+	 * Changes whether this player has Full-House.  
+	 * 
+	 * @param strFlush true if this player has Full-House. false otherwise
+	 */
 	public void setFullHouse(boolean fullHouse) {
 		this.fullHouse = fullHouse;
 	}
 
+	/**
+	 * Returns true if this player has Full-House, false otherwise.
+	 * 
+	 * @return true if this player has Full-House, false otherwise
+	 */
 	public boolean isFullHouse() {
 		return fullHouse;
 	}
 
+	/**
+	 * Changes whether this player has flush.  
+	 * 
+	 * @param strFlush true if this player has flush. false otherwise
+	 */
 	public void setFlush(boolean flush) {
 		this.flush = flush;
 	}
 
+	/**
+	 * Returns true if this player has flush, false otherwise.
+	 * 
+	 * @return true if this player has flush, false otherwise
+	 */
 	public boolean isFlush() {
 		return flush;
 	}
 
+	/**
+	 * Changes whether this player has Straight.  
+	 * 
+	 * @param strFlush true if this player has Straight. false otherwise
+	 */
 	public void setStraight(boolean straight) {
 		this.straight = straight;
 	}
 
+	/**
+	 * Returns true if this player has Straight, false otherwise.
+	 * 
+	 * @return true if this player has Straight, false otherwise
+	 */
 	public boolean isStraight() {
 		return straight;
 	}
 
+	/**
+	 * Changes whether this player has Trips.  
+	 * 
+	 * @param strFlush true if this player has Trips. false otherwise
+	 */
 	public void setTrips(boolean trips) {
 		this.trips = trips;
 	}
 
+	/**
+	 * Returns true if this player has Trips, false otherwise.
+	 * 
+	 * @return true if this player has Trips, false otherwise
+	 */
 	public boolean isTrips() {
 		return trips;
 	}
 
+	/**
+	 * Changes whether this player has Two Pairs.  
+	 * 
+	 * @param strFlush true if this player has Two Pairs. false otherwise
+	 */
 	public void setTwoPairs(boolean twoPairs) {
 		this.twoPairs = twoPairs;
 	}
 
+	/**
+	 * Returns true if this player has Two Pairs, false otherwise.
+	 * 
+	 * @return true if this player has Two Pairs, false otherwise
+	 */
 	public boolean isTwoPairs() {
 		return twoPairs;
 	}
 
+	/**
+	 * Changes whether this player has Pair.  
+	 * 
+	 * @param strFlush true if this player has Pair. false otherwise
+	 */
 	public void setPair(boolean pair) {
 		this.pair = pair;
 	}
 
+	/**
+	 * Returns true if this player has Pair, false otherwise.
+	 * 
+	 * @return true if this player has Pair, false otherwise
+	 */
 	public boolean isPair() {
 		return pair;
 	}
 	
+	/**
+	 * Returns the hand rank of this player as enum object.
+	 * 
+	 * @return the hand rank of this player as enum object
+	 */
 	public HandRank getHandRank() {
 		return handRank;
 	}
 
+	/**
+	 * Changes the hand rank enum object of this player.
+	 * 
+	 * @param handRank the hand rank enum object of this player to be changed
+	 */
 	public void setHandRank(HandRank handRank) {
 		this.handRank = handRank;
 	}
 
+	/**
+	 * Returns the hand rank-value of this player.
+	 * 
+	 * @return the hand rank-value of this player
+	 */
 	public int getHandValue() {
 		return handRank.getValue();
 	}
 
+	/**
+	 * Adds winning score for this player. used for statistic analyze.
+	 * 
+	 * @param score the score to add to this player
+	 */
 	public void setScore(int score) {
 		this.score = this.score + score;
 	}
 	
+	/**
+	 * Returns the winning score of this player.
+	 * 
+	 * @return the winning score of this player
+	 */
 	public int getScore() {
 		return score;
 	}
 	
+	/**
+	 * Sorts this player hand by its rank in ascending order.
+	 * 
+	 * @param hand the hand to be sorted
+	 */
 	public void sortHandByRank(ArrayList<TestCard> hand) {
 		hand.sort(new Comparator<TestCard>() {
 
@@ -255,6 +365,11 @@ public class TestPlayer  {
 		});
 	}
 	
+	/**
+	 * Sorts this player hand by its suit in ascending order.
+	 * 
+	 * @param hand the hand to be sorted
+	 */
 	public void sortHandBySuit(ArrayList<TestCard> hand) {
 		hand.sort(new Comparator<TestCard>() {
 

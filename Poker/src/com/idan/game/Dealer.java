@@ -122,9 +122,18 @@ public abstract class Dealer {
 		System.out.println("\nRiver: " + river.getRank() + river.getSuit() + "\n");
 	}
 	
+	/**
+	 * Dealer deals all players at the table 2 holecards.
+	 */
 	public abstract void dealHoleCards();
 	
+	/**
+	 * Prints the holecards of all players at the table.
+	 */
 	public abstract void printHoleCards();
 	
+	/**
+	 * Prints the hands of all players at the table.
+	 */
 	public abstract void printHands();
 }

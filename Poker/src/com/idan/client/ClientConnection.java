@@ -36,35 +36,37 @@ public class ClientConnection extends Thread {
 	private String actionInput;
 
 	/**
-	 * Constructs a ClientConnection object
+	 * Constructs a ClientConnection object.
+	 * 
 	 * @param socket the socket to connect through
 	 * @param player the player whom this connection to be established.
 	 */
 	public ClientConnection(Socket socket, Player player) {
 		this.player = player;
 		ObjectOutputStream tempObjectOutput;
-		ObjectInputStream tempObjectInput;	
-		
+		ObjectInputStream tempObjectInput;
+
 		try {
 			tempObjectOutput = new ObjectOutputStream(socket.getOutputStream());
 			tempObjectInput = new ObjectInputStream(socket.getInputStream());
-			
+
 		} catch (IOException e) {
 			tempObjectInput = null;
 			tempObjectOutput = null;
 			e.printStackTrace();
 		}
-		
+
 		objectOutput = tempObjectOutput;
 		objectInput = tempObjectInput;
-		
+
 		opponentCards = new ImageIcon[2];
 		running = true;
-		actionInput = "";		
+		actionInput = "";
 	}
 
 	/**
 	 * Sets the game table window.
+	 * 
 	 * @param tableGUI the table window
 	 */
 	public void setTableGUI(TableWindow tableGUI) {
@@ -73,6 +75,7 @@ public class ClientConnection extends Thread {
 
 	/**
 	 * Returns the table states and game information.
+	 * 
 	 * @return the table states and game information
 	 */
 	public TableInformation getTableInfo() {
@@ -81,22 +84,25 @@ public class ClientConnection extends Thread {
 
 	/**
 	 * Returns the player this client connection belongs to.
+	 * 
 	 * @return the player this client connection belongs to
 	 */
 	public Player getPlayer() {
 		return player;
 	}
-	
+
 	/**
 	 * Returns the object output opened in this connection.
+	 * 
 	 * @return the object output opened in this connection
 	 */
 	public ObjectOutputStream getObjectOutput() {
 		return objectOutput;
 	}
-	
+
 	/**
 	 * Changes this connection state.
+	 * 
 	 * @param running this connection state
 	 */
 	public void setRunning(boolean running) {
@@ -122,7 +128,7 @@ public class ClientConnection extends Thread {
 	 * Sends game actions and bet amount to the server.
 	 * 
 	 * @param actionOutput the game actions represented as strings
-	 * @param betSize the bet amount
+	 * @param betSize      the bet amount
 	 */
 	public void sendToServer(String actionOutput, int betSize) {
 		try {
@@ -152,6 +158,7 @@ public class ClientConnection extends Thread {
 
 	/*
 	 * Prints the player's holecards to the console.
+	 * used for debug
 	 */
 	private void printHolecards() {
 		System.out.println("You were dealt " + player.getHoleCard1().getRank() + player.getHoleCard1().getSuit()
@@ -165,7 +172,7 @@ public class ClientConnection extends Thread {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				lobbyGUI = new Lobby(clientConnection);
-				lobbyGUI.getLobbyFrame().setVisible(true);
+				lobbyGUI.setVisible(true);
 			}
 		});
 
@@ -181,7 +188,7 @@ public class ClientConnection extends Thread {
 				checkCounter = 0;
 
 				tableGUI.resetBoard();
-				printHolecards();
+				printHolecards();	// debug
 				tableGUI.setHoleCardsImages(player.getHoleCard1().getCardImage(), player.getHoleCard2().getCardImage());
 
 				// set opponent card images
@@ -196,21 +203,21 @@ public class ClientConnection extends Thread {
 				if (player.isYourTurn()) {
 					tableGUI.highLightPlayerBox();
 					tableGUI.callRaiseFoldButtons();
-				} else 
+				} else
 					tableGUI.dimPlayerBox();
-				
-			// flop cards
+
+				// flop cards
 			} else if (actionInput.equals("FLOP")) {
 				handState = "Postflop";
 				tableGUI.setFlopImages(tableInfo.getFlop()[0].getCardImage(), tableInfo.getFlop()[1].getCardImage(),
 						tableInfo.getFlop()[2].getCardImage());
-				
-			// turn card
+
+				// turn card
 			} else if (actionInput.equals("TURN")) {
 				handState = "Postflop";
 				tableGUI.setTurnImage(tableInfo.getTurn().getCardImage());
-				
-			// river card
+
+				// river card
 			} else if (actionInput.equals("RIVER")) {
 				handState = "River";
 				tableGUI.setRiverImage(tableInfo.getRiver().getCardImage());
@@ -225,10 +232,10 @@ public class ClientConnection extends Thread {
 				if (player.isYourTurn()) {
 					tableGUI.highLightPlayerBox();
 					tableGUI.callRaiseFoldButtons();
-				} else 
-					tableGUI.dimPlayerBox();			
+				} else
+					tableGUI.dimPlayerBox();
 
-			// call
+				// call
 			} else if (actionInput.contains("calls")) {
 				System.out.println(actionInput);
 				tableGUI.getMessagesBox().append("Dealer: " + actionInput + "\n");
@@ -247,7 +254,7 @@ public class ClientConnection extends Thread {
 					} else
 						tableGUI.dimPlayerBox();
 
-				// post flop action
+					// post flop action
 				} else if (handState.equals("Postflop")) {
 
 					if (player.isYourTurn()) {
@@ -256,7 +263,7 @@ public class ClientConnection extends Thread {
 					} else
 						tableGUI.dimPlayerBox();
 
-				// river action
+					// river action
 				} else if (handState.equals("River")) {
 					tableGUI.dimPlayerBox();
 					tableGUI.showDown(opponentCards[0], opponentCards[1]);
@@ -270,7 +277,7 @@ public class ClientConnection extends Thread {
 					tableGUI.resetHoleCardsPosition();
 				}
 
-			// check
+				// check
 			} else if (actionInput.contains("checks")) {
 				System.out.println(actionInput);
 				tableGUI.getMessagesBox().append("Dealer: " + actionInput + "\n");
@@ -283,7 +290,7 @@ public class ClientConnection extends Thread {
 					} else
 						tableGUI.dimPlayerBox();
 
-				// post flop action
+					// post flop action
 				} else if (handState.equals("Postflop")) {
 					if (player.isYourTurn()) {
 						tableGUI.highLightPlayerBox();
@@ -291,7 +298,7 @@ public class ClientConnection extends Thread {
 					} else
 						tableGUI.dimPlayerBox();
 
-				// river action
+					// river action
 				} else if (handState.equals("River")) {
 					checkCounter++;
 
@@ -308,7 +315,7 @@ public class ClientConnection extends Thread {
 
 						tableGUI.resetHoleCardsPosition();
 
-					// change turns
+						// change turns
 					} else if (checkCounter == 1) {
 						if (player.isYourTurn()) {
 							tableGUI.getMessagesBox().append("Dealer: " + player.getName() + ", it's your turn \n");
@@ -320,7 +327,7 @@ public class ClientConnection extends Thread {
 					}
 				}
 
-			// bet
+				// bet
 			} else if (actionInput.contains("bets")) {
 				System.out.println(actionInput);
 				tableGUI.getMessagesBox().append("Dealer: " + actionInput + "\n");
@@ -331,7 +338,7 @@ public class ClientConnection extends Thread {
 				} else
 					tableGUI.dimPlayerBox();
 
-			// raise
+				// raise
 			} else if (actionInput.contains("raises")) {
 				System.out.println(actionInput);
 				tableGUI.getMessagesBox().append("Dealer: " + actionInput + "\n");
@@ -344,7 +351,7 @@ public class ClientConnection extends Thread {
 					} else
 						tableGUI.dimPlayerBox();
 
-				// post flop action
+					// post flop action
 				} else if (handState.equals("Postflop")) {
 					if (player.isYourTurn()) {
 						tableGUI.highLightPlayerBox();

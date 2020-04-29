@@ -7,16 +7,25 @@ import java.util.ArrayList;
 
 import com.idan.game.*;
 
+/**
+ * This class represents the game server.
+ * 
+ * @author Idan Perry
+ * @version 03.05.2013
+ */
+
 public class Server {
 	private static final int PORT = 1342;
 	
 	private ServerSocket serverSocket;
-	private ArrayList<ServerConnection> connections;
+	private final ArrayList<ServerConnection> connections;
 
+	/**
+	 * Constructs the game server.
+	 */
 	public Server() {
-		boolean running = true;
-
 		connections = new ArrayList<ServerConnection>();
+		boolean running = true;
 
 		try {
 			serverSocket = new ServerSocket(PORT);
@@ -39,8 +48,19 @@ public class Server {
 		} catch (IOException e) {
 			System.err.println("Server was disconnected");
 		}
+		
+		try {
+			serverSocket.close();
+		} catch (IOException e) {
+			System.err.println("Server wasn't closed properly.");
+		}
 	}
 	
+	/**
+	 * Returns connections list of this server.
+	 * 
+	 * @return connections list of this server
+	 */
 	public ArrayList<ServerConnection> getConnections() {
 		return connections;
 	}

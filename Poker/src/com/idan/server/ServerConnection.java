@@ -7,33 +7,44 @@ import java.net.Socket;
 
 import com.idan.game.*;
 
-public class ServerConnection extends Thread {
+/**
+ * This class represents a server side connection.
+ * 
+ * @author Idan Perry
+ * @version 03.05.2013
+ */
 
-	private Socket socket;
+public class ServerConnection extends Thread {
+	private final Socket socket;
+	private final Server server;
 	private ObjectInputStream objectInput;
 	private ObjectOutputStream objectOutput;
-	private Server server;
-
-	private boolean running = true;
-	private Player player;
-	private HeadsUpTable table;
-	private TableInformation tableInfo;
-	private String actionInput = "";
+	
+	private final HeadsUpTable table;
+	private TableInformation tableInfo;	
+	private Player player;	
+	private String actionInput;
 	private int betSize;
+	private boolean running;
 
+	/**
+	 * Constructs a ServerConnection object.
+	 * 
+	 * @param socket the socket to connect through
+	 * @param server
+	 * @param table
+	 */
 	public ServerConnection(Socket socket, Server server, HeadsUpTable table) {
 		super("Server_Connection_Thread");
 		this.socket = socket;
 		this.server = server;
 		this.table = table;
-	}
-
-	public Player getPlayer() {
-		return player;
+		actionInput  = "";
+		running = true;
 	}
 	
-	public void setTableInfo(TableInformation info) {
-		this.tableInfo = info;
+	public void setTableInfo(TableInformation tableInfo) {
+		this.tableInfo = tableInfo;
 	}
 
 	private void openObjectStream() {

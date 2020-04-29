@@ -21,6 +21,8 @@ import javax.swing.event.ChangeListener;
 import com.idan.client.ClientConnection;
 
 public class TableWindow implements ActionListener, ChangeListener {
+	private static final int WIDTH = 705;
+	private static final int HEIGHT = 525;
 	private static final int[][] BOX_POSITION = { { 275, 365 }, { 275, 52 } };
 	private static final int[][] HOLE_CARDS_POSITION = { { 295, 330 }, { 345, 330 }, { 295, 18 }, { 345, 18 } };
 	private static final int CARD_WIDTH = 50;
@@ -56,7 +58,7 @@ public class TableWindow implements ActionListener, ChangeListener {
 
 	private void initComponents() {
 		tableFrame = new JFrame("No-limit Hold'em - Logged in as " + clientConnection.getPlayer().getName());
-		tableFrame.setSize(705, 525);
+		tableFrame.setSize(WIDTH, HEIGHT);
 		tableFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		tableFrame.setResizable(false);
 

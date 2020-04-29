@@ -304,29 +304,30 @@ public class TestHandEvaluation {
 	 * Check if the hand is a straight.
 	 */
 	private boolean checkStraight(TestPlayer player) {
+		int size = player.getSevenCardsTempHand().size()-1;
+		int fixSteps = 4;
 		int counter = 0; // counts the increments between 2 folowing cards
-		int j;
 
-		for (j = 6; j >= 4; j--) {
+		// scan blocks of 5 cards across the 7 cards array
+		for (; size >= fixSteps; size--) {
 			counter = 0;
-			for (int i = j; i > 2; i--) {
+			for (int i = size; i > size-fixSteps; i--) {
 				if (player.getSevenCardsTempHand().get(i).getRank()
 						.getValue() == player.getSevenCardsTempHand().get(i - 1).getRank().getValue() + 1)
 					counter++;
-					
-
-				if (counter == 4)
-					break;
 			}
+			
+			if (counter == fixSteps)
+				break;
 		}
 
-		if (counter == 4) {
+		if (counter == fixSteps) {
 			player.setStraight(true);
 			player.setHandRank(HandRank.STRAIGHT);
 
 			// init 5 cards hand
 			for (int i = 0; i < hand.length; i++)
-				hand[i] = player.getSevenCardsTempHand().get(j - 1 + i);
+				hand[i] = player.getSevenCardsTempHand().get(size - fixSteps + i);
 
 			player.setFiveCardsHand(hand);
 			return true;
@@ -449,6 +450,9 @@ public class TestHandEvaluation {
 		player.setFiveCardsHand(hand);
 	}
 
+	/*
+	 * Resets hand rank of all players at the table.
+	 */
 	private void resetHandRanks() {
 		TestPlayer player;
 
@@ -465,6 +469,9 @@ public class TestHandEvaluation {
 		}
 	}
 	
+	/*
+	 * Bubble sort by rank-value in ascending order.
+	 */
 	private void sortHand(TestCard[] hand) {
 		for (int i = 0; i < hand.length; i++) {
 			for (int j = i + 1; j < hand.length; j++) {

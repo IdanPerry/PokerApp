@@ -114,7 +114,7 @@ public class TestHandComparison {
 	 * Prints the plyare with the winning hand and the winning hand.
 	 */
 	private void printWinner(TestPlayer player) {
-		System.out.print(player.getName() + " wins with " + player.getHandRank() + ":	");
+		System.out.print(player.getName() + " wins with " + player.getHandRank() + ":     ");
 
 		for (int i = 0; i < player.getFiveCardsHand().length; i++) {
 			System.out.print(player.getFiveCardsHand()[i].getRank());
@@ -154,6 +154,7 @@ public class TestHandComparison {
 		// compare the pair
 		if(player1.getFiveCardsHand()[0].getRank().getValue() > player2.getFiveCardsHand()[0].getRank().getValue())
 			return player1;
+		
 		else if(player1.getFiveCardsHand()[0].getRank().getValue() < player2.getFiveCardsHand()[0].getRank().getValue())
 			return player2;
 		
@@ -170,6 +171,7 @@ public class TestHandComparison {
 		for(int i = 0; i <= 2; i+=2) {
 			if(player1.getFiveCardsHand()[i].getRank().getValue() > player2.getFiveCardsHand()[i].getRank().getValue())
 				return player1;
+			
 			else if(player1.getFiveCardsHand()[i].getRank().getValue() < player2.getFiveCardsHand()[i].getRank().getValue())
 				return player2;
 		}
@@ -187,6 +189,7 @@ public class TestHandComparison {
 		// compair trips
 		if(player1.getFiveCardsHand()[0].getRank().getValue() > player2.getFiveCardsHand()[0].getRank().getValue())
 			return player1;
+		
 		else if(player1.getFiveCardsHand()[0].getRank().getValue() < player2.getFiveCardsHand()[0].getRank().getValue())
 			return player2;
 		
@@ -213,6 +216,7 @@ public class TestHandComparison {
 		// compair trips
 		if(player1.getFiveCardsHand()[0].getRank().getValue() > player2.getFiveCardsHand()[0].getRank().getValue())
 			return player1;
+		
 		else if(player1.getFiveCardsHand()[0].getRank().getValue() < player2.getFiveCardsHand()[0].getRank().getValue())
 			return player2;
 		
@@ -229,9 +233,14 @@ public class TestHandComparison {
 		return compareCardFromEach(player1, player2, 0);
 	}
 	
+	/*
+	 * Compares a single card from each of the 2 players,
+	 * at the specified index in the hand array.
+	 */
 	private TestPlayer compareCardFromEach(TestPlayer player1, TestPlayer player2, int i) {
 		if(player1.getFiveCardsHand()[i].getRank().getValue() > player2.getFiveCardsHand()[i].getRank().getValue())
 			return player1;
+		
 		else if(player1.getFiveCardsHand()[i].getRank().getValue() < player2.getFiveCardsHand()[i].getRank().getValue())
 			return player2;
 		
