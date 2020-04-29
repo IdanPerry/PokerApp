@@ -3,7 +3,8 @@ package com.idan.game;
 import java.util.ArrayList;
 
 import com.idan.server.TableInformation;
-import com.idan.texasholdem.Evaluator;
+import com.idan.texasholdem.HandComparison;
+import com.idan.texasholdem.HandEvaluation;
 import com.idan.texasholdem.TexasHoldemDealer;
 
 /**
@@ -343,11 +344,11 @@ public abstract class Table extends Thread {
 		pot += bet;
 		tableInfo.setPot(pot);
 
-		Evaluator e = new Evaluator(dealer, this);
-		e.resetHandRanks();
-		e.sortAllHands();
-		e.evaluateAllHands();;
-		e.showDown();
+		HandEvaluation evaluate = new HandEvaluation(dealer, this);
+		HandComparison compare = new HandComparison(this);
+		evaluate.resetHandRanks();
+		evaluate.evaluateAllHands();
+		compare.showDown();
 
 		riverWasDealt = false;
 
@@ -691,11 +692,20 @@ public abstract class Table extends Thread {
 		postFlopAction();
 		// river action
 		postFlopAction();
-
 	}
 	
+	/**
+	 * Allocates a seat for the player at this table.
+	 * 
+	 * @param player the player to be seated at this table
+	 */
 	public abstract void seatPlayer(Player player);
 
+	/**
+	 * Allocates seats for a specified number of players at this table.
+	 * 
+	 * @param int the number of players to be seated at this table
+	 */
 	public abstract void seatPlayers(int players);
 
 	@Override

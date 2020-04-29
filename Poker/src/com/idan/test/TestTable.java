@@ -2,35 +2,24 @@ package com.idan.test;
 
 import java.util.ArrayList;
 
+/**
+ * This class represented a poker table.
+ * 
+ * @author Idan Perry
+ * @version 13.05.2013
+ *
+ */
+
 public class TestTable {
-	private static final int MAX_PLAYERS = 9;
-	protected static final int MIN_PLAYRES = 2;
-	protected ArrayList<TestPlayer> tablePlayers;
-	protected ArrayList<TestPlayer> playersInHand;
-	protected TestTexasHoldemDealer dealer;
-	protected TestPlayer player;
-	protected int tableId;
-	protected int numOfPlayers;
+	private static final int MAX_PLAYERS = 2;
+	
+	private final ArrayList<TestPlayer> tablePlayers;
+	private final TestTexasHoldemDealer dealer;
+	private int numOfPlayers;
 
-	protected int butPosition;
-	protected int sbPosition;
-	protected int bbPosition;
-
-	protected String action;
-	protected int bet;
-	protected int pot;
-	protected int foldCounter = 0;
-
-	public boolean holeCardsWereDealt;
-	protected boolean running;
-	protected boolean preFlop;
-	protected boolean flop;
-	protected boolean turn;
-	protected boolean river;
-
-	protected static final int SMALL_BLIND = 50;
-	protected static final int BIG_BLIND = 100;
-
+	/**
+	 * Constructs a poker table.
+	 */
 	public TestTable() {
 		tablePlayers = new ArrayList<TestPlayer>();
 		dealer = new TestTexasHoldemDealer(this);
@@ -45,47 +34,49 @@ public class TestTable {
 			dealer.getDeck().shuffle();
 			dealer.checkDealing();
 			
-			TestEvaluator e = new TestEvaluator(dealer, this);
-			e.resetHandRanks();
-			e.evaluateAllHands();
-			e.showDown();
+			TestHandComparison compare = new TestHandComparison(this);
+			TestHandEvaluation evaluate = new TestHandEvaluation(dealer, this);
+			evaluate.evaluateAllHands();
+			compare.showDown();
 		}
 	}
 
-	public TestTable(int tableId) {
-		this.tableId = tableId;
-
-		tablePlayers = new ArrayList<TestPlayer>();
-		dealer = new TestTexasHoldemDealer(this);
-	}
-
+	/**
+	 * Returns a list of the players at the table.
+	 * 
+	 * @return a list of the players at the table
+	 */
 	public ArrayList<TestPlayer> getTablePlayers() {
 		return tablePlayers;
 	}
 
-	public int getTableId() {
-		return tableId;
-	}
-
-	protected void setTableId(int tableId) {
-		this.tableId = tableId;
-	}
-
+	/**
+	 * Initializes the number of players at this table.
+	 * 
+	 * @param numOfPlayers the number of players at this table
+	 */
 	protected void setNumOfPlayers(int numOfPlayers) {
 		this.numOfPlayers = numOfPlayers;
 	}
 
+	/**
+	 * Returns the number of players at this table.
+	 * 
+	 * @return the number of players at this table
+	 */
 	public int getNumOfPlayers() {
 		return numOfPlayers;
 	}
 
+	/**
+	 * Allocates a seat for the player at this table.
+	 * 
+	 * @param player the player to be seated at this table
+	 */
 	public void seatPlayer(TestPlayer player) {
-		if (tablePlayers.size() < MAX_PLAYERS) {
+		if (tablePlayers.size() < MAX_PLAYERS)
 			tablePlayers.add(player);
-
-		} else {
+		 else 
 			System.out.println("Table is full");
-		}
-
 	}
 }

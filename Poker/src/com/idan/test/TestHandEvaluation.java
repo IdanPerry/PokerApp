@@ -8,12 +8,11 @@ import com.idan.test.TestPlayer;
 import com.idan.test.TestTable;
 
 public class TestHandEvaluation {
-
-	private boolean strFlush; // for debug
+	private final TestDealer dealer;
+	private final TestTable table;
 	private TestCard[] hand;
 
-	private TestDealer dealer;
-	protected TestTable table;
+	private boolean strFlush; // for debug
 
 	public TestHandEvaluation(TestDealer dealer, TestTable table) {
 		this.dealer = dealer;
@@ -30,20 +29,22 @@ public class TestHandEvaluation {
 	// in array to make a 7 cards hand in ascending rank order
 	private void initAndSortAllHands() {
 		ArrayList<TestCard> sevenCards;
-		
+		TestPlayer player;
+
 		// initalize the seven cards hand
 		for (int i = 0; i < table.getTablePlayers().size(); i++) {
 			sevenCards = new ArrayList<TestCard>(7);
+			player = table.getTablePlayers().get(i);
 
-			sevenCards.add(table.getTablePlayers().get(i).getHoleCard1());
-			sevenCards.add(table.getTablePlayers().get(i).getHoleCard2());
+			sevenCards.add(player.getHoleCard1());
+			sevenCards.add(player.getHoleCard2());
 			sevenCards.add(dealer.getFlop()[0]);
 			sevenCards.add(dealer.getFlop()[1]);
 			sevenCards.add(dealer.getFlop()[2]);
 			sevenCards.add(dealer.getTurn());
 			sevenCards.add(dealer.getRiver());
 
-			table.getTablePlayers().get(i).setSevenCardsTempHand(sevenCards);
+			player.setSevenCardsTempHand(sevenCards);
 		}
 
 		// sort the hand
@@ -51,8 +52,13 @@ public class TestHandEvaluation {
 			table.getTablePlayers().get(i).sortHandByRank(table.getTablePlayers().get(i).getSevenCardsTempHand());
 	}
 
+	/**
+	 * Start sequence of hand evaluation for all players at the table,
+	 * checking the highest ranking first down to the lowest.
+	 */
 	public void evaluateAllHands() {
 		TestPlayer player;
+		resetHandRanks();
 
 		for (int i = 0; i < table.getTablePlayers().size(); i++) {
 			player = table.getTablePlayers().get(i);
@@ -60,49 +66,52 @@ public class TestHandEvaluation {
 
 			initAndSortAllHands();
 			if (checkStrFlush(player))
-				return;
+				continue;
 
 			initAndSortAllHands();
 			if (checkQuads(player))
-				return;
-			
+				continue;
+
 			initAndSortAllHands();
 			if (checkFullHouse(player))
-				return;
-			
+				continue;
+
 			initAndSortAllHands();
 			if (checkFlush(player))
-				return;
-			
+				continue;
+
 			initAndSortAllHands();
 			if (checkStraight(player))
-				return;
-			
+				continue;
+
 			initAndSortAllHands();
-			if (checkTrips(player))
-				return;
-			
+			if (player.isTrips())
+				continue;
+
 			initAndSortAllHands();
 			if (checkTwoPairs(player))
-				return;
-			
+				continue;
+
 			initAndSortAllHands();
-			if (checkPair(player))
-				return;
-			
+			if (player.isPair())
+				continue;
+
 			initAndSortAllHands();
 			checkHighCard(player);
 		}
 	}
 
+	/*
+	 * Check if teh hand is a straight-flush
+	 */
 	private boolean checkStrFlush(TestPlayer player) {
 		player.sortHandBySuit(player.getSevenCardsTempHand());
 
 		for (int j = 6; j > 3; j--) {
 			if (player.getSevenCardsTempHand().get(j).getSuit().getValue() == player.getSevenCardsTempHand().get(j - 4)
 					.getSuit().getValue()) {
-				
-				for(int i = 0; i < hand.length; i++)
+
+				for (int i = 0; i < hand.length; i++)
 					hand[i] = player.getSevenCardsTempHand().get(j - i);
 
 				// Sort by rank
@@ -122,10 +131,11 @@ public class TestHandEvaluation {
 				return true;
 			}
 		}
-		
-		if(!player.isStrFlush())
+
+		if (!player.isStrFlush())
 			return false;
 
+		// speciel case - lowest straight-flush (Ace to 5)
 		if (hand[4].getRank().equals(TestCard.Rank.ACE) && hand[3].getRank().equals(TestCard.Rank.FIVE)
 				&& hand[2].getRank().equals(TestCard.Rank.FOUR) && hand[1].getRank().equals(TestCard.Rank.THREE)
 				&& hand[0].getRank().equals(TestCard.Rank.TWO)) {
@@ -137,7 +147,7 @@ public class TestHandEvaluation {
 			strFlush = true;
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -154,16 +164,16 @@ public class TestHandEvaluation {
 				break;
 			}
 		}
-		
-		if(!player.isQuads())
+
+		if (!player.isQuads())
 			return false;
-		
+
 		// init 5 cards hand
-		for(int i = 0; i < hand.length - 1; i++) {
+		for (int i = 0; i < hand.length - 1; i++) {
 			hand[i] = player.getSevenCardsTempHand().get(j);
 			player.getSevenCardsTempHand().remove(j);
 		}
-		
+
 		// add kicker
 		hand[4] = player.getSevenCardsTempHand().get(2);
 
@@ -175,23 +185,8 @@ public class TestHandEvaluation {
 	 * Check if the hand is a full-house
 	 */
 	private boolean checkFullHouse(TestPlayer player) {
-
 		// search for trips first
-		for (int j = 6; j >= 2; j--) {
-			if (player.getSevenCardsTempHand().get(j).getRank()
-					.equals(player.getSevenCardsTempHand().get(j - 2).getRank())) {
-				player.setTrips(true);
-
-				// add trips to the 5 cards hand
-				hand[0] = player.getSevenCardsTempHand().get(j);
-				hand[1] = player.getSevenCardsTempHand().get(j - 1);
-				hand[2] = player.getSevenCardsTempHand().get(j - 2);
-				player.getSevenCardsTempHand().remove(j);
-				player.getSevenCardsTempHand().remove(j - 1);
-				player.getSevenCardsTempHand().remove(j - 2);
-				break;
-			}
-		}
+		checkTrips(player);
 
 		// not qualified for full-house
 		if (!player.isTrips())
@@ -212,6 +207,11 @@ public class TestHandEvaluation {
 				return true;
 			}
 		}
+
+		// add kickers for the trips
+		hand[3] = player.getSevenCardsTempHand().get(3);
+		hand[4] = player.getSevenCardsTempHand().get(2);
+		player.setFiveCardsHand(hand);
 
 		return false;
 	}
@@ -286,13 +286,13 @@ public class TestHandEvaluation {
 
 			player.setStraight(true);
 			player.setHandValue(4);
-			
+
 			// init 5 cards hand
 			hand[0] = player.getSevenCardsTempHand().get(6);
 			for (int i = 1; i < hand.length; i++)
-				hand[i] = player.getSevenCardsTempHand().get(i-1);
-					
-			player.setFiveCardsHand(hand);			
+				hand[i] = player.getSevenCardsTempHand().get(i - 1);
+
+			player.setFiveCardsHand(hand);
 			return true;
 		}
 
@@ -302,10 +302,11 @@ public class TestHandEvaluation {
 	/*
 	 * Check if the hand is three-of-a-kind.
 	 */
-	private boolean checkTrips(TestPlayer player) {
+	private void checkTrips(TestPlayer player) {
 		for (int j = 6; j > 1; j--) {
 			if (player.getSevenCardsTempHand().get(j).getRank()
 					.equals(player.getSevenCardsTempHand().get(j - 2).getRank())) {
+
 				player.setTrips(true);
 				player.setHandValue(3);
 				hand[0] = player.getSevenCardsTempHand().get(j);
@@ -314,17 +315,9 @@ public class TestHandEvaluation {
 				player.getSevenCardsTempHand().remove(j);
 				player.getSevenCardsTempHand().remove(j - 1);
 				player.getSevenCardsTempHand().remove(j - 2);
-
-				// add kickers
-				hand[3] = player.getSevenCardsTempHand().remove(3);
-				hand[4] = player.getSevenCardsTempHand().remove(2);
-
-				player.setFiveCardsHand(hand);
-				return true;
+				break;
 			}
 		}
-
-		return false;
 	}
 
 	/*
@@ -332,19 +325,7 @@ public class TestHandEvaluation {
 	 */
 	private boolean checkTwoPairs(TestPlayer player) {
 		// first pair
-		for (int j = 6; j > 0; j--) {
-			if (player.getSevenCardsTempHand().get(j).getRank()
-					.equals(player.getSevenCardsTempHand().get(j - 1).getRank())) {
-				player.setPair(true);
-
-				// add first pair to the 5 cards hand
-				hand[0] = player.getSevenCardsTempHand().get(j);
-				hand[1] = player.getSevenCardsTempHand().get(j - 1);
-				player.getSevenCardsTempHand().remove(j);
-				player.getSevenCardsTempHand().remove(j - 1);
-				break;
-			}
-		}
+		checkPair(player);
 
 		// doesn't qualify for 2 pairs
 		if (!player.isPair()) {
@@ -367,19 +348,24 @@ public class TestHandEvaluation {
 
 				// add kicker
 				hand[4] = player.getSevenCardsTempHand().get(2);
-
 				player.setFiveCardsHand(hand);
 				return true;
 			}
 		}
 
+		// add 3 kickers for the single pair found
+		hand[2] = player.getSevenCardsTempHand().get(4);
+		hand[3] = player.getSevenCardsTempHand().get(3);
+		hand[4] = player.getSevenCardsTempHand().get(2);
+		player.setFiveCardsHand(hand);
+		
 		return false;
 	}
 
 	/*
 	 * Check if the hand is one-pair.
 	 */
-	private boolean checkPair(TestPlayer player) {
+	private void checkPair(TestPlayer player) {
 		for (int j = 6; j > 0; j--) {
 			if (player.getSevenCardsTempHand().get(j).getRank()
 					.equals(player.getSevenCardsTempHand().get(j - 1).getRank())) {
@@ -391,18 +377,9 @@ public class TestHandEvaluation {
 				hand[1] = player.getSevenCardsTempHand().get(j - 1);
 				player.getSevenCardsTempHand().remove(j);
 				player.getSevenCardsTempHand().remove(j - 1);
-
-				// add 3 kickers
-				hand[2] = player.getSevenCardsTempHand().get(4);
-				hand[3] = player.getSevenCardsTempHand().get(3);
-				hand[4] = player.getSevenCardsTempHand().get(2);
-
-				player.setFiveCardsHand(hand);
-				return true;
+				break;
 			}
 		}
-
-		return false;
 	}
 
 	/*
@@ -411,13 +388,13 @@ public class TestHandEvaluation {
 	private void checkHighCard(TestPlayer player) {
 		player.setHandValue(0);
 
-		for (int i = 0; i < hand.length; i++)
-			hand[i] = player.getSevenCardsTempHand().get(i + 2);
+		for (int i = 0, j = 6; i < hand.length; i++, j--)
+			hand[i] = player.getSevenCardsTempHand().get(j);
 
 		player.setFiveCardsHand(hand);
 	}
 
-	public void resetHandRanks() {
+	private void resetHandRanks() {
 		TestPlayer player;
 
 		for (int i = 0; i < table.getTablePlayers().size(); i++) {
@@ -432,7 +409,7 @@ public class TestHandEvaluation {
 			player.setStrFlush(false);
 		}
 	}
-
+	
 	private void sortHand(TestCard[] hand) {
 		for (int i = 0; i < hand.length; i++) {
 			for (int j = i + 1; j < hand.length; j++) {

@@ -68,9 +68,11 @@ public abstract class TestDealer {
 	 * @param cards the number of cards each player holds (2 in holdem, 4 in omaha)
 	 */
 	public void dealFlop(int cards) {
-		flop[0] = deck.getCardsDeck().get(1 + table.getTablePlayers().size() * cards);
-		flop[1] = deck.getCardsDeck().get(2 + table.getTablePlayers().size() * cards);
-		flop[2] = deck.getCardsDeck().get(3 + table.getTablePlayers().size() * cards);
+		int size = table.getTablePlayers().size();
+		
+		flop[0] = deck.getCardsDeck().get(1 + size * cards);
+		flop[1] = deck.getCardsDeck().get(2 + size * cards);
+		flop[2] = deck.getCardsDeck().get(3 + size * cards);
 	}
 
 	/**

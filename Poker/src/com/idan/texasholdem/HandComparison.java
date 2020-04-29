@@ -2,17 +2,16 @@ package com.idan.texasholdem;
 
 import java.util.ArrayList;
 
-import com.idan.game.Dealer;
 import com.idan.game.Player;
 import com.idan.game.Table;
 
-public class Evaluator extends HandEvaluation {
-	
+public class HandComparison {	
+	private final Table table;
 	private ArrayList<Player> bestHands;
 	private int max;
 	
-	public Evaluator(Dealer dealer, Table table) {
-		super(dealer, table);
+	public HandComparison(Table table) {
+		this.table = table;
 	}
 
 	private void loop(int card) {
@@ -30,7 +29,6 @@ public class Evaluator extends HandEvaluation {
 	}
 	
 	private void printWinningHand() {
-		
 		for (int i = 0; i < table.getPlayersInHand().size(); i++) {
 			if (table.getPlayersInHand().get(i).getName().equals(bestHands.get(0).getName())) {
 				table.getPlayersInHand().get(i).setWin(true);

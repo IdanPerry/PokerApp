@@ -24,10 +24,9 @@ public class HeadsUpTable extends Table {
 
 	@Override
 	public void seatPlayer(Player player) {
-		if (getTablePlayers().size() < MAX_PLAYERS) {
+		if (getTablePlayers().size() < MAX_PLAYERS)
 			getTablePlayers().add(player);
-
-		} else
+		else
 			System.out.println("Table is full");
 	}
 

@@ -2,13 +2,13 @@ package com.idan.test;
 
 import java.util.ArrayList;
 
-public class TestEvaluator extends TestHandEvaluation {
-	
+public class TestHandComparison  {
+	private final TestTable table;
 	private ArrayList<TestPlayer> bestHands;
 	private int max;
 	
-	public TestEvaluator(TestDealer dealer, TestTable table) {
-		super(dealer, table);
+	public TestHandComparison(TestTable table) {
+		this.table = table;
 	}
 
 	private void loop(int card) {

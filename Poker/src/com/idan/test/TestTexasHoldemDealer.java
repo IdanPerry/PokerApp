@@ -3,8 +3,8 @@ package com.idan.test;
 public class TestTexasHoldemDealer extends TestDealer {
 
 	/**
-	 * Constructs a Texas Holdem dealer which manages a Texas Holdem
-	 * poker table game.
+	 * Constructs a Texas Holdem dealer which manages a Texas Holdem poker table
+	 * game.
 	 * 
 	 * @param table the table this dealer manages
 	 */
@@ -16,9 +16,11 @@ public class TestTexasHoldemDealer extends TestDealer {
 	 * Dealer deals all players at the table 2 holecards.
 	 */
 	public void dealHoleCards() {
-		for (int i = 0; i < getTable().getTablePlayers().size(); i++) {
+		int size = getTable().getTablePlayers().size();
+
+		for (int i = 0; i < size; i++) {
 			getTable().getTablePlayers().get(i).setTexasHoleCards(getDeck().getCardsDeck().get(i),
-					getDeck().getCardsDeck().get(i + getTable().getTablePlayers().size()));
+					getDeck().getCardsDeck().get(i + size));
 		}
 	}
 
@@ -28,10 +30,10 @@ public class TestTexasHoldemDealer extends TestDealer {
 	public void printHoleCards() {
 		for (int i = 0; i < getTable().getTablePlayers().size(); i++) {
 			System.out.print(getTable().getTablePlayers().get(i).getName() + " has: "
-					+ getTable().getTablePlayers().get(i).getHoleCard1().getRank().toString()
-					+ getTable().getTablePlayers().get(i).getHoleCard1().getSuit().toString());
-			System.out.print(getTable().getTablePlayers().get(i).getHoleCard2().getRank().toString()
-					+ getTable().getTablePlayers().get(i).getHoleCard2().getSuit().toString() + "\n");
+					+ getTable().getTablePlayers().get(i).getHoleCard1().getRank()
+					+ getTable().getTablePlayers().get(i).getHoleCard1().getSuit());
+			System.out.print("" + getTable().getTablePlayers().get(i).getHoleCard2().getRank()
+					+ getTable().getTablePlayers().get(i).getHoleCard2().getSuit() + "\n");
 		}
 	}
 
@@ -41,21 +43,18 @@ public class TestTexasHoldemDealer extends TestDealer {
 	public void printHands() {
 		for (int i = 0; i < getTable().getTablePlayers().size(); i++) {
 			System.out.print(getTable().getTablePlayers().get(i).getName() + " has: "
-					+ getTable().getTablePlayers().get(i).getHoleCard1().getRank().toString()
-					+ getTable().getTablePlayers().get(i).getHoleCard1().getSuit().toString());
-			
-			System.out.print(getTable().getTablePlayers().get(i).getHoleCard2().getRank().toString()
-					+ getTable().getTablePlayers().get(i).getHoleCard2().getSuit().toString() + "\n");
+					+ getTable().getTablePlayers().get(i).getHoleCard1().getRank()
+					+ getTable().getTablePlayers().get(i).getHoleCard1().getSuit());
+
+			System.out.print("" + getTable().getTablePlayers().get(i).getHoleCard2().getRank()
+					+ getTable().getTablePlayers().get(i).getHoleCard2().getSuit() + "\n");
 		}
 
-		System.out.println("\nBoard: " + getFlop()[0].getRank().toString() + getFlop()[0].getSuit().toString()
-				+ getFlop()[1].getRank().toString() + getFlop()[1].getSuit().toString()
-				+ getFlop()[2].getRank().toString() + getFlop()[2].getSuit().toString() + getTurn().getRank().toString()
-				+ getTurn().getSuit().toString() + getRiver().getRank().toString() + getRiver().getSuit().toString()
-				+ "\n");
+		System.out.println("\nBoard: " + getFlop()[0].getRank() + getFlop()[0].getSuit() + getFlop()[1].getRank()
+				+ getFlop()[1].getSuit() + getFlop()[2].getRank() + getFlop()[2].getSuit() + getTurn().getRank()
+				+ getTurn().getSuit() + getRiver().getRank() + getRiver().getSuit() + "\n");
 	}
 
-	/* for debug use */
 	public void checkDealing() {
 		dealHoleCards();
 		dealFlop(2);
@@ -64,5 +63,4 @@ public class TestTexasHoldemDealer extends TestDealer {
 
 		printHands();
 	}
-
 }

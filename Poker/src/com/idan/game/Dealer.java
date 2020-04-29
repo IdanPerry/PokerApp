@@ -75,9 +75,11 @@ public abstract class Dealer {
 	 * @param cards the number of cards each player holds (2 in holdem, 4 in omaha)
 	 */
 	public void dealFlop(int cards) {
-		flop[0] = deck.getCardsDeck().get(1 + table.getTablePlayers().size() * cards);
-		flop[1] = deck.getCardsDeck().get(2 + table.getTablePlayers().size() * cards);
-		flop[2] = deck.getCardsDeck().get(3 + table.getTablePlayers().size() * cards);
+		int size = table.getTablePlayers().size();
+		
+		flop[0] = deck.getCardsDeck().get(1 + size * cards);
+		flop[1] = deck.getCardsDeck().get(2 + size * cards);
+		flop[2] = deck.getCardsDeck().get(3 + size * cards);
 	}
 
 	/**
@@ -125,20 +127,4 @@ public abstract class Dealer {
 	public abstract void printHoleCards();
 	
 	public abstract void printHands();
-	
-
-	/** TEST ** checking hands statistics */
-	// public void drawHoleCards() {
-	//
-	// table.getPlayers().get(0).setHoleCards(deck.getCardsDeck().get(51),
-	// deck.getCardsDeck().get(46));
-	// table.getPlayers().get(1).setHoleCards(deck.getCardsDeck().get(45),
-	// deck.getCardsDeck().get(44));
-	//
-	// deck.getCardsDeck().remove(51);
-	// deck.getCardsDeck().remove(46);
-	// deck.getCardsDeck().remove(45);
-	// deck.getCardsDeck().remove(44);
-	// }
-
 }
