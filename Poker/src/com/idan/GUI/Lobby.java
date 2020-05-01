@@ -68,7 +68,7 @@ public class Lobby extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				tableGUI.getTableFrame().setVisible(true);
+				tableGUI.setVisible(true);
 				clientConnection.setTableGUI(tableGUI);
 			}
 		});

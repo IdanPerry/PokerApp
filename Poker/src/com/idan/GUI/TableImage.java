@@ -5,27 +5,27 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
-public class TableImage extends JPanel implements MouseListener {
+import com.idan.server.TableInformation;
+
+public class TableImage extends JPanel {
 	private static final long serialVersionUID = 1L;
 
+	private final TableWindow tableGUI;
+	private final JLayeredPane layeredPane;
+	private TableInformation info;
 	private BufferedImage table;
-	private TableWindow tableGUI;
-	private JLayeredPane layeredPane;
 
-	private int clicked;
-	private int chips;
-
+	/**
+	 * Constructs a panel with table image backgroung.
+	 */
 	public TableImage(TableWindow tableGUI) {
 		this.tableGUI = tableGUI;
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -38,15 +38,15 @@ public class TableImage extends JPanel implements MouseListener {
 		}
 
 		layeredPane.setPreferredSize(new Dimension(table.getWidth(), table.getHeight()));
-		addMouseListener(this);
 	}
 
+	/**
+	 * Returns the JLayeredPane of this panel.
+	 * 
+	 * @return the JLayeredPane of this panel
+	 */
 	public JLayeredPane getLayeredPane() {
 		return layeredPane;
-	}
-
-	public void setPlayerChips(int chips) {
-		this.chips = chips;
 	}
 
 	@Override
@@ -56,64 +56,22 @@ public class TableImage extends JPanel implements MouseListener {
 		g2.drawImage(table, 0, 0, null);
 		g2.setColor(Color.WHITE);
 		g2.setFont(new Font("Tahoma", Font.BOLD, 14));
+		
+		info = tableGUI.getClientConnection().getTableInfo();
 
 		if (tableGUI.getClientConnection().getTableInfo() != null) {
-			g2.drawString("Pot: " + tableGUI.getClientConnection().getTableInfo().getPot(), 300, 150);
+			g2.drawString("Pot: " + info.getPot(), 300, 150);
 
-			for (int i = 0; i < tableGUI.getClientConnection().getTableInfo().getPlayers().size(); i++) {
-				if (!tableGUI.getClientConnection().getTableInfo().getPlayers().get(i).getName().equals(tableGUI.getClientConnection().getPlayer().getName())) {
-					tableGUI.getPlayerBoxLabel()[1].setText("<html><span style='font-size:11px'>" +
-							tableGUI.getClientConnection().getTableInfo().getPlayers().get(i).getName() + "<br>"
-									+ tableGUI.getClientConnection().getTableInfo().getPlayers().get(i).getChips() + "</span></html>");
-					
-					layeredPane.add(tableGUI.getPlayerBoxLabel()[1], new Integer(2));
+			for (int i = 0; i < info.getPlayers().size(); i++) {
+				if (!info.getPlayers().get(i).getName().equals(info.getPlayer().getName())) {
+					tableGUI.getPlayerBoxLabel()[1]
+							.setText("<html><span style='font-size:11px'>" + info.getPlayers().get(i).getName() + "<br>"
+									+ info.getPlayers().get(i).getChips() + "</span></html>");
+
+					layeredPane.add(tableGUI.getPlayerBoxLabel()[1], 2);
+					layeredPane.add(tableGUI.getPlayerBoxImg()[1], 2);
 				}
 			}
 		}
-
-		if (clicked == 1) {
-			tableGUI.getPlayerBoxLabel()[0].setText("<html><span style='font-size:11px'>"
-					+ tableGUI.getClientConnection().getPlayer().getName() + "<br>" + chips + "</span></html>");
-			tableGUI.getPlayerBoxLabel()[0].setBorder(BorderFactory.createLineBorder(Color.WHITE));
-			layeredPane.add(tableGUI.getPlayerBoxLabel()[0], new Integer(2));
-			clicked = 2;
-
-		} else if (clicked == 0) {
-			g2.fillOval(315, 340, 70, 70);
-			g2.setColor(Color.BLACK);
-			g2.drawString("Take seat", 322, 377);
-
-		}
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		int x = e.getX();
-		int y = e.getY();
-
-		if (e.getClickCount() == 1 && x < 380 && x > 320 && y < 400 && y > 340) {
-			clicked = e.getClickCount();
-			repaint();
-
-			// Initially sends the player states to the server. this includes
-			// the player's name, hole-cards, any action (call, fold...) etc.
-			tableGUI.getClientConnection().sendToServer(tableGUI.getClientConnection().getPlayer());
-		}
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-	}
-
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-	}
-
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
 	}
 }

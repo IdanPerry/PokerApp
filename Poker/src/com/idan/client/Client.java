@@ -32,4 +32,26 @@ public class Client {
 			System.err.println("Server is not connected, you were logged out. \nPlease connect the server first and try again.");
 		}
 	}
+	
+	/**
+	 * Constructs a Client object with the specified player name.
+	 * Initializes player's name and a client connection to the server.
+	 * 
+	 * @param name the name of the player
+	 */
+	public Client(String name) {
+		Player player = new Player(name);
+		player.setChips(10000);
+		
+		System.out.println("Logged in as " + player.getName());
+
+		try {
+			Socket socket = new Socket(IP, PORT);			
+			ClientConnection clientConnection = new ClientConnection(socket, player);
+			clientConnection.start();
+
+		} catch (IOException e) {
+			System.err.println("Server is not connected, you were logged out. \nPlease connect the server first and try again.");
+		}
+	}
 }

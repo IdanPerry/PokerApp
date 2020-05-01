@@ -180,7 +180,7 @@ public class ClientConnection extends Thread {
 			// Waiting for string input from server (echos back any string sent
 			// to the server).
 			readTableInfo();
-			tableGUI.getTableImage().setPlayerChips(player.getChips());
+			tableGUI.setPlayerChips(player.getChips());
 
 			// new hand
 			if (actionInput.equals("New Hand")) {
@@ -256,7 +256,6 @@ public class ClientConnection extends Thread {
 
 					// post flop action
 				} else if (handState.equals("Postflop")) {
-
 					if (player.isYourTurn()) {
 						tableGUI.highLightPlayerBox();
 						tableGUI.checkBetButtons();
