@@ -10,6 +10,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import com.idan.client.ClientConnection;
 
@@ -68,6 +70,18 @@ public class Lobby extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
+				try {
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+				} catch (UnsupportedLookAndFeelException e) {
+					e.printStackTrace();
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				} catch (InstantiationException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				}
+				
 				tableGUI.setVisible(true);
 				clientConnection.setTableGUI(tableGUI);
 			}

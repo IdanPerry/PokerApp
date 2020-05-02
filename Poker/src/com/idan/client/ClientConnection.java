@@ -7,6 +7,8 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import javax.swing.ImageIcon;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import com.idan.GUI.Lobby;
 import com.idan.GUI.TableWindow;
@@ -171,6 +173,18 @@ public class ClientConnection extends Thread {
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
+				try {
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+				} catch (UnsupportedLookAndFeelException e) {
+					e.printStackTrace();
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				} catch (InstantiationException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				}
+				
 				lobbyGUI = new Lobby(clientConnection);
 				lobbyGUI.setVisible(true);
 			}

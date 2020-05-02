@@ -47,31 +47,36 @@ public class TableWindow extends JFrame implements ActionListener, ChangeListene
 	private static final Font MESSAGE_FONT = new Font("Ariel", Font.PLAIN, 15);
 	
 	// bet field and slider
-	private static final int BET_FIELD_X = 360;
-	private static final int BET_FIELD_Y = 417;
-	private static final int BET_FIELD_WIDTH = 100;
+	private static final int BET_FIELD_X = 610;
+	private static final int BET_FIELD_Y = 390;
+	private static final int BET_FIELD_WIDTH = 70;
 	private static final int BET_FIELD_HEIGHT = 30;
-	private static final Font BET_FIELD_FONT = new Font("Tahoma", Font.PLAIN, 12);
-	private static final int BET_SLIDER_X = 462;
-	private static final int BET_SLIDER_Y = 417;
-	private static final int BET_SLIDER_WIDTH = 218;
-	private static final int BET_SLIDER_HEIGHT = 30;
+	private static final Font BET_FIELD_FONT = new Font("Tahoma", Font.BOLD, 14);
+	private static final int BET_SLIDER_X = 480;
+	private static final int BET_SLIDER_Y = 425;
+	private static final int BET_SLIDER_WIDTH = 200;
+	private static final int BET_SLIDER_HEIGHT = 20;
 	private static final int SLIDER_TICK_SPACE = 100;
 	private static final int MIN_BET = 100;
 	
 	// buttons
 	private static final int BET_RAISE_BTN_X = 580;
-	private static final int CALL_CHECK_BTN_X = 470;
-	private static final int FOLD_BTN_X = 360;
+	private static final int CALL_CHECK_BTN_X = 480;
+	private static final int FOLD_BTN_X = 380;
 	private static final int ACTION_BTN_Y = 450;
 	private static final int ACTION_BTN_WIDTH = 100;
 	private static final int ACTION_BTN_HEIGHT = 40;
 	private static final int LEAVE_BTN_X = 0;
 	private static final int LEAVE_BTN_Y = 0;
+	private static final int LEAVE_BTN_WIDTH = 70;
+	private static final int LEAVE_BTN_HEIGHT = 30;
+	private static final Font BTN_FONT = new Font("Tahoma", Font.BOLD, 14);
+	private static final Color LIGHT_BROWN = new Color(204, 102, 0);
 	
 	// player box
 	private static final Color BROWN = new Color(153, 76, 0);
-	private static final Color ORANGE = new Color(235, 100, 0);
+	private static final Color ORANGE = new Color(245, 100, 0);
+	private static final Font PLAYER_BOX_FONT = new Font("Tahoma", Font.PLAIN, 14);
 	private static final Font BOX_IMG_FONT = new Font("", Font.PLAIN, 36);
 	private static final int BOX_WIDTH = 130;
 	private static final int BOX_HEIGHT = 40;
@@ -159,7 +164,9 @@ public class TableWindow extends JFrame implements ActionListener, ChangeListene
 			playerBoxLabel[i].setOpaque(true);
 			playerBoxLabel[i].setBackground(BROWN);
 			playerBoxLabel[i].setForeground(Color.WHITE);
+			playerBoxLabel[i].setFont(PLAYER_BOX_FONT);
 			playerBoxLabel[i].setBounds(PLAYER_BOX_POSITION[i][0], PLAYER_BOX_POSITION[i][1], BOX_WIDTH, BOX_HEIGHT);
+			playerBoxLabel[i].setBorder(BorderFactory.createLineBorder(Color.WHITE));
 			
 			playerBoxImg[i] = new JLabel();
 			playerBoxImg[i].setVerticalAlignment(JLabel.CENTER);
@@ -169,6 +176,7 @@ public class TableWindow extends JFrame implements ActionListener, ChangeListene
 			playerBoxImg[i].setForeground(Color.BLACK);
 			playerBoxImg[i].setFont(BOX_IMG_FONT);
 			playerBoxImg[i].setText("\u2660");
+			playerBoxImg[i].setBorder(BorderFactory.createLineBorder(Color.WHITE));
 			playerBoxImg[i].setBounds(PLAYER_BOX_POSITION[i][0]- BOX_IMG_WIDTH,
 					PLAYER_BOX_POSITION[i][1], BOX_IMG_WIDTH, BOX_HEIGHT);
 		}
@@ -212,43 +220,68 @@ public class TableWindow extends JFrame implements ActionListener, ChangeListene
 		
 		// raise button
 		raiseBtn = new JButton("Raise");
+		raiseBtn.setContentAreaFilled(false);
+		raiseBtn.setOpaque(true);
 		raiseBtn.setBounds(BET_RAISE_BTN_X, ACTION_BTN_Y, ACTION_BTN_WIDTH, ACTION_BTN_HEIGHT);
-		raiseBtn.setBackground(Color.WHITE);
-		raiseBtn.setBorder(BorderFactory.createLineBorder(Color.RED));
+		raiseBtn.setBackground(LIGHT_BROWN);
+		raiseBtn.setForeground(Color.WHITE);
+		raiseBtn.setFont(BTN_FONT);
+		raiseBtn.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 		raiseBtn.addActionListener(this);
 
 		// bet button
 		betBtn = new JButton("Bet");
+		betBtn.setContentAreaFilled(false);
+		betBtn.setOpaque(true);
 		betBtn.setBounds(BET_RAISE_BTN_X, ACTION_BTN_Y, ACTION_BTN_WIDTH, ACTION_BTN_HEIGHT);
-		betBtn.setBackground(Color.WHITE);
-		betBtn.setBorder(BorderFactory.createLineBorder(Color.RED));
+		betBtn.setBackground(LIGHT_BROWN);
+		betBtn.setForeground(Color.WHITE);
+		betBtn.setFont(BTN_FONT);
+		betBtn.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 		betBtn.addActionListener(this);
 
 		// call button
 		callBtn = new JButton("Call");
+		callBtn.setContentAreaFilled(false);
+		callBtn.setOpaque(true);
 		callBtn.setBounds(CALL_CHECK_BTN_X, ACTION_BTN_Y, ACTION_BTN_WIDTH, ACTION_BTN_HEIGHT);
-		callBtn.setBackground(Color.WHITE);
-		callBtn.setBorder(BorderFactory.createLineBorder(Color.GREEN));
+		callBtn.setBackground(LIGHT_BROWN);
+		callBtn.setForeground(Color.WHITE);
+		callBtn.setFont(BTN_FONT);
+		callBtn.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 		callBtn.addActionListener(this);
 
 		// check button
 		checkBtn = new JButton("Check");
+		checkBtn.setContentAreaFilled(false);
+		checkBtn.setOpaque(true);
 		checkBtn.setBounds(CALL_CHECK_BTN_X, ACTION_BTN_Y, ACTION_BTN_WIDTH, ACTION_BTN_HEIGHT);
-		checkBtn.setBackground(Color.WHITE);
-		checkBtn.setBorder(BorderFactory.createLineBorder(Color.GREEN));
+		checkBtn.setBackground(LIGHT_BROWN);
+		checkBtn.setForeground(Color.WHITE);
+		checkBtn.setFont(BTN_FONT);
+		checkBtn.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 		checkBtn.addActionListener(this);
 
 		// fold button
 		foldBtn = new JButton("fold");
+		foldBtn.setContentAreaFilled(false);
+		foldBtn.setOpaque(true);
 		foldBtn.setBounds(FOLD_BTN_X, ACTION_BTN_Y, ACTION_BTN_WIDTH, ACTION_BTN_HEIGHT);
-		foldBtn.setBackground(Color.WHITE);
-		foldBtn.setBorder(BorderFactory.createLineBorder(Color.CYAN));
+		foldBtn.setBackground(LIGHT_BROWN);
+		foldBtn.setForeground(Color.WHITE);
+		foldBtn.setFont(BTN_FONT);
+		foldBtn.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 		foldBtn.addActionListener(this);
 
 		// leave table button
 		leaveTableBtn = new JButton("Leave");
-		leaveTableBtn.setBounds(LEAVE_BTN_X, LEAVE_BTN_Y, ACTION_BTN_WIDTH, ACTION_BTN_HEIGHT);
-		leaveTableBtn.setBackground(Color.WHITE);
+		leaveTableBtn.setContentAreaFilled(false);
+		leaveTableBtn.setOpaque(true);
+		leaveTableBtn.setBounds(LEAVE_BTN_X, LEAVE_BTN_Y, LEAVE_BTN_WIDTH, LEAVE_BTN_HEIGHT);
+		leaveTableBtn.setBackground(LIGHT_BROWN);
+		leaveTableBtn.setForeground(Color.WHITE);
+		leaveTableBtn.setFont(BTN_FONT);
+		leaveTableBtn.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 		leaveTableBtn.addActionListener(this);
 	}
 	
@@ -272,8 +305,6 @@ public class TableWindow extends JFrame implements ActionListener, ChangeListene
 		tableImage.getLayeredPane().add(turnLabel, 1);
 		tableImage.getLayeredPane().add(riverLabel, 1);
 		tableImage.getLayeredPane().add(leaveTableBtn, 1);
-//		tableImage.getLayeredPane().add(playerBoxLabel[1], 2);
-//		tableImage.getLayeredPane().add(playerBoxImg[1], 2);
 		tableImage.add(tableImage.getLayeredPane());
 		
 		setContentPane(tableImage);
@@ -289,16 +320,21 @@ public class TableWindow extends JFrame implements ActionListener, ChangeListene
 		messagesBox.setBounds(MESSAGE_X, MESSAGE_Y, MESSAGE_WIDTH, MESSAGE_HEIGHT);
 		messagesBox.setFont(MESSAGE_FONT);
 
-		// bet amount box
+		// bet field box
 		betField = new JTextField();
 		betField.setBounds(BET_FIELD_X, BET_FIELD_Y, BET_FIELD_WIDTH, BET_FIELD_HEIGHT);
-		betField.setAlignmentY(JTextField.CENTER_ALIGNMENT);
+		betField.setHorizontalAlignment(JTextField.CENTER);
 		betField.setFont(BET_FIELD_FONT);
+		betField.setBorder(BorderFactory.createLineBorder(BROWN));
 		
 		// bet slider
-		betSlider = new JSlider(JSlider.HORIZONTAL, MIN_BET, clientConnection.getPlayer().getChips(), MIN_BET);
+		betSlider = new JSlider(JSlider.HORIZONTAL, MIN_BET, 5000, MIN_BET);
 		betSlider.setBounds(BET_SLIDER_X, BET_SLIDER_Y, BET_SLIDER_WIDTH, BET_SLIDER_HEIGHT);
 		betSlider.setMajorTickSpacing(SLIDER_TICK_SPACE);
+		betSlider.setMinorTickSpacing(MIN_BET);
+		betSlider.setPaintTicks(true);
+		betSlider.setSnapToTicks(true);
+		betSlider.setPaintTrack(true);
 		betSlider.addChangeListener(this);			
 	}
 
@@ -533,10 +569,9 @@ public class TableWindow extends JFrame implements ActionListener, ChangeListene
 			// the player's name, hole-cards, any action (call, fold...) etc.
 			clientConnection.sendToServer(clientConnection.getPlayer());
 			
-			playerBoxLabel[0].setText("<html><span style='font-size:11px'>" + "player_name" + "<br>" + chips + "</span></html>");
-			playerBoxLabel[0].setBorder(BorderFactory.createLineBorder(Color.WHITE));
+			playerBoxLabel[0].setText("<html><span style='font-size:11px'>" +
+					clientConnection.getPlayer().getName() + "<br>" + chips + "</span></html>");		
 			tableImage.getLayeredPane().add(playerBoxLabel[0], 2);
-			playerBoxImg[0].setBorder(BorderFactory.createLineBorder(Color.WHITE));
 			tableImage.getLayeredPane().add(playerBoxImg[0], 2);
 			tableImage.getLayeredPane().remove(seatBtn);
 					
