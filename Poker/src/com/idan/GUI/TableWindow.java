@@ -512,8 +512,8 @@ public class TableWindow extends JFrame implements ActionListener, ChangeListene
 	
 	public void dimPlayerBox() {
 		flashing = false;
-		playerBoxLabel[0].setText("<html><span style='font-size:11px'>" + clientConnection.getPlayer().getName()
-				+ "<br>" + clientConnection.getPlayer().getChips() + "</span></html>");
+		playerBoxLabel[0].setText("<html>" + clientConnection.getPlayer().getName()
+				+ "<br>" + clientConnection.getPlayer().getChips() + "</html>");
 
 		otherPlayerTimer.start();
 		thisPlayerTimer.stop();
@@ -522,43 +522,45 @@ public class TableWindow extends JFrame implements ActionListener, ChangeListene
 
 	public void highLightPlayerBox() {
 		flashing = true;
-		playerBoxLabel[0].setText("<html><span style='font-size:11px'>" + clientConnection.getPlayer().getName()
-				+ "<br>" + clientConnection.getPlayer().getChips() + "</span></html>");
+		playerBoxLabel[0].setText("<html>" + clientConnection.getPlayer().getName()
+				+ "<br>" + clientConnection.getPlayer().getChips() + "</html>");
 			
 		thisPlayerTimer.start();
 		otherPlayerTimer.stop();
 		playerBoxLabel[1].setBackground(BROWN);
 	}
 	
+	/**
+	 * Flips the oponents cards (those who went to showdown) and elevates the
+	 * cards of all players involving in the showdown.
+	 * 
+	 * @param opponentCard1 first opponent holecard ImageIcon
+	 * @param opponentCard2 second opponent holecard ImageIcon
+	 */
 	public void showDown(ImageIcon opponentCard1, ImageIcon opponentCard2) {
-		holeCardsLabel[0].setBounds(HOLE_CARDS_POSITION[0][0],
-				HOLE_CARDS_POSITION[0][1] - 35, CARD_WIDTH, CARD_HEIGHT);
-		
-		holeCardsLabel[1].setBounds(HOLE_CARDS_POSITION[1][0],
-				HOLE_CARDS_POSITION[1][1] - 35, CARD_WIDTH, CARD_HEIGHT);
-
 		opponentHoleCardsLabel[0].setIcon(opponentCard1);
 		opponentHoleCardsLabel[1].setIcon(opponentCard2);
-
-		opponentHoleCardsLabel[0].setBounds(HOLE_CARDS_POSITION[2][0],
-				HOLE_CARDS_POSITION[2][1] - 18, CARD_WIDTH, CARD_HEIGHT);
 		
-		opponentHoleCardsLabel[1].setBounds(HOLE_CARDS_POSITION[3][0],
-				HOLE_CARDS_POSITION[3][1] - 18, CARD_WIDTH, CARD_HEIGHT);
+		for (int i = 0; i < 2; i++) {
+			holeCardsLabel[i].setBounds(HOLE_CARDS_POSITION[i][0],
+					HOLE_CARDS_POSITION[i][1] - 35, CARD_WIDTH, CARD_HEIGHT);
+			
+			opponentHoleCardsLabel[i].setBounds(HOLE_CARDS_POSITION[i + 2][0],
+					HOLE_CARDS_POSITION[i + 2][1] - 18, CARD_WIDTH, CARD_HEIGHT);
+		}
 	}
 	
+	/**
+	 * Reset the holecards to their original position to start a new hand.
+	 */
 	public void resetHoleCardsPosition() {
-		opponentHoleCardsLabel[0].setBounds(HOLE_CARDS_POSITION[2][0],
-				HOLE_CARDS_POSITION[2][1], CARD_WIDTH, CARD_HEIGHT);
-		
-		opponentHoleCardsLabel[1].setBounds(HOLE_CARDS_POSITION[3][0],
-				HOLE_CARDS_POSITION[3][1], CARD_WIDTH, CARD_HEIGHT);
-
-		holeCardsLabel[0].setBounds(HOLE_CARDS_POSITION[0][0],
-				HOLE_CARDS_POSITION[0][1], CARD_WIDTH, CARD_HEIGHT);
-		
-		holeCardsLabel[1].setBounds(HOLE_CARDS_POSITION[1][0],
-				HOLE_CARDS_POSITION[1][1], CARD_WIDTH, CARD_HEIGHT);
+		for (int i = 0; i < 2; i++) {
+			holeCardsLabel[i].setBounds(HOLE_CARDS_POSITION[i][0],
+					HOLE_CARDS_POSITION[i][1], CARD_WIDTH, CARD_HEIGHT);
+			
+			opponentHoleCardsLabel[i].setBounds(HOLE_CARDS_POSITION[i + 2][0],
+					HOLE_CARDS_POSITION[i + 2][1], CARD_WIDTH, CARD_HEIGHT);
+		}
 	}
 
 	@Override
@@ -569,8 +571,8 @@ public class TableWindow extends JFrame implements ActionListener, ChangeListene
 			// the player's name, hole-cards, any action (call, fold...) etc.
 			clientConnection.sendToServer(clientConnection.getPlayer());
 			
-			playerBoxLabel[0].setText("<html><span style='font-size:11px'>" +
-					clientConnection.getPlayer().getName() + "<br>" + chips + "</span></html>");		
+			playerBoxLabel[0].setText("<html>" +
+					clientConnection.getPlayer().getName() + "<br>" + chips + "</html>");		
 			tableImage.getLayeredPane().add(playerBoxLabel[0], 2);
 			tableImage.getLayeredPane().add(playerBoxImg[0], 2);
 			tableImage.getLayeredPane().remove(seatBtn);
@@ -630,7 +632,7 @@ public class TableWindow extends JFrame implements ActionListener, ChangeListene
 			dispose();
 		}
 		
-		// this player turn - box is flashing
+		// this player turn to act - box is flashing
 		if(e.getSource() == thisPlayerTimer) {			
 			if(flashing) {
 				playerBoxLabel[0].setBackground(ORANGE);
