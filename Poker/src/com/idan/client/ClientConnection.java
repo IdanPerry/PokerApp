@@ -23,8 +23,8 @@ import com.idan.server.TableInformation;
  */
 
 public class ClientConnection extends Thread {
-	private final ObjectInputStream objectInput;
-	private final ObjectOutputStream objectOutput;
+	private ObjectInputStream objectInput;
+	private ObjectOutputStream objectOutput;
 
 	private final ImageIcon[] opponentCards;
 	private Lobby lobbyGUI;
@@ -33,9 +33,9 @@ public class ClientConnection extends Thread {
 	private TableInformation tableInfo;
 
 	private String handState;
+	private String actionInput;
 	private int checkCounter;
 	private boolean running;
-	private String actionInput;
 
 	/**
 	 * Constructs a ClientConnection object.
@@ -45,25 +45,18 @@ public class ClientConnection extends Thread {
 	 */
 	public ClientConnection(Socket socket, Player player) {
 		this.player = player;
-		ObjectOutputStream tempObjectOutput;
-		ObjectInputStream tempObjectInput;
-
-		try {
-			tempObjectOutput = new ObjectOutputStream(socket.getOutputStream());
-			tempObjectInput = new ObjectInputStream(socket.getInputStream());
-
-		} catch (IOException e) {
-			tempObjectInput = null;
-			tempObjectOutput = null;
-			e.printStackTrace();
-		}
-
-		objectOutput = tempObjectOutput;
-		objectInput = tempObjectInput;
-
 		opponentCards = new ImageIcon[2];
 		running = true;
 		actionInput = "";
+
+		try {
+			objectOutput = new ObjectOutputStream(socket.getOutputStream());
+			objectInput = new ObjectInputStream(socket.getInputStream());
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
 	}
 
 	/**
@@ -123,6 +116,7 @@ public class ClientConnection extends Thread {
 
 		} catch (IOException e) {
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 
@@ -140,6 +134,7 @@ public class ClientConnection extends Thread {
 
 		} catch (IOException e) {
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 
@@ -153,18 +148,109 @@ public class ClientConnection extends Thread {
 
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
+			System.exit(1);
 		}
 
 		player = tableInfo.getPlayer();
 	}
 
 	/*
-	 * Prints the player's holecards to the console.
-	 * used for debug
+	 * Prints the player's holecards to the console. used for debug
 	 */
 	private void printHolecards() {
 		System.out.println("You were dealt " + player.getHoleCard1().getRank() + player.getHoleCard1().getSuit()
 				+ player.getHoleCard2().getRank() + player.getHoleCard2().getSuit());
+	}
+
+	/*
+	 * Initialize all opponent players card images.
+	 */
+	private void setOponentsCardImgs() {
+		for (int i = 0; i < tableInfo.getPlayers().size(); i++) {
+			if (!tableInfo.getPlayers().get(i).getName().equals(player.getName())) {
+				opponentCards[0] = tableInfo.getPlayers().get(i).getHoleCard1().getCardImage();
+				opponentCards[1] = tableInfo.getPlayers().get(i).getHoleCard2().getCardImage();
+			}
+		}
+	}
+
+	/*
+	 * Switch turns by changing table graphics and buttons. Parameter action - what
+	 * buttons should this player currently needs. Paramter message - a dealer
+	 * message to the table.
+	 */
+	private void changeTurns(String action, String message) {
+		if (player.isYourTurn()) {
+			tableGUI.highLightPlayerBox();
+
+			if (action.equals("call_raise_fold"))
+				tableGUI.callRaiseFoldButtons();
+			else
+				tableGUI.checkBetButtons();
+
+		} else
+			tableGUI.dimPlayerBox();
+
+		if (message != null) {
+			if (message.equals(actionInput))
+				tableGUI.getMessagesBox().append("Dealer: " + actionInput + "\n");
+			else if (message.equals(player.getName()))
+				tableGUI.getMessagesBox().append("Dealer: " + player.getName() + ", it's your turn \n");
+		}
+	}
+
+	/*
+	 * Players actions decided apon inside hand street. When a new hand is dealt,
+	 * the action begins at the player sitting to the left of the small blind
+	 * position, while every street post flop the action begins with the player
+	 * sitting at the small blind position.
+	 */
+	private void streetState() {
+		// new hand
+		if (actionInput.equals("New Hand")) {
+			handState = "Preflop";
+			checkCounter = 0;
+
+			tableGUI.resetBoard();
+			printHolecards(); // debug
+			tableGUI.setHoleCardsImages(player.getHoleCard1().getCardImage(), player.getHoleCard2().getCardImage());
+
+			setOponentsCardImgs();
+			changeTurns("call_raise_fold", null);
+
+			// flop cards
+		} else if (actionInput.equals("FLOP")) {
+			handState = "Postflop";
+			tableGUI.setFlopImages(tableInfo.getFlop()[0].getCardImage(), tableInfo.getFlop()[1].getCardImage(),
+					tableInfo.getFlop()[2].getCardImage());
+
+			// turn card
+		} else if (actionInput.equals("TURN")) {
+			handState = "Postflop";
+			tableGUI.setTurnImage(tableInfo.getTurn().getCardImage());
+
+			// river card
+		} else if (actionInput.equals("RIVER")) {
+			handState = "River";
+			tableGUI.setRiverImage(tableInfo.getRiver().getCardImage());
+		}
+	}
+	
+	/*
+	 * Faces up the opponents cards.
+	 */
+	private void showDown() {
+		tableGUI.dimPlayerBox();
+		tableGUI.showDown(opponentCards[0], opponentCards[1]);
+
+		// gives the players some time to observe the opponents hands.
+		try {
+			sleep(1500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		tableGUI.resetHoleCardsPosition();
 	}
 
 	@Override
@@ -184,7 +270,7 @@ public class ClientConnection extends Thread {
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
 				}
-				
+
 				lobbyGUI = new Lobby(clientConnection);
 				lobbyGUI.setVisible(true);
 			}
@@ -195,59 +281,12 @@ public class ClientConnection extends Thread {
 			// to the server).
 			readTableInfo();
 			tableGUI.setPlayerChips(player.getChips());
-
-			// new hand
-			if (actionInput.equals("New Hand")) {
-				handState = "Preflop";
-				checkCounter = 0;
-
-				tableGUI.resetBoard();
-				printHolecards();	// debug
-				tableGUI.setHoleCardsImages(player.getHoleCard1().getCardImage(), player.getHoleCard2().getCardImage());
-
-				// set opponent card images
-				for (int i = 0; i < tableInfo.getPlayers().size(); i++) {
-					if (!tableInfo.getPlayers().get(i).getName().equals(player.getName())) {
-						opponentCards[0] = tableInfo.getPlayers().get(i).getHoleCard1().getCardImage();
-						opponentCards[1] = tableInfo.getPlayers().get(i).getHoleCard2().getCardImage();
-					}
-				}
-
-				// players turn changes
-				if (player.isYourTurn()) {
-					tableGUI.highLightPlayerBox();
-					tableGUI.callRaiseFoldButtons();
-				} else
-					tableGUI.dimPlayerBox();
-
-				// flop cards
-			} else if (actionInput.equals("FLOP")) {
-				handState = "Postflop";
-				tableGUI.setFlopImages(tableInfo.getFlop()[0].getCardImage(), tableInfo.getFlop()[1].getCardImage(),
-						tableInfo.getFlop()[2].getCardImage());
-
-				// turn card
-			} else if (actionInput.equals("TURN")) {
-				handState = "Postflop";
-				tableGUI.setTurnImage(tableInfo.getTurn().getCardImage());
-
-				// river card
-			} else if (actionInput.equals("RIVER")) {
-				handState = "River";
-				tableGUI.setRiverImage(tableInfo.getRiver().getCardImage());
-			}
+			streetState();
 
 			// fold
 			if (actionInput.contains("folds")) {
 				System.out.println(actionInput);
-				tableGUI.getMessagesBox().append("Dealer: " + actionInput + "\n");
-
-				// players turn changes
-				if (player.isYourTurn()) {
-					tableGUI.highLightPlayerBox();
-					tableGUI.callRaiseFoldButtons();
-				} else
-					tableGUI.dimPlayerBox();
+				changeTurns("call_raise_fold", actionInput);
 
 				// call
 			} else if (actionInput.contains("calls")) {
@@ -269,26 +308,12 @@ public class ClientConnection extends Thread {
 						tableGUI.dimPlayerBox();
 
 					// post flop action
-				} else if (handState.equals("Postflop")) {
-					if (player.isYourTurn()) {
-						tableGUI.highLightPlayerBox();
-						tableGUI.checkBetButtons();
-					} else
-						tableGUI.dimPlayerBox();
+				} else if (handState.equals("Postflop"))
+					changeTurns("check_bet", null);
 
 					// river action
-				} else if (handState.equals("River")) {
-					tableGUI.dimPlayerBox();
-					tableGUI.showDown(opponentCards[0], opponentCards[1]);
-
-					try {
-						sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-
-					tableGUI.resetHoleCardsPosition();
-				}
+				else if (handState.equals("River"))
+					showDown();
 
 				// check
 			} else if (actionInput.contains("checks")) {
@@ -296,82 +321,31 @@ public class ClientConnection extends Thread {
 				tableGUI.getMessagesBox().append("Dealer: " + actionInput + "\n");
 
 				// pre flop action
-				if (handState.equals("Preflop")) {
-					if (player.isYourTurn()) {
-						tableGUI.highLightPlayerBox();
-						tableGUI.checkBetButtons();
-					} else
-						tableGUI.dimPlayerBox();
+				if (handState.equals("Preflop"))
+					changeTurns("check_bet", null);
 
 					// post flop action
-				} else if (handState.equals("Postflop")) {
-					if (player.isYourTurn()) {
-						tableGUI.highLightPlayerBox();
-						tableGUI.checkBetButtons();
-					} else
-						tableGUI.dimPlayerBox();
+				else if (handState.equals("Postflop"))
+					changeTurns("check_bet", null);
 
 					// river action
-				} else if (handState.equals("River")) {
+				else if (handState.equals("River")) {
 					checkCounter++;
 
 					// showdown
-					if (checkCounter == 2) {
-						tableGUI.dimPlayerBox();
-						tableGUI.showDown(opponentCards[0], opponentCards[1]);
+					if (checkCounter == 2)
+						showDown();
 
-						try {
-							sleep(1000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-
-						tableGUI.resetHoleCardsPosition();
-
-						// change turns
-					} else if (checkCounter == 1) {
-						if (player.isYourTurn()) {
-							tableGUI.getMessagesBox().append("Dealer: " + player.getName() + ", it's your turn \n");
-							tableGUI.highLightPlayerBox();
-							tableGUI.checkBetButtons();
-						} else
-							tableGUI.dimPlayerBox();
-
-					}
+					// change turns
+					else if (checkCounter == 1)
+						changeTurns("check_bet", player.getName());
 				}
 
-				// bet
-			} else if (actionInput.contains("bets")) {
+				// bet or raise
+			} else if (actionInput.contains("bets") || (actionInput.contains("raises")
+					&& (handState.equals("Preflop") || handState.equals("Postflop")))) {
 				System.out.println(actionInput);
-				tableGUI.getMessagesBox().append("Dealer: " + actionInput + "\n");
-
-				if (player.isYourTurn()) {
-					tableGUI.highLightPlayerBox();
-					tableGUI.callRaiseFoldButtons();
-				} else
-					tableGUI.dimPlayerBox();
-
-				// raise
-			} else if (actionInput.contains("raises")) {
-				System.out.println(actionInput);
-				tableGUI.getMessagesBox().append("Dealer: " + actionInput + "\n");
-
-				// pre flop action
-				if (handState.equals("Preflop")) {
-					if (player.isYourTurn()) {
-						tableGUI.highLightPlayerBox();
-						tableGUI.callRaiseFoldButtons();
-					} else
-						tableGUI.dimPlayerBox();
-
-					// post flop action
-				} else if (handState.equals("Postflop")) {
-					if (player.isYourTurn()) {
-						tableGUI.highLightPlayerBox();
-						tableGUI.callRaiseFoldButtons();
-					} else
-						tableGUI.dimPlayerBox();
-				}
+				changeTurns("call_raise_fold", actionInput);
 			}
 		}
 	}
