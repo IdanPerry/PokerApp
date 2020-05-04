@@ -10,7 +10,7 @@ import com.idan.texasholdem.HandEvaluation.HandRank;
  * This class represents a poker player.
  * 
  * @author Idan Perry
- * @version 03.05.2013
+ * @version 04.05.2020
  */
 
 public class Player implements Serializable {
@@ -52,7 +52,10 @@ public class Player implements Serializable {
 	private boolean dealerPosition;
 	private boolean bigBlindPosition;
 	private boolean smallBlindPosition;
+	private boolean smallBlindAction;
 	private boolean yourTurn;
+	private boolean facingRaise;
+	private boolean hasActed;
 	private boolean win;
 	private boolean allIn;
 
@@ -218,7 +221,7 @@ public class Player implements Serializable {
 	/**
 	 * Changes whether this player is at the dealer position.
 	 * 
-	 * @param smallBlind true if this player is at the dealer position 
+	 * @param smallBlind true if this player is at the dealer position
 	 */
 	public void setDealerPosition(boolean dealer) {
 		this.dealerPosition = dealer;
@@ -236,7 +239,7 @@ public class Player implements Serializable {
 	/**
 	 * Changes whether this player is at the big blind position.
 	 * 
-	 * @param smallBlind true if this player is at the big blind position 
+	 * @param smallBlind true if this player is at the big blind position
 	 */
 	public void setBigBlindPosition(boolean bigBlind) {
 		this.bigBlindPosition = bigBlind;
@@ -254,7 +257,7 @@ public class Player implements Serializable {
 	/**
 	 * Changes whether this player is at the small blind position.
 	 * 
-	 * @param smallBlind true if this player is at the small blind position 
+	 * @param smallBlind true if this player is at the small blind position
 	 */
 	public void setSmallBlindPosition(boolean smallBlind) {
 		this.smallBlindPosition = smallBlind;
@@ -278,8 +281,24 @@ public class Player implements Serializable {
 		this.yourTurn = yourTurn;
 	}
 
+	public boolean isFacingRaise() {
+		return facingRaise;
+	}
+
+	public void setFacingRaise(boolean facingRaise) {
+		this.facingRaise = facingRaise;
+	}
+
+	public boolean isHasActed() {
+		return hasActed;
+	}
+
+	public void setHasActed(boolean hasActed) {
+		this.hasActed = hasActed;
+	}
+
 	/**
-	 * Changes whether this player has Straight-flush.  
+	 * Changes whether this player has Straight-flush.
 	 * 
 	 * @param strFlush true if this player has Straight-flush. false otherwise
 	 */
@@ -297,7 +316,7 @@ public class Player implements Serializable {
 	}
 
 	/**
-	 * Changes whether this player has Quads.  
+	 * Changes whether this player has Quads.
 	 * 
 	 * @param strFlush true if this player has Quads. false otherwise
 	 */
@@ -315,7 +334,7 @@ public class Player implements Serializable {
 	}
 
 	/**
-	 * Changes whether this player has Full-House.  
+	 * Changes whether this player has Full-House.
 	 * 
 	 * @param strFlush true if this player has Full-House. false otherwise
 	 */
@@ -333,7 +352,7 @@ public class Player implements Serializable {
 	}
 
 	/**
-	 * Changes whether this player has flush.  
+	 * Changes whether this player has flush.
 	 * 
 	 * @param strFlush true if this player has flush. false otherwise
 	 */
@@ -351,7 +370,7 @@ public class Player implements Serializable {
 	}
 
 	/**
-	 * Changes whether this player has Straight.  
+	 * Changes whether this player has Straight.
 	 * 
 	 * @param strFlush true if this player has Straight. false otherwise
 	 */
@@ -369,7 +388,7 @@ public class Player implements Serializable {
 	}
 
 	/**
-	 * Changes whether this player has Trips.  
+	 * Changes whether this player has Trips.
 	 * 
 	 * @param strFlush true if this player has Trips. false otherwise
 	 */
@@ -387,7 +406,7 @@ public class Player implements Serializable {
 	}
 
 	/**
-	 * Changes whether this player has Two Pairs.  
+	 * Changes whether this player has Two Pairs.
 	 * 
 	 * @param strFlush true if this player has Two Pairs. false otherwise
 	 */
@@ -405,7 +424,7 @@ public class Player implements Serializable {
 	}
 
 	/**
-	 * Changes whether this player has Pair.  
+	 * Changes whether this player has Pair.
 	 * 
 	 * @param strFlush true if this player has Pair. false otherwise
 	 */
@@ -421,7 +440,7 @@ public class Player implements Serializable {
 	public boolean isPair() {
 		return pair;
 	}
-	
+
 	/**
 	 * Returns the hand rank of this player as enum object.
 	 * 
@@ -521,6 +540,7 @@ public class Player implements Serializable {
 
 	/**
 	 * Returns true.
+	 * 
 	 * @return true
 	 */
 	public boolean check() {
@@ -529,6 +549,7 @@ public class Player implements Serializable {
 
 	/**
 	 * Returns true.
+	 * 
 	 * @return true
 	 */
 	public boolean call() {
@@ -594,6 +615,28 @@ public class Player implements Serializable {
 	}
 
 	/**
+	 * Changes whether this player has to act at small blind position, preflop and
+	 * it's his first action at the current hand.
+	 * 
+	 * @param smallBlindAction true if this player is at the small blind, preflop
+	 *                         and it's his first action
+	 */
+	public void setSmallBlindAction(boolean smallBlindAction) {
+		this.smallBlindAction = smallBlindAction;
+	}
+
+	/**
+	 * Returns true if this player has to act at small blind position, preflop and
+	 * it's his first action at the current hand.
+	 * 
+	 * @return this player has to act at small blind position, preflop and it's his
+	 *         first action at the current hand
+	 */
+	public boolean isSmallBlindAction() {
+		return smallBlindAction;
+	}
+
+	/**
 	 * Changes the allin state of this player.
 	 * 
 	 * @param allIn the boolean state of allin
@@ -623,6 +666,8 @@ public class Player implements Serializable {
 		currentBet = 0;
 		win = false;
 		allIn = false;
+		facingRaise = false;
+		hasActed = false;
 	}
 
 	/**

@@ -20,7 +20,7 @@ import com.idan.client.ClientConnection;
  * choose a table to play at.
  * 
  * @author Idan Perry
- * @version 03.05.2013
+ * @version 04.05.2020
  *
  */
 

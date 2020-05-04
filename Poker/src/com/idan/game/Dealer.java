@@ -4,7 +4,7 @@ package com.idan.game;
  * This class represents a card game dealer.
  * 
  * @author Idan Perry
- * @version 13.05.2013
+ * @version 04.05.2020
  */
 
 public abstract class Dealer {

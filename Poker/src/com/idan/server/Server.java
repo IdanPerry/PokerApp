@@ -11,7 +11,7 @@ import com.idan.game.*;
  * This class represents the game server.
  * 
  * @author Idan Perry
- * @version 03.05.2013
+ * @version 04.05.2020
  */
 
 public class Server {
@@ -30,7 +30,7 @@ public class Server {
 		try {
 			serverSocket = new ServerSocket(PORT);
 			System.out.println("Server is connected");
-			HeadsUpTable table = new HeadsUpTable(1);
+			HeadsUpTable table = new HeadsUpTable(1, this);
 			table.start();
 
 			while (running) {
@@ -40,7 +40,7 @@ public class Server {
 				ServerConnection serverConnection = new ServerConnection(clientSocket, this, table);
 				connections.add(serverConnection);
 				
-				// TableInformation is the object the is being serialized.
+				// TableInformation is the serialized object.
 				serverConnection.setTableInfo(table.getTableInfo());
 				serverConnection.start();
 			}

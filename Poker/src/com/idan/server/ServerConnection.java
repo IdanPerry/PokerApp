@@ -11,20 +11,22 @@ import com.idan.game.*;
  * This class represents a server side connection.
  * 
  * @author Idan Perry
- * @version 03.05.2013
+ * @version 04.05.2020
  */
 
 public class ServerConnection extends Thread {
+	private static final int MIN_PLAYERS = 2;
 	private final Socket socket;
 	private final Server server;
 	private ObjectInputStream objectInput;
 	private ObjectOutputStream objectOutput;
-	
+
 	private final HeadsUpTable table;
-	private TableInformation tableInfo;	
-	private Player player;	
+	private TableInformation tableInfo;
+	private Player player;
 	private String actionInput;
 	private int betSize;
+	private boolean connected;
 	private boolean running;
 
 	/**
@@ -39,40 +41,45 @@ public class ServerConnection extends Thread {
 		this.socket = socket;
 		this.server = server;
 		this.table = table;
-		actionInput  = "";
+		actionInput = "";
 		running = true;
 	}
-	
+
+	/**
+	 * Returns this connection ObjectInputStream.
+	 * @return this connection ObjectInputStream
+	 */
+	public ObjectInputStream getObjectInput() {
+		return objectInput;
+	}
+
+	/**
+	 * Returns this connection ObjectOutputStream.
+	 * @return this connection ObjectOutputStream
+	 */
+	public ObjectOutputStream getObjectOutput() {
+		return objectOutput;
+	}
+
+	/**
+	 * Sets the table information for this connection.
+	 * this an object containing the information needed to transfer between
+	 * the client and the server.
+	 * 
+	 * @param tableInfo the table information to be set for this connection.
+	 */
 	public void setTableInfo(TableInformation tableInfo) {
 		this.tableInfo = tableInfo;
 	}
-
-	private void openObjectStream() {
-		try {
-			objectOutput = new ObjectOutputStream(socket.getOutputStream());
-			objectInput = new ObjectInputStream(socket.getInputStream());
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 	
-	private void sendInfoToClient() {
-		try {
-			objectOutput.writeObject("");
-			objectOutput.writeObject(tableInfo);
-			objectOutput.flush();
-			objectOutput.reset();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	private void sendInfoToClient(String actionOutput) {	
+	/*
+	 * Sends the player all necessary information about the table he sits at.
+	 * Parameter actionInput is the last action commited by a player at the table.
+	 */
+	private void sendInfoToClient(String actionOutput) {
 		tableInfo.setNumOfPlayersInHand(table.getPlayersInHand().size());
 		tableInfo.setPlayer(player);
-		
+
 		try {
 			objectOutput.writeObject(actionOutput);
 			objectOutput.writeObject(tableInfo);
@@ -84,12 +91,35 @@ public class ServerConnection extends Thread {
 		}
 	}
 	
+	/*
+	 * Sends all players sitting at the table, all necessary information about this table.
+	 * Parameter actionInput is the last action commited by a player at the table.
+	 */
 	private void sendInfoToAllClients(String actionOutput) {
 		for (int i = 0; i < server.getConnections().size(); i++) {
 			server.getConnections().get(i).sendInfoToClient(actionOutput);
 		}
 	}
 
+	/*
+	 * Initializes the object intput and output streams.
+	 */
+	private void openObjectStream() {
+		try {
+			objectOutput = new ObjectOutputStream(socket.getOutputStream());
+			objectInput = new ObjectInputStream(socket.getInputStream());
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		connected = true;
+	}
+
+	/*
+	 * Recieves a player object from client as he sits in the table
+	 * assosiated with this connection.
+	 */
 	private void readPlayer() {
 		try {
 			player = (Player) objectInput.readObject();
@@ -98,6 +128,10 @@ public class ServerConnection extends Thread {
 		}
 	}
 
+	/*
+	 * Recieves the last action commited by a player at the table,
+	 * and the bet size of the action if there was any.
+	 */
 	private void readActionInput() {
 		try {
 			actionInput = (String) objectInput.readObject();
@@ -111,112 +145,83 @@ public class ServerConnection extends Thread {
 	public void run() {
 		openObjectStream();
 
-		// Server gets the player data and states as he connects to the server.
-		readPlayer();
+		while (connected) {
+			// Server gets the player data and states as he connects to the server.
+			readPlayer();
 
-		// Player joins the table
-		table.seatPlayer(player);
+			// Player joins the table
+			table.seatPlayer(player);
 
-		// Game is in process, every player at the table is dealt hole cards
-		// only when at least 2 players are seating at the table - new hand will
-		// be dealt and run
-		while (table.getTablePlayers().size() < 2) {
-			try {
-				sleep(500);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-
-		while (running) {
-			try {
-				sleep(500);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			// Game is in process, every player at the table is dealt hole cards
+			// only when at least 2 players are seating at the table - new hand will
+			// be dealt and run
+			while (table.getTablePlayers().size() < MIN_PLAYERS) {
+				try {
+					sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 
-			if (table.isHoleCardsWereDealt()) {
-				tableInfo.setPlayers(table.getPlayersInHand());
-				sendInfoToAllClients("New Hand");
-				table.setHoleCardsWereDealt(false);
-
-			} else if (table.isFlopWasDealt()) {
-				tableInfo.setFlop(table.getDealer().getFlop());
-				sendInfoToAllClients("FLOP");
-
-			} else if (table.isTurnWasDealt()) {
-				tableInfo.setTurn(table.getDealer().getTurn());
-				sendInfoToAllClients("TURN");
-
-			} else if (table.isRiverWasDealt()) {
-				tableInfo.setRiver(table.getDealer().getRiver());
-				sendInfoToAllClients("RIVER");			
-			}
-
-			// Server is waiting for players actions, represented by strings here
-			readActionInput();
-
-			if (actionInput.equals("fold")) {
-				player.fold();
-				
-				try {
-					sleep(500);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				
-				sendInfoToAllClients(player.getName() + " folds");
-
-			} else if (actionInput.equals("call")) {
-				player.call();
-
+			while (running) {
 				try {
 					sleep(500);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 
-				sendInfoToAllClients(player.getName() + " calls");
+				if (table.isHoleCardsWereDealt()) {
+					tableInfo.setPlayers(table.getPlayersInHand());
+					sendInfoToAllClients("New Hand");
+					table.setHoleCardsWereDealt(false);
 
-			} else if (actionInput.equals("check")) {
-				player.check();
-				
-				try {
-					sleep(500);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				
-				sendInfoToAllClients(player.getName() + " checks");
+				} else if (table.isFlopWasDealt()) {
+					tableInfo.setFlop(table.getDealer().getFlop());
+					sendInfoToAllClients("FLOP");
 
-			} else if (actionInput.equals("bet")) {
-				player.bet(betSize);
-				
-				try {
-					sleep(500);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				
-				sendInfoToAllClients(player.getName() + " bets " + betSize);
+				} else if (table.isTurnWasDealt()) {
+					tableInfo.setTurn(table.getDealer().getTurn());
+					sendInfoToAllClients("TURN");
 
-			} else if (actionInput.equals("raise")) {
-				player.raise(betSize);
-				
-				try {
-					sleep(500);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+				} else if (table.isRiverWasDealt()) {
+					tableInfo.setRiver(table.getDealer().getRiver());
+					sendInfoToAllClients("RIVER");
 				}
-				
-				sendInfoToAllClients(player.getName() + " raises " + betSize);
-				
-			} else if (actionInput.equals("leave")) {
-				running = false;
-				try {
-					objectOutput.close();
-				} catch (IOException e) {
-					e.printStackTrace();
+
+				// Server is waiting for players actions, represented by strings here
+				readActionInput();
+				table.continueRun();
+
+				if (actionInput.equals("fold")) {
+					player.fold();
+					sendInfoToAllClients(player.getName() + " folds");
+
+				} else if (actionInput.equals("call")) {
+					player.call();
+					sendInfoToAllClients(player.getName() + " calls");
+
+				} else if (actionInput.equals("check")) {
+					player.check();
+					sendInfoToAllClients(player.getName() + " checks");
+
+				} else if (actionInput.equals("bet")) {
+					player.bet(betSize);
+					sendInfoToAllClients(player.getName() + " bets " + betSize);
+
+				} else if (actionInput.equals("raise")) {
+					player.raise(betSize);
+					sendInfoToAllClients(player.getName() + " raises " + betSize);
+
+				} else if (actionInput.equals("leave")) {
+					running = false;
+					table.getPlayersInHand().remove(player);
+					System.out.println(player + " left the table");
+					
+//					try {
+//						objectOutput.close();
+//					} catch (IOException e) {
+//						e.printStackTrace();
+//					}
 				}
 			}
 		}

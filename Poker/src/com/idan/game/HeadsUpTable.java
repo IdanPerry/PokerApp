@@ -2,11 +2,13 @@ package com.idan.game;
 
 import javax.swing.JOptionPane;
 
+import com.idan.server.Server;
+
 /**
  * This class represents a 2 players table.
  * 
  * @author Idan Perry
- * @version 03.05.2013
+ * @version 04.05.2020
  *
  */
 
@@ -18,15 +20,18 @@ public class HeadsUpTable extends Table {
 	 * 
 	 * @param tableId the id number of this table
 	 */
-	public HeadsUpTable(int tableId) {
-		super(tableId);
+	public HeadsUpTable(int tableId, Server server) {
+		super(tableId, server);
 	}
 
 	@Override
-	public void seatPlayer(Player player) {
-		if (getTablePlayers().size() < MAX_PLAYERS)
+	public synchronized void seatPlayer(Player player) {
+		if (getTablePlayers().size() < MAX_PLAYERS) {
 			getTablePlayers().add(player);
-		else
+
+			notifyAll();
+
+		} else
 			System.out.println("Table is full");
 	}
 

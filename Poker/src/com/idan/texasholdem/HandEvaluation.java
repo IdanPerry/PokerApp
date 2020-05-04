@@ -11,7 +11,7 @@ import com.idan.game.Table;
  * This class represents a hand evaluation tool for each poker table.
  * 
  * @author Idan Perry
- * @version 03.05.2013
+ * @version 04.05.2020
  */
 
 public class HandEvaluation {

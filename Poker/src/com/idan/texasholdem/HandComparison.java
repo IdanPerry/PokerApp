@@ -8,7 +8,7 @@ import com.idan.texasholdem.HandEvaluation.HandRank;
  * This class represents a comparison tool between the player's hands.
  * 
  * @author Idan Perry
- * @version 03.15.2013
+ * @version 04.15.2020
  */
 
 public class HandComparison {	

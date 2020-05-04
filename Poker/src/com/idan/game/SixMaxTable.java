@@ -2,11 +2,13 @@ package com.idan.game;
 
 import javax.swing.JOptionPane;
 
+import com.idan.server.Server;
+
 /**
  * This class represents a 6 players table.
  * 
  * @author Idan Perry
- * @version 03.05.2013
+ * @version 04.05.2020
  *
  */
 
@@ -18,8 +20,8 @@ public class SixMaxTable extends Table {
 	 * 
 	 * @param tableId the id number of this table
 	 */
-	public SixMaxTable(int tableId) {
-		super(tableId);
+	public SixMaxTable(int tableId, Server server) {
+		super(tableId, server);
 	}
 	
 	@Override

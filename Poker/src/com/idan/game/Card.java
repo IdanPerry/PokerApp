@@ -8,7 +8,7 @@ import javax.swing.ImageIcon;
  * This class represents a game card.
  * 
  * @author Idan Perry
- * @version 13.05.2013
+ * @version 04.05.2020
  *
  */
 

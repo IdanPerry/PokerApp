@@ -21,6 +21,13 @@ import javax.swing.event.ChangeListener;
 
 import com.idan.client.ClientConnection;
 
+/**
+ * This class represents the graphic table component where game is taking place.
+ * 
+ * @author Idan Perry
+ * @version 04.05.2020
+ */
+
 @SuppressWarnings("serial")
 public class TableWindow extends JFrame implements ActionListener, ChangeListener {
 	// frame
@@ -140,6 +147,355 @@ public class TableWindow extends JFrame implements ActionListener, ChangeListene
 	
 	public void setPlayerChips(int chips) {
 		this.chips = chips;
+	}
+
+	/**
+	 * Returns the connection object assosiated with this table component.
+	 * 
+	 * @return the connection object assosiated with this table component
+	 */
+	public ClientConnection getClientConnection() {
+		return clientConnection;
+	}
+
+	/**
+	 * Returns an array of the player boxes labels appear at the table.
+	 * 
+	 * @return an array of the player boxes labels appear at the table
+	 */
+	public JLabel[] getPlayerBoxLabel() {
+		return playerBoxLabel;
+	}
+	
+	/**
+	 * Returns an array of the player image boxes labels appear at the table.
+	 * 
+	 * @return an array of the player image boxes labels appear at the table
+	 */
+	public JLabel[] getPlayerBoxImg() {
+		return playerBoxImg;
+	}
+
+	/**
+	 * Returns an array of the holecards labels of the player who assosiates
+	 * with this table object.
+	 * 
+	 * @return an array of the holecards labels of the player who assosiates
+	 * 		   with this table object.
+	 */
+	public JLabel[] getHoleCardsLabel() {
+		return holeCardsLabel;
+	}
+
+	/**
+	 * Returns an array of the opponent player holecards labels.
+	 * 
+	 * @return an array of the opponent player holecards labels.
+	 */
+	public JLabel[] getOpponentHoleCardsLabel() {
+		return opponentHoleCardsLabel;
+	}
+
+	/**
+	 * Returns an array of the flop cards labels of this table.
+	 * 
+	 * @return an array of the flop cards labels of this table
+	 */ 
+	public JLabel[] getFlopLabel() {
+		return flopLabel;
+	}
+
+	/**
+	 * Returns the turn card label of this table.
+	 * 
+	 * @return the turn card label of this table
+	 */ 
+	public JLabel getTurnLabel() {
+		return turnLabel;
+	}
+
+	/**
+	 * Returns the river card label of this table.
+	 * 
+	 * @return the river card label of this table
+	 */ 
+	public JLabel getRiverLabel() {
+		return riverLabel;
+	}
+	
+	/**
+	 * Returns the dealer message message box of this table.
+	 * 
+	 * @return the dealer message message box of this table
+	 */
+	public TextArea getMessagesBox() {
+		return messagesBox;
+	}
+	
+	/**
+	 * Initializes the flop cards labels for this table.
+	 * 
+	 * @param flop1 the label of the 1st flop card
+	 * @param flop2 the label of the 2nd flop card
+	 * @param flop3 the label of the 3rd flop card
+	 */
+	public void setFlopLabels(ImageIcon flop1, ImageIcon flop2, ImageIcon flop3) {
+		tableImage.getLayeredPane().add(flopLabel[0], 1);
+		tableImage.getLayeredPane().add(flopLabel[1], 1);
+		tableImage.getLayeredPane().add(flopLabel[2], 1);
+		
+		flopLabel[0].setIcon(flop1);
+		flopLabel[1].setIcon(flop2);
+		flopLabel[2].setIcon(flop3);
+		
+		flopLabel[0].setVisible(true);
+		flopLabel[1].setVisible(true);
+		flopLabel[2].setVisible(true);
+	}
+	
+	/**
+	 * Initializes the turn card label for this table.
+	 * 
+	 * @param turn the label of the turn card
+	 */
+	public void setTurnLabel(ImageIcon turn) {
+		tableImage.getLayeredPane().add(turnLabel, 1);
+		turnLabel.setIcon(turn);
+		turnLabel.setVisible(true);
+	}
+	
+	/**
+	 * Initializes the river card label for this table.
+	 * 
+	 * @param river the label of the turn card
+	 */
+	public void setRiverLabel(ImageIcon river) {
+		tableImage.getLayeredPane().add(riverLabel, 1);
+		riverLabel.setIcon(river);
+		riverLabel.setVisible(true);
+	}
+	
+	/**
+	 * Initializes the flop cards images for this table.
+	 * 
+	 * @param flop1 the image of the 1st flop card
+	 * @param flop2 the image of the 2nd flop card
+	 * @param flop3 the image of the 3rd flop card
+	 */
+	public void setFlopImages(ImageIcon flop1, ImageIcon flop2, ImageIcon flop3) {	
+		flopLabel[0].setIcon(flop1);
+		flopLabel[1].setIcon(flop2);
+		flopLabel[2].setIcon(flop3);
+		
+		flopLabel[0].setVisible(true);
+		flopLabel[1].setVisible(true);
+		flopLabel[2].setVisible(true);
+	}
+	
+	/**
+	 * Initializes the turn card image for this table.
+	 * 
+	 * @param turn the image of the turn card
+	 */
+	public void setTurnImage(ImageIcon turn) {
+		turnLabel.setIcon(turn);
+		turnLabel.setVisible(true);
+	}
+	
+	/**
+	 * Initializes the river card image for this table.
+	 * 
+	 * @param river the image of the river card
+	 */
+	public void setRiverImage(ImageIcon river) {
+		riverLabel.setIcon(river);
+		riverLabel.setVisible(true);
+	}
+	
+	/**
+	 * Removes all community cards from this table while
+	 * preparing for a new hand to be dealt.
+	 */
+	public void resetBoard() {
+		flopLabel[0].setIcon(null);
+		flopLabel[1].setIcon(null);
+		flopLabel[2].setIcon(null);
+		turnLabel.setIcon(null);
+		riverLabel.setIcon(null);
+	}
+	
+	/**
+	 * Changes the visibilty of all the community cards at this table.
+	 * 
+	 * @param visible true if the community cards are to be visible,
+	 * 				  or false otherwise
+	 */
+	public void setBoardVisibility(boolean visible) {
+		flopLabel[0].setVisible(visible);
+		flopLabel[1].setVisible(visible);
+		flopLabel[2].setVisible(visible);
+		turnLabel.setVisible(visible);
+		riverLabel.setVisible(visible);
+	}
+	
+	/**
+	 * Initializes the holecards images of the player assosiates with this table object.
+	 * 
+	 * @param holeCard1Img the image of the 1st holecard
+	 * @param holeCard2img the image of the 2nd holecard
+	 */
+	public void setHoleCardsImages(ImageIcon holeCard1Img, ImageIcon holeCard2img) {
+		holeCardsLabel[0].setIcon(holeCard1Img);
+		holeCardsLabel[1].setIcon(holeCard2img);
+		opponentHoleCardsLabel[0].setIcon(cardBackImg);
+		opponentHoleCardsLabel[1].setIcon(cardBackImg);
+	}
+	
+	public void callRaiseFoldButtons() {
+		messagesBox.append("Dealer: " + clientConnection.getPlayer().getName() + ", it's your turn \n");
+
+		tableImage.getLayeredPane().add(callBtn, 1);
+		callBtn.setText("Call " + (clientConnection.getTableInfo().getBet() - clientConnection.getPlayer().getCurrentBet()));
+		tableImage.getLayeredPane().add(raiseBtn, 1);
+		tableImage.getLayeredPane().add(betField, 1);
+		betField.setText(MIN_BET + "");
+		tableImage.getLayeredPane().add(betSlider, 1);
+		tableImage.getLayeredPane().add(foldBtn, 1);
+
+		validate();
+		repaint();
+	}
+
+	public void checkBetButtons() {
+		messagesBox.append("Dealer: " + clientConnection.getPlayer().getName() + ", it's your turn \n");
+
+		tableImage.getLayeredPane().add(checkBtn, 1);
+		tableImage.getLayeredPane().add(betBtn, 1);
+		tableImage.getLayeredPane().add(betField, 1);
+		betField.setText(MIN_BET + "");
+		tableImage.getLayeredPane().add(betSlider, 1);
+
+		validate();
+		repaint();
+	}
+	
+	public void checkRaiseButtons() {
+		messagesBox.append("Dealer: " + clientConnection.getPlayer().getName() + ", it's your turn \n");
+		
+		tableImage.getLayeredPane().add(checkBtn, 1);
+		tableImage.getLayeredPane().add(raiseBtn, 1);
+		tableImage.getLayeredPane().add(betField, 1);
+		betField.setText(MIN_BET + "");
+		tableImage.getLayeredPane().add(betSlider, 1);
+		
+		validate();
+		repaint();
+	}
+	
+	public void dimPlayerBox() {
+		flashing = false;
+		playerBoxLabel[0].setText("<html>" + clientConnection.getPlayer().getName()
+				+ "<br>" + clientConnection.getPlayer().getChips() + "</html>");
+
+		otherPlayerTimer.start();
+		thisPlayerTimer.stop();
+		playerBoxLabel[0].setBackground(BROWN);
+	}
+
+	public void highLightPlayerBox() {
+		flashing = true;
+		playerBoxLabel[0].setText("<html>" + clientConnection.getPlayer().getName()
+				+ "<br>" + clientConnection.getPlayer().getChips() + "</html>");
+			
+		thisPlayerTimer.start();
+		otherPlayerTimer.stop();
+		playerBoxLabel[1].setBackground(BROWN);
+	}
+	
+	/**
+	 * Flips the oponents cards (those who went to showdown) and elevates the
+	 * cards of all players involving in the showdown.
+	 * 
+	 * @param opponentCard1 first opponent holecard ImageIcon
+	 * @param opponentCard2 second opponent holecard ImageIcon
+	 */
+	public void showDown(ImageIcon opponentCard1, ImageIcon opponentCard2) {
+		opponentHoleCardsLabel[0].setIcon(opponentCard1);
+		opponentHoleCardsLabel[1].setIcon(opponentCard2);
+		
+		for (int i = 0; i < 2; i++) {
+			holeCardsLabel[i].setBounds(HOLE_CARDS_POSITION[i][0],
+					HOLE_CARDS_POSITION[i][1] - 35, CARD_WIDTH, CARD_HEIGHT);
+			
+			opponentHoleCardsLabel[i].setBounds(HOLE_CARDS_POSITION[i + 2][0],
+					HOLE_CARDS_POSITION[i + 2][1] - 18, CARD_WIDTH, CARD_HEIGHT);
+		}
+	}
+	
+	/**
+	 * Reset the holecards to their original position to start a new hand.
+	 */
+	public void resetHoleCardsPosition() {
+		for (int i = 0; i < 2; i++) {
+			holeCardsLabel[i].setBounds(HOLE_CARDS_POSITION[i][0],
+					HOLE_CARDS_POSITION[i][1], CARD_WIDTH, CARD_HEIGHT);
+			
+			opponentHoleCardsLabel[i].setBounds(HOLE_CARDS_POSITION[i + 2][0],
+					HOLE_CARDS_POSITION[i + 2][1], CARD_WIDTH, CARD_HEIGHT);
+		}
+	}
+	
+	/*
+	 * Initializes the table image panel.
+	 */
+	private void initTableImage() {
+		tableImage = new TableImage(this);
+		tableImage.setOpaque(true);
+
+		// add components to tableImage
+		tableImage.getLayeredPane().add(seatBtn, 0);
+		tableImage.getLayeredPane().add(messagesBox, 1);
+		tableImage.getLayeredPane().add(holeCardsLabel[0], 0);
+		tableImage.getLayeredPane().add(holeCardsLabel[1], 0);
+		tableImage.getLayeredPane().add(opponentHoleCardsLabel[0], 0);
+		tableImage.getLayeredPane().add(opponentHoleCardsLabel[1], 0);
+		tableImage.getLayeredPane().add(flopLabel[0], 1);
+		tableImage.getLayeredPane().add(flopLabel[1], 1);
+		tableImage.getLayeredPane().add(flopLabel[2], 1);
+		tableImage.getLayeredPane().add(turnLabel, 1);
+		tableImage.getLayeredPane().add(riverLabel, 1);
+		tableImage.getLayeredPane().add(leaveTableBtn, 1);
+		tableImage.add(tableImage.getLayeredPane());
+		
+		setContentPane(tableImage);
+	}
+
+	/*
+	 * Initializes meesage box, bet amount box and bet slider components.
+	 */
+	private void initComponents() {
+		// message box
+		messagesBox = new TextArea(MESSAGE_ROWS, MESSAGE_COLS);
+		messagesBox.setBackground(Color.WHITE);
+		messagesBox.setBounds(MESSAGE_X, MESSAGE_Y, MESSAGE_WIDTH, MESSAGE_HEIGHT);
+		messagesBox.setFont(MESSAGE_FONT);
+
+		// bet field box
+		betField = new JTextField();
+		betField.setBounds(BET_FIELD_X, BET_FIELD_Y, BET_FIELD_WIDTH, BET_FIELD_HEIGHT);
+		betField.setHorizontalAlignment(JTextField.CENTER);
+		betField.setFont(BET_FIELD_FONT);
+		betField.setBorder(BorderFactory.createLineBorder(BROWN));
+		
+		// bet slider
+		betSlider = new JSlider(JSlider.HORIZONTAL, MIN_BET, 5000, MIN_BET);
+		betSlider.setBounds(BET_SLIDER_X, BET_SLIDER_Y, BET_SLIDER_WIDTH, BET_SLIDER_HEIGHT);
+		betSlider.setMajorTickSpacing(SLIDER_TICK_SPACE);
+		betSlider.setMinorTickSpacing(MIN_BET);
+		betSlider.setPaintTicks(true);
+		betSlider.setSnapToTicks(true);
+		betSlider.setPaintTrack(true);
+		betSlider.addChangeListener(this);			
 	}
 	
 	/*
@@ -286,144 +642,9 @@ public class TableWindow extends JFrame implements ActionListener, ChangeListene
 	}
 	
 	/*
-	 * Initializes the table image panel.
+	 * Remove all actions buttons while this player is not in
+	 * turn to act.
 	 */
-	private void initTableImage() {
-		tableImage = new TableImage(this);
-		tableImage.setOpaque(true);
-
-		// add components to tableImage
-		tableImage.getLayeredPane().add(seatBtn, 0);
-		tableImage.getLayeredPane().add(messagesBox, 1);
-		tableImage.getLayeredPane().add(holeCardsLabel[0], 0);
-		tableImage.getLayeredPane().add(holeCardsLabel[1], 0);
-		tableImage.getLayeredPane().add(opponentHoleCardsLabel[0], 0);
-		tableImage.getLayeredPane().add(opponentHoleCardsLabel[1], 0);
-		tableImage.getLayeredPane().add(flopLabel[0], 1);
-		tableImage.getLayeredPane().add(flopLabel[1], 1);
-		tableImage.getLayeredPane().add(flopLabel[2], 1);
-		tableImage.getLayeredPane().add(turnLabel, 1);
-		tableImage.getLayeredPane().add(riverLabel, 1);
-		tableImage.getLayeredPane().add(leaveTableBtn, 1);
-		tableImage.add(tableImage.getLayeredPane());
-		
-		setContentPane(tableImage);
-	}
-
-	/*
-	 * Initializes meesage box, bet amount box and bet slider components.
-	 */
-	private void initComponents() {
-		// message box
-		messagesBox = new TextArea(MESSAGE_ROWS, MESSAGE_COLS);
-		messagesBox.setBackground(Color.WHITE);
-		messagesBox.setBounds(MESSAGE_X, MESSAGE_Y, MESSAGE_WIDTH, MESSAGE_HEIGHT);
-		messagesBox.setFont(MESSAGE_FONT);
-
-		// bet field box
-		betField = new JTextField();
-		betField.setBounds(BET_FIELD_X, BET_FIELD_Y, BET_FIELD_WIDTH, BET_FIELD_HEIGHT);
-		betField.setHorizontalAlignment(JTextField.CENTER);
-		betField.setFont(BET_FIELD_FONT);
-		betField.setBorder(BorderFactory.createLineBorder(BROWN));
-		
-		// bet slider
-		betSlider = new JSlider(JSlider.HORIZONTAL, MIN_BET, 5000, MIN_BET);
-		betSlider.setBounds(BET_SLIDER_X, BET_SLIDER_Y, BET_SLIDER_WIDTH, BET_SLIDER_HEIGHT);
-		betSlider.setMajorTickSpacing(SLIDER_TICK_SPACE);
-		betSlider.setMinorTickSpacing(MIN_BET);
-		betSlider.setPaintTicks(true);
-		betSlider.setSnapToTicks(true);
-		betSlider.setPaintTrack(true);
-		betSlider.addChangeListener(this);			
-	}
-
-	public ClientConnection getClientConnection() {
-		return clientConnection;
-	}
-
-	public TableImage getTableImage() {
-		return tableImage;
-	}
-
-	public JLabel[] getPlayerBoxLabel() {
-		return playerBoxLabel;
-	}
-	
-	public JLabel[] getPlayerBoxImg() {
-		return playerBoxImg;
-	}
-
-	public JLabel[] getHoleCardsLabel() {
-		return holeCardsLabel;
-	}
-
-	public JLabel[] getOpponentHoleCardsLabel() {
-		return opponentHoleCardsLabel;
-	}
-
-	public JLabel[] getFlopLabel() {
-		return flopLabel;
-	}
-
-	public JLabel getTurnLabel() {
-		return turnLabel;
-	}
-
-	public JLabel getRiverLabel() {
-		return riverLabel;
-	}
-	
-	public TextArea getMessagesBox() {
-		return messagesBox;
-	}
-	
-	public void setFlopLabels(ImageIcon flop1, ImageIcon flop2, ImageIcon flop3) {
-		tableImage.getLayeredPane().add(flopLabel[0], 1);
-		tableImage.getLayeredPane().add(flopLabel[1], 1);
-		tableImage.getLayeredPane().add(flopLabel[2], 1);
-		
-		flopLabel[0].setIcon(flop1);
-		flopLabel[1].setIcon(flop2);
-		flopLabel[2].setIcon(flop3);
-		
-		flopLabel[0].setVisible(true);
-		flopLabel[1].setVisible(true);
-		flopLabel[2].setVisible(true);
-	}
-	
-	public void setTurnLabel(ImageIcon turn) {
-		tableImage.getLayeredPane().add(turnLabel, 1);
-		turnLabel.setIcon(turn);
-		turnLabel.setVisible(true);
-	}
-	
-	public void setRiverLabel(ImageIcon river) {
-		tableImage.getLayeredPane().add(riverLabel, 1);
-		riverLabel.setIcon(river);
-		riverLabel.setVisible(true);
-	}
-	
-	public void setFlopImages(ImageIcon flop1, ImageIcon flop2, ImageIcon flop3) {	
-		flopLabel[0].setIcon(flop1);
-		flopLabel[1].setIcon(flop2);
-		flopLabel[2].setIcon(flop3);
-		
-		flopLabel[0].setVisible(true);
-		flopLabel[1].setVisible(true);
-		flopLabel[2].setVisible(true);
-	}
-	
-	public void setTurnImage(ImageIcon turn) {
-		turnLabel.setIcon(turn);
-		turnLabel.setVisible(true);
-	}
-	
-	public void setRiverImage(ImageIcon river) {
-		riverLabel.setIcon(river);
-		riverLabel.setVisible(true);
-	}
-
 	private void removeButtons() {
 		tableImage.getLayeredPane().remove(checkBtn);
 		tableImage.getLayeredPane().remove(raiseBtn);
@@ -434,133 +655,6 @@ public class TableWindow extends JFrame implements ActionListener, ChangeListene
 		tableImage.getLayeredPane().remove(betSlider);
 
 		repaint();
-	}
-	
-	public void removeBoardCards() {
-		tableImage.getLayeredPane().remove(flopLabel[0]);
-		tableImage.getLayeredPane().remove(flopLabel[1]);
-		tableImage.getLayeredPane().remove(flopLabel[2]);
-		tableImage.getLayeredPane().remove(turnLabel);
-		tableImage.getLayeredPane().remove(riverLabel);
-		
-		repaint();
-	}
-	
-	public void resetBoard() {
-		flopLabel[0].setIcon(null);
-		flopLabel[1].setIcon(null);
-		flopLabel[2].setIcon(null);
-		turnLabel.setIcon(null);
-		riverLabel.setIcon(null);
-	}
-	
-	public void setBoardVisibility(boolean visible) {
-		flopLabel[0].setVisible(visible);
-		flopLabel[1].setVisible(visible);
-		flopLabel[2].setVisible(visible);
-		turnLabel.setVisible(visible);
-		riverLabel.setVisible(visible);
-	}
-	
-	public void setHoleCardsImages(ImageIcon holeCard1Img, ImageIcon holeCard2img) {
-		holeCardsLabel[0].setIcon(holeCard1Img);
-		holeCardsLabel[1].setIcon(holeCard2img);
-		opponentHoleCardsLabel[0].setIcon(cardBackImg);
-		opponentHoleCardsLabel[1].setIcon(cardBackImg);
-	}
-	
-	public void callRaiseFoldButtons() {
-		messagesBox.append("Dealer: " + clientConnection.getPlayer().getName() + ", it's your turn \n");
-
-		tableImage.getLayeredPane().add(callBtn, 1);
-		callBtn.setText("Call " + (clientConnection.getTableInfo().getBet() - clientConnection.getPlayer().getCurrentBet()));
-		tableImage.getLayeredPane().add(raiseBtn, 1);
-		tableImage.getLayeredPane().add(betField, 1);
-		betField.setText(MIN_BET + "");
-		tableImage.getLayeredPane().add(betSlider, 1);
-		tableImage.getLayeredPane().add(foldBtn, 1);
-
-		validate();
-		repaint();
-	}
-
-	public void checkBetButtons() {
-		messagesBox.append("Dealer: " + clientConnection.getPlayer().getName() + ", it's your turn \n");
-
-		tableImage.getLayeredPane().add(checkBtn, 1);
-		tableImage.getLayeredPane().add(betBtn, 1);
-		tableImage.getLayeredPane().add(betField, 1);
-		betField.setText(MIN_BET + "");
-		tableImage.getLayeredPane().add(betSlider, 1);
-
-		validate();
-		repaint();
-	}
-	
-	public void checkRaiseButtons() {
-		messagesBox.append("Dealer: " + clientConnection.getPlayer().getName() + ", it's your turn \n");
-		
-		tableImage.getLayeredPane().add(checkBtn, 1);
-		tableImage.getLayeredPane().add(raiseBtn, 1);
-		tableImage.getLayeredPane().add(betField, 1);
-		betField.setText(MIN_BET + "");
-		tableImage.getLayeredPane().add(betSlider, 1);
-		
-		validate();
-		repaint();
-	}
-	
-	public void dimPlayerBox() {
-		flashing = false;
-		playerBoxLabel[0].setText("<html>" + clientConnection.getPlayer().getName()
-				+ "<br>" + clientConnection.getPlayer().getChips() + "</html>");
-
-		otherPlayerTimer.start();
-		thisPlayerTimer.stop();
-		playerBoxLabel[0].setBackground(BROWN);
-	}
-
-	public void highLightPlayerBox() {
-		flashing = true;
-		playerBoxLabel[0].setText("<html>" + clientConnection.getPlayer().getName()
-				+ "<br>" + clientConnection.getPlayer().getChips() + "</html>");
-			
-		thisPlayerTimer.start();
-		otherPlayerTimer.stop();
-		playerBoxLabel[1].setBackground(BROWN);
-	}
-	
-	/**
-	 * Flips the oponents cards (those who went to showdown) and elevates the
-	 * cards of all players involving in the showdown.
-	 * 
-	 * @param opponentCard1 first opponent holecard ImageIcon
-	 * @param opponentCard2 second opponent holecard ImageIcon
-	 */
-	public void showDown(ImageIcon opponentCard1, ImageIcon opponentCard2) {
-		opponentHoleCardsLabel[0].setIcon(opponentCard1);
-		opponentHoleCardsLabel[1].setIcon(opponentCard2);
-		
-		for (int i = 0; i < 2; i++) {
-			holeCardsLabel[i].setBounds(HOLE_CARDS_POSITION[i][0],
-					HOLE_CARDS_POSITION[i][1] - 35, CARD_WIDTH, CARD_HEIGHT);
-			
-			opponentHoleCardsLabel[i].setBounds(HOLE_CARDS_POSITION[i + 2][0],
-					HOLE_CARDS_POSITION[i + 2][1] - 18, CARD_WIDTH, CARD_HEIGHT);
-		}
-	}
-	
-	/**
-	 * Reset the holecards to their original position to start a new hand.
-	 */
-	public void resetHoleCardsPosition() {
-		for (int i = 0; i < 2; i++) {
-			holeCardsLabel[i].setBounds(HOLE_CARDS_POSITION[i][0],
-					HOLE_CARDS_POSITION[i][1], CARD_WIDTH, CARD_HEIGHT);
-			
-			opponentHoleCardsLabel[i].setBounds(HOLE_CARDS_POSITION[i + 2][0],
-					HOLE_CARDS_POSITION[i + 2][1], CARD_WIDTH, CARD_HEIGHT);
-		}
 	}
 
 	@Override
@@ -623,11 +717,11 @@ public class TableWindow extends JFrame implements ActionListener, ChangeListene
 			clientConnection.sendToServer("leave", 0);
 			clientConnection.setRunning(false);
 
-			try {
-				clientConnection.getObjectOutput().close();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
+//			try {
+//				clientConnection.getObjectOutput().close();
+//			} catch (IOException e1) {
+//				e1.printStackTrace();
+//			}
 			
 			dispose();
 		}

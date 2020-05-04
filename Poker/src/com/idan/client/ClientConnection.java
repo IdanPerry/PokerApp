@@ -19,7 +19,7 @@ import com.idan.server.TableInformation;
  * This class represents a client (player) side connection.
  * 
  * @author Idan Perry
- * @version 03.05.2013
+ * @version 04.05.2020
  */
 
 public class ClientConnection extends Thread {
@@ -235,7 +235,7 @@ public class ClientConnection extends Thread {
 			tableGUI.setRiverImage(tableInfo.getRiver().getCardImage());
 		}
 	}
-	
+
 	/*
 	 * Faces up the opponents cards.
 	 */
@@ -261,13 +261,8 @@ public class ClientConnection extends Thread {
 			public void run() {
 				try {
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-				} catch (UnsupportedLookAndFeelException e) {
-					e.printStackTrace();
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
-				} catch (InstantiationException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
+				} catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException
+						| IllegalAccessException e) {
 					e.printStackTrace();
 				}
 
@@ -311,7 +306,7 @@ public class ClientConnection extends Thread {
 				} else if (handState.equals("Postflop"))
 					changeTurns("check_bet", null);
 
-					// river action
+				// river action
 				else if (handState.equals("River"))
 					showDown();
 
@@ -324,11 +319,11 @@ public class ClientConnection extends Thread {
 				if (handState.equals("Preflop"))
 					changeTurns("check_bet", null);
 
-					// post flop action
+				// post flop action
 				else if (handState.equals("Postflop"))
 					changeTurns("check_bet", null);
 
-					// river action
+				// river action
 				else if (handState.equals("River")) {
 					checkCounter++;
 

@@ -12,7 +12,7 @@ import javax.swing.ImageIcon;
  * This class represents a deck of cards.
  * 
  * @author Idan Perry
- * @version 13.05.2013
+ * @version 04.05.2020
  */
 
 public class CardsDeck implements Serializable{

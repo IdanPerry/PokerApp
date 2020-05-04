@@ -24,23 +24,23 @@ public class TableInformation implements Serializable {
 	public TableInformation() {		
 	}
 
-	public Player getPlayer() {
+	public synchronized Player getPlayer() {
 		return player;
 	}
 
-	public void setPlayer(Player player) {
+	public synchronized void setPlayer(Player player) {
 		this.player = player;
 	}
 	
-	public void setPlayers(ArrayList<Player> players) {
+	public synchronized void setPlayers(ArrayList<Player> players) {
 		this.players = players;
 	}
 	
-	public ArrayList<Player> getPlayers() {
+	public synchronized ArrayList<Player> getPlayers() {
 		return players;
 	}
 
-	public ArrayList<String> getPlayersNames() {
+	public synchronized ArrayList<String> getPlayersNames() {
 		return tablePlayersNames;
 	}
 
@@ -48,67 +48,67 @@ public class TableInformation implements Serializable {
 		this.tablePlayersNames = tablePlayersNames;
 	}
 
-	public int getNumOfPlayersInHand() {
+	public synchronized int getNumOfPlayersInHand() {
 		return numOfPlayersInHand;
 	}
 
-	public void setNumOfPlayersInHand(int numOfPlayersInHand) {
+	public synchronized void setNumOfPlayersInHand(int numOfPlayersInHand) {
 		this.numOfPlayersInHand = numOfPlayersInHand;
 	}
 
-	public Card[] getFlop() {
+	public synchronized Card[] getFlop() {
 		return flop;
 	}
 
-	public void setFlop(Card[] flop) {
+	public synchronized void setFlop(Card[] flop) {
 		this.flop = flop;
 	}
 
-	public Card getTurn() {
+	public synchronized Card getTurn() {
 		return turn;
 	}
 
-	public void setTurn(Card turn) {
+	public synchronized void setTurn(Card turn) {
 		this.turn = turn;
 	}
 
-	public Card getRiver() {
+	public synchronized Card getRiver() {
 		return river;
 	}
 
-	public void setRiver(Card river) {
+	public synchronized void setRiver(Card river) {
 		this.river = river;
 	}
 
-	public int getPot() {
+	public synchronized int getPot() {
 		return pot;
 	}
 
-	public void setPot(int pot) {
+	public synchronized void setPot(int pot) {
 		this.pot = pot;
 	}
 
-	public int getBet() {
+	public synchronized int getBet() {
 		return bet;
 	}
 
-	public void setBet(int bet) {
+	public synchronized void setBet(int bet) {
 		this.bet = bet;
 	}
 
-	public int getRaise() {
+	public synchronized int getRaise() {
 		return raise;
 	}
 
-	public void setRaise(int raise) {
+	public synchronized void setRaise(int raise) {
 		this.raise = raise;
 	}
 	
-	public void setRaiseFlag(boolean raiseFlag) {
+	public synchronized void setRaiseFlag(boolean raiseFlag) {
 		this.raiseFlag = raiseFlag;
 	}
 	
-	public boolean isRaise() {
+	public synchronized boolean isRaise() {
 		return raiseFlag;
 	}
 }
