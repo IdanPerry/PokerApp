@@ -85,6 +85,10 @@ public class ClientConnection extends Thread {
 	public Player getPlayer() {
 		return player;
 	}
+	
+	public String getHandState() {
+		return handState;
+	}
 
 	/**
 	 * Returns the object output opened in this connection.
@@ -155,11 +159,11 @@ public class ClientConnection extends Thread {
 	}
 
 	/*
-	 * Prints the player's holecards to the console. used for debug
+	 * Prints the player's holecards to the table message box.
 	 */
 	private void printHolecards() {
-		System.out.println("You were dealt " + player.getHoleCard1().getRank() + player.getHoleCard1().getSuit()
-				+ player.getHoleCard2().getRank() + player.getHoleCard2().getSuit());
+		tableGUI.getMessagesBox().append("You were dealt " + player.getHoleCard1().getRank() + player.getHoleCard1().getSuit()
+				+ player.getHoleCard2().getRank() + player.getHoleCard2().getSuit() + "\n");
 	}
 
 	/*
@@ -173,6 +177,22 @@ public class ClientConnection extends Thread {
 			}
 		}
 	}
+	
+	/*
+	 * Changes the position of the dealer button image according
+	 * to the players positions in the current hand.
+	 */
+	private void setDealerBtnPosition() {
+		if(player.isDealerPosition()) {
+			tableGUI.getDealerBtnLabel()[0].setVisible(true);
+			tableGUI.getDealerBtnLabel()[1].setVisible(false);
+		} else {
+			tableGUI.getDealerBtnLabel()[0].setVisible(false);
+			tableGUI.getDealerBtnLabel()[1].setVisible(true);
+		}
+		
+		tableGUI.validate();
+	}
 
 	/*
 	 * Switch turns by changing table graphics and buttons. Parameter action - what
@@ -181,6 +201,7 @@ public class ClientConnection extends Thread {
 	 */
 	private void changeTurns(String action, String message) {
 		if (player.isYourTurn()) {
+			tableGUI.getMessagesBox().append("Dealer: " + player.getName() + ", it's your turn \n");
 			tableGUI.highLightPlayerBox();
 
 			if (action.equals("call_raise_fold"))
@@ -191,12 +212,8 @@ public class ClientConnection extends Thread {
 		} else
 			tableGUI.dimPlayerBox();
 
-		if (message != null) {
-			if (message.equals(actionInput))
-				tableGUI.getMessagesBox().append("Dealer: " + actionInput + "\n");
-			else if (message.equals(player.getName()))
-				tableGUI.getMessagesBox().append("Dealer: " + player.getName() + ", it's your turn \n");
-		}
+		if (message != null && message.equals(actionInput))
+			tableGUI.getMessagesBox().append("Dealer: " + actionInput + "\n");
 	}
 
 	/*
@@ -221,6 +238,7 @@ public class ClientConnection extends Thread {
 			// flop cards
 		} else if (actionInput.equals("FLOP")) {
 			handState = "Postflop";
+			player.resetCurrentBet();
 			tableGUI.setFlopImages(tableInfo.getFlop()[0].getCardImage(), tableInfo.getFlop()[1].getCardImage(),
 					tableInfo.getFlop()[2].getCardImage());
 
@@ -242,6 +260,7 @@ public class ClientConnection extends Thread {
 	private void showDown() {
 		tableGUI.dimPlayerBox();
 		tableGUI.showDown(opponentCards[0], opponentCards[1]);
+		printWinningHand();
 
 		// gives the players some time to observe the opponents hands.
 		try {
@@ -251,6 +270,21 @@ public class ClientConnection extends Thread {
 		}
 
 		tableGUI.resetHoleCardsPosition();
+	}
+	
+	/*
+	 * Prints the winning player's name and cards to the table message box.
+	 */
+	private void printWinningHand() {
+		Player player = tableInfo.getWinningPlayer();
+		tableGUI.getMessagesBox().append(player.getName() + " wins with " + player.getHandRank() + ": ");
+
+		for (int i = 0; i < player.getFiveCardsHand().length; i++) {
+			tableGUI.getMessagesBox().append(player.getFiveCardsHand()[i].getRank().toString());
+			tableGUI.getMessagesBox().append(player.getFiveCardsHand()[i].getSuit().toString());
+		}
+		
+		tableGUI.getMessagesBox().append("\n");
 	}
 
 	@Override
@@ -277,6 +311,7 @@ public class ClientConnection extends Thread {
 			readTableInfo();
 			tableGUI.setPlayerChips(player.getChips());
 			streetState();
+			setDealerBtnPosition();
 
 			// fold
 			if (actionInput.contains("folds")) {
@@ -296,8 +331,11 @@ public class ClientConnection extends Thread {
 						// following raise action
 						if (tableInfo.isRaise())
 							tableGUI.checkBetButtons();
-						else
+						else {
+							tableGUI.getMessagesBox().append("Dealer: " + player.getName() + ", it's your turn \n");
 							tableGUI.checkRaiseButtons();
+						}
+							
 
 					} else
 						tableGUI.dimPlayerBox();

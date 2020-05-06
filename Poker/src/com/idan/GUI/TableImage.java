@@ -32,7 +32,7 @@ public class TableImage extends JPanel {
 		layeredPane = new JLayeredPane();
 
 		try {
-			table = ImageIO.read(getClass().getResourceAsStream("/table_scaled_700_500.png"));
+			table = ImageIO.read(getClass().getResourceAsStream("/my_poker_table_small_green.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -60,13 +60,13 @@ public class TableImage extends JPanel {
 		info = tableGUI.getClientConnection().getTableInfo();
 
 		if (tableGUI.getClientConnection().getTableInfo() != null) {
-			g2.drawString("Pot: " + info.getPot(), 300, 150);
+			tableGUI.getPotLabel().setText("Pot: " + info.getPot());
 
 			for (int i = 0; i < info.getPlayers().size(); i++) {
 				if (!info.getPlayers().get(i).getName().equals(info.getPlayer().getName())) {
 					tableGUI.getPlayerBoxLabel()[1]
-							.setText("<html><span style='font-size:11px'>" + info.getPlayers().get(i).getName() + "<br>"
-									+ info.getPlayers().get(i).getChips() + "</span></html>");
+							.setText("<html>" + info.getPlayers().get(i).getName() + "<br>"
+									+ info.getPlayers().get(i).getChips() + "</html>");
 
 					layeredPane.add(tableGUI.getPlayerBoxLabel()[1], 2);
 					layeredPane.add(tableGUI.getPlayerBoxImg()[1], 2);

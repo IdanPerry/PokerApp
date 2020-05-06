@@ -26,7 +26,8 @@ public class TestTableImage extends JPanel {
 		layeredPane = new JLayeredPane();
 
 		try {
-			table = ImageIO.read(getClass().getResourceAsStream("/table_scaled_700_500.png"));
+			table = ImageIO.read(getClass().getResourceAsStream("/my_poker_table_small_blue.png"));
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

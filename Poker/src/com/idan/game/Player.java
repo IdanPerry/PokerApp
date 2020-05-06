@@ -24,7 +24,7 @@ public class Player implements Serializable {
 	private int chips;
 	private int score;
 	private int currentBet;
-	private int lastBet;
+	private int tempPot;
 	private int seat;
 
 	private Card holeCard1;
@@ -56,7 +56,6 @@ public class Player implements Serializable {
 	private boolean yourTurn;
 	private boolean facingRaise;
 	private boolean hasActed;
-	private boolean win;
 	private boolean allIn;
 
 	/**
@@ -191,6 +190,14 @@ public class Player implements Serializable {
 	 */
 	public int getChips() {
 		return chips;
+	}
+	
+	public void setTempPot(int tempPot) {
+		this.tempPot = tempPot;
+	}
+	
+	public int getTempPot() {
+		return tempPot;
 	}
 
 	/**
@@ -532,28 +539,26 @@ public class Player implements Serializable {
 	}
 
 	/**
-	 * Sets fold to true.
+	 * Changes fold state of this player to true.
 	 */
 	public void fold() {
 		fold = true;
 	}
 
 	/**
-	 * Returns true.
-	 * 
-	 * @return true
+	 * Changes check state of this player to true.
 	 */
-	public boolean check() {
-		return check = true;
+	public void check() {
+		check = true;
 	}
 
 	/**
-	 * Returns true.
-	 * 
-	 * @return true
+	 * Reduces the amount to call from this player's chips.
 	 */
-	public boolean call() {
-		return call = true;
+	public void call(int currentBet) {
+		chips -= currentBet;
+		tempPot += currentBet;
+		call = true;
 	}
 
 	/**
@@ -565,16 +570,8 @@ public class Player implements Serializable {
 	public boolean bet(int currentBet) {
 		this.currentBet = currentBet;
 		chips -= currentBet;
+		tempPot += currentBet;
 		return bet = true;
-	}
-
-	/**
-	 * Returns the current bet of this player.
-	 * 
-	 * @return the current bet of this player
-	 */
-	public int getCurrentBet() {
-		return currentBet;
 	}
 
 	/**
@@ -585,33 +582,25 @@ public class Player implements Serializable {
 	 */
 	public boolean raise(int currentBet) {
 		this.currentBet = currentBet;
+		tempPot += currentBet;
 		return raise = true;
 	}
-
-	public void setLastBet(int lastBet) {
-		this.lastBet = lastBet;
-	}
-
-	public int getLastBet() {
-		return lastBet;
-	}
-
+	
 	/**
-	 * Chnges the win state of this player.
+	 * Returns the current bet of this player.
 	 * 
-	 * @param win the boolean state of win
+	 * @return the current bet of this player
 	 */
-	public void setWin(boolean win) {
-		this.win = win;
+	public int getCurrentBet() {
+		return currentBet;
 	}
-
+	
 	/**
-	 * Returns true if this player wins the current hand.
-	 * 
-	 * @return true if this player wins the current hand
+	 * Resets the current bet to 0. this method should be called
+	 * at the start of each street in a hand.
 	 */
-	public boolean isWin() {
-		return win;
+	public void resetCurrentBet() {
+		currentBet = 0;
 	}
 
 	/**
@@ -663,8 +652,6 @@ public class Player implements Serializable {
 		call = false;
 		bet = false;
 		raise = false;
-		currentBet = 0;
-		win = false;
 		allIn = false;
 		facingRaise = false;
 		hasActed = false;

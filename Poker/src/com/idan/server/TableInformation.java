@@ -10,6 +10,7 @@ public class TableInformation implements Serializable {
 	private static final long serialVersionUID = 3308340352929276498L;
 	
 	private Player player;
+	private Player winningPlayer;
 	private ArrayList<String> tablePlayersNames;
 	private ArrayList<Player> players;
 	private int numOfPlayersInHand;
@@ -17,8 +18,9 @@ public class TableInformation implements Serializable {
 	private Card turn;
 	private Card river;
 	private int pot;
-	private int bet;
+	private int betSize;
 	private int raise;
+	private int smallBlind;
 	private boolean raiseFlag;
 
 	public TableInformation() {		
@@ -30,6 +32,14 @@ public class TableInformation implements Serializable {
 
 	public synchronized void setPlayer(Player player) {
 		this.player = player;
+	}
+	
+	public synchronized Player getWinningPlayer() {
+		return winningPlayer;
+	}
+	
+	public synchronized void setWinningPlayer(Player winningPlayer) {
+		this.winningPlayer = winningPlayer;
 	}
 	
 	public synchronized void setPlayers(ArrayList<Player> players) {
@@ -89,11 +99,11 @@ public class TableInformation implements Serializable {
 	}
 
 	public synchronized int getBet() {
-		return bet;
+		return betSize;
 	}
 
 	public synchronized void setBet(int bet) {
-		this.bet = bet;
+		this.betSize = bet;
 	}
 
 	public synchronized int getRaise() {
@@ -110,5 +120,13 @@ public class TableInformation implements Serializable {
 	
 	public synchronized boolean isRaise() {
 		return raiseFlag;
+	}
+	
+	public synchronized int getSmallBlind() {
+		return smallBlind;
+	}
+	
+	public synchronized void setSmallBlind(int smallBlind) {
+	this.smallBlind = smallBlind;
 	}
 }

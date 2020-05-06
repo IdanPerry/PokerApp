@@ -26,9 +26,11 @@ public class HandComparison {
 	}
 
 	/**
-	 * Flips the cards and compare the hands.
+	 * Flips the cards, compares the hands and returns the winning player.
+	 * 
+	 * @return the winning player
 	 */
-	public void showDown() {
+	public Player showDown() {
 		int size = table.getTablePlayers().size();
 		table.sortPlayersByHandValue(table.getTablePlayers());
 		handRank = table.getTablePlayers().get(size - 1).getHandRank();
@@ -38,16 +40,17 @@ public class HandComparison {
 				.getHandValue()) {
 			table.getTablePlayers().get(size - 1).setScore(1);
 			printWinner(table.getTablePlayers().get(size - 1));
-			return;
+			
+			return table.getTablePlayers().get(size - 1);
 		}
 
-		compareSameValueHands(table.getTablePlayers().get(size - 1), table.getTablePlayers().get(size - 2));
+		return compareSameValueHands(table.getTablePlayers().get(size - 1), table.getTablePlayers().get(size - 2));
 	}
 
 	/*
 	 * Compares hands which has the same strength (one pair vs. one pair etc.)
 	 */
-	private void compareSameValueHands(Player player1, Player player2) {
+	private Player compareSameValueHands(Player player1, Player player2) {
 		Player player = null;
 		
 		switch (handRank) {
@@ -92,6 +95,8 @@ public class HandComparison {
 			player.setScore(1);
 			printWinner(player);
 		}
+		
+		return player;
 	}
 	
 	/*
@@ -113,7 +118,7 @@ public class HandComparison {
 	}
 
 	/*
-	 * Prints the plyare with the winning hand and the winning hand.
+	 * Prints the player with the winning hand and the winning hand.
 	 */
 	private void printWinner(Player player) {
 		System.out.print(player.getName() + " wins with " + player.getHandRank() + ":	");

@@ -24,7 +24,7 @@ public class Server {
 	 * Constructs the game server.
 	 */
 	public Server() {
-		connections = new ArrayList<ServerConnection>();
+		connections = new ArrayList<ServerConnection>();	
 		boolean running = true;
 
 		try {
