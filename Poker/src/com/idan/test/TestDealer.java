@@ -16,6 +16,14 @@ public abstract class TestDealer {
 		this.table = table;
 		deck = new TestCardsDeck();
 	}
+	
+	/**
+	 * Constructs a dealer. used for JUnit test.
+	 */
+	public TestDealer() {
+		deck = null;
+		table = null;
+	}
 
 	/**
 	 * Returns the table this dealer manages.

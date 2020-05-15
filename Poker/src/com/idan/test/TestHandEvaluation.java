@@ -15,6 +15,8 @@ import com.idan.test.TestTable;
  */
 
 public class TestHandEvaluation {
+	private static final int FINAL_HAND = 5;
+	
 	private final TestDealer dealer;
 	private final TestTable table;
 	private TestCard[] hand;
@@ -73,6 +75,14 @@ public class TestHandEvaluation {
 	}
 	
 	/**
+	 * Initalizes the 5 cards hand for the player.
+	 * Used for JUnit test.
+	 */
+	public void setHand() {
+		hand = new TestCard[FINAL_HAND];
+	}
+	
+	/**
 	 * Start sequence of hand evaluation for all players at the table,
 	 * checking the highest ranking first down to the lowest.
 	 */
@@ -82,7 +92,7 @@ public class TestHandEvaluation {
 
 		for (int i = 0; i < table.getTablePlayers().size(); i++) {
 			player = table.getTablePlayers().get(i);
-			hand = new TestCard[5];
+			hand = new TestCard[FINAL_HAND];
 
 			initAndSortAllHands();
 			if (checkStrFlush(player))
@@ -155,9 +165,9 @@ public class TestHandEvaluation {
 	}
 
 	/*
-	 * Check if teh hand is a straight-flush
+	 * Check if the hand is a straight-flush
 	 */
-	private boolean checkStrFlush(TestPlayer player) {
+	public boolean checkStrFlush(TestPlayer player) {
 		player.sortHandBySuit(player.getSevenCardsTempHand());
 
 		for (int j = 6; j > 3; j--) {
@@ -207,7 +217,7 @@ public class TestHandEvaluation {
 	/*
 	 * Check if the hand is four-of-a-kind.
 	 */
-	private boolean checkQuads(TestPlayer player) {
+	public boolean checkQuads(TestPlayer player) {
 		int j;
 		for (j = 0; j <= 3; j++) {
 			if (player.getSevenCardsTempHand().get(j).getRank()
@@ -237,13 +247,15 @@ public class TestHandEvaluation {
 	/*
 	 * Check if the hand is a full-house
 	 */
-	private boolean checkFullHouse(TestPlayer player) {
+	public boolean checkFullHouse(TestPlayer player) {
 		// search for trips first
 		checkTrips(player);
 
 		// not qualified for full-house
-		if (!player.isTrips())
+		if (!player.isTrips()) {
+			player.setTrips(false);
 			return false;
+		}
 
 		// search for a pair
 		for (int j = 3; j >= 1; j--) {
@@ -272,7 +284,7 @@ public class TestHandEvaluation {
 	/*
 	 * Check if the hand is a flush
 	 */
-	private boolean checkFlush(TestPlayer player) {
+	public boolean checkFlush(TestPlayer player) {
 		player.sortHandBySuit(player.getSevenCardsTempHand());
 		int j;
 
@@ -303,7 +315,7 @@ public class TestHandEvaluation {
 	/*
 	 * Check if the hand is a straight.
 	 */
-	private boolean checkStraight(TestPlayer player) {
+	public boolean checkStraight(TestPlayer player) {
 		int size = player.getSevenCardsTempHand().size()-1;
 		int fixSteps = 4;
 		int counter = 0; // counts the increments between 2 folowing cards
@@ -358,7 +370,7 @@ public class TestHandEvaluation {
 	/*
 	 * Check if the hand is three-of-a-kind.
 	 */
-	private void checkTrips(TestPlayer player) {
+	public void checkTrips(TestPlayer player) {
 		for (int j = 6; j > 1; j--) {
 			if (player.getSevenCardsTempHand().get(j).getRank()
 					.equals(player.getSevenCardsTempHand().get(j - 2).getRank())) {
@@ -379,7 +391,7 @@ public class TestHandEvaluation {
 	/*
 	 * Check if the hand is two-pairs.
 	 */
-	private boolean checkTwoPairs(TestPlayer player) {
+	public boolean checkTwoPairs(TestPlayer player) {
 		// first pair
 		checkPair(player);
 
@@ -421,7 +433,7 @@ public class TestHandEvaluation {
 	/*
 	 * Check if the hand is one-pair.
 	 */
-	private void checkPair(TestPlayer player) {
+	public void checkPair(TestPlayer player) {
 		for (int j = 6; j > 0; j--) {
 			if (player.getSevenCardsTempHand().get(j).getRank()
 					.equals(player.getSevenCardsTempHand().get(j - 1).getRank())) {
@@ -441,7 +453,7 @@ public class TestHandEvaluation {
 	/*
 	 * Check if the hand is a high-card hand.
 	 */
-	private void checkHighCard(TestPlayer player) {
+	public void checkHighCard(TestPlayer player) {
 		player.setHandRank(HandRank.HIGH_CARD);
 
 		for (int i = 0, j = 6; i < hand.length; i++, j--)

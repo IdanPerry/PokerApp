@@ -21,7 +21,7 @@ public class TestTable {
 	/**
 	 * Constructs a poker table.
 	 */
-	public TestTable() {
+	public TestTable(int id) {
 		tablePlayers = new ArrayList<TestPlayer>();
 		dealer = new TestTexasHoldemDealer(this);
 		
@@ -40,6 +40,14 @@ public class TestTable {
 			evaluate.evaluateAllHands();
 			compare.showDown();
 		}
+	}
+	
+	/**
+	 * Constructs a poker table. used for JUnit test.
+	 */
+	public TestTable() {
+		tablePlayers = null;
+		dealer = null;
 	}
 
 	/**

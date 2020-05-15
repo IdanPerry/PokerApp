@@ -11,6 +11,12 @@ public class TestTexasHoldemDealer extends TestDealer {
 	public TestTexasHoldemDealer(TestTable table) {
 		super(table);
 	}
+	
+	/**
+	 * Constructs a Texas Holdem dealer. used for JUnit test.
+	 */
+	public TestTexasHoldemDealer() {
+	}
 
 	/**
 	 * Dealer deals all players at the table 2 holecards.
