@@ -23,4 +23,7 @@
 hs_err_pid*
 
 # Resource files
-*.png
+.res/
+
+* Production files
+.bin/
