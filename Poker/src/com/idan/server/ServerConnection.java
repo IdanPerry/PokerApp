@@ -33,7 +33,7 @@ public class ServerConnection extends Thread {
 	 * Constructs a ServerConnection object.
 	 * 
 	 * @param socket the socket to connect through
-	 * @param server
+	 * @param server the server this connection established on
 	 * @param table
 	 */
 	public ServerConnection(Socket socket, Server server, HeadsUpTable table) {
