@@ -1,4 +1,4 @@
-package com.idan.junittest.handevaluation;
+package com.idan.handevaluation;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

@@ -1,4 +1,4 @@
-package com.idan.junittest.handevaluation;
+package com.idan.handevaluation;
 
 import static org.junit.Assert.assertTrue;
 

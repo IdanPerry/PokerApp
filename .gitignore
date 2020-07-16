@@ -25,5 +25,7 @@ hs_err_pid*
 # Resource files
 .res/
 
-* Production files
-.bin/
+*.iml
+.idea/
+.out/
+.lib/

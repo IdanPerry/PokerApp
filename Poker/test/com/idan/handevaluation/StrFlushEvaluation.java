@@ -1,4 +1,4 @@
-package com.idan.junittest.handevaluation;
+package com.idan.handevaluation;
 
 import static org.junit.Assert.assertTrue;
 
@@ -12,7 +12,7 @@ import com.idan.test.TestPlayer;
 import com.idan.test.TestTable;
 import com.idan.test.TestTexasHoldemDealer;
 
-public class QuadsEvaluation {
+public class StrFlushEvaluation {
 	TestPlayer player;
 	ArrayList<TestCard> sevenCardshand;	
 	TestTable table;
@@ -20,9 +20,9 @@ public class QuadsEvaluation {
 	TestHandEvaluation test;
 	
 	/**
-	 * Constructs quads evaluation tests.
+	 * Constructs hand evaluation tests.
 	 */
-	public QuadsEvaluation() {
+	public StrFlushEvaluation() {
 		player =  new TestPlayer("Player");
 		sevenCardshand = new ArrayList<TestCard>(7);
 		test = new TestHandEvaluation(dealer, table);
@@ -30,17 +30,17 @@ public class QuadsEvaluation {
 	}
 	
 	@Test
-	public void highestQuads() {
-		sevenCardshand.add(new TestCard(TestCard.Rank.ACE, TestCard.Suit.CLUBS));
-		sevenCardshand.add(new TestCard(TestCard.Rank.ACE, TestCard.Suit.DIAMONDS));
-		sevenCardshand.add(new TestCard(TestCard.Rank.ACE, TestCard.Suit.HEARTS));
-		sevenCardshand.add(new TestCard(TestCard.Rank.ACE, TestCard.Suit.SPADES));
-		sevenCardshand.add(new TestCard(TestCard.Rank.EIGHT, TestCard.Suit.DIAMONDS));	
-		sevenCardshand.add(new TestCard(TestCard.Rank.EIGHT, TestCard.Suit.SPADES));
+	public void royalFlush() {		
 		sevenCardshand.add(new TestCard(TestCard.Rank.FOUR, TestCard.Suit.SPADES));
+		sevenCardshand.add(new TestCard(TestCard.Rank.FIVE, TestCard.Suit.SPADES));
+		sevenCardshand.add(new TestCard(TestCard.Rank.TEN, TestCard.Suit.CLUBS));
+		sevenCardshand.add(new TestCard(TestCard.Rank.JACK, TestCard.Suit.CLUBS));
+		sevenCardshand.add(new TestCard(TestCard.Rank.QUEEN, TestCard.Suit.CLUBS));
+		sevenCardshand.add(new TestCard(TestCard.Rank.KING, TestCard.Suit.CLUBS));
+		sevenCardshand.add(new TestCard(TestCard.Rank.ACE, TestCard.Suit.CLUBS));
 		
 		player.setSevenCardsTempHand(sevenCardshand);
-		test.checkQuads(player);
-		assertTrue(player.isQuads());
+		test.checkStrFlush(player);
+		assertTrue(player.isStrFlush());
 	}
 }
